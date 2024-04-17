@@ -22,7 +22,7 @@ END n_bit_adder;
 -- 0 0 1 1 F=A-1 F=B+1
 ARCHITECTURE Behavioral OF n_bit_adder IS
 
-    COMPONENT my_nadder IS
+    COMPONENT n_bit_adder IS
         GENERIC (n : INTEGER := 4);
         PORT (
             a, b : IN STD_LOGIC_VECTOR(n - 1 DOWNTO 0);
@@ -45,7 +45,7 @@ ARCHITECTURE Behavioral OF n_bit_adder IS
 BEGIN
 
     -- making generic full adder circuit
-    my_nadder1 : my_nadder GENERIC MAP(bits/4) PORT MAP(a(3 DOWNTO 0), b(3 DOWNTO 0), cin, result(3 downto 0), CARRYS(0));
+    my_nadder1 : n_bit_adder GENERIC MAP(bits/4) PORT MAP(a(3 DOWNTO 0), b(3 DOWNTO 0), cin, result(3 downto 0), CARRYS(0));
 
     loop1 : FOR i IN 0 TO (bits/4) - 2 GENERATE
         select_adder1 : select_adder GENERIC MAP(bits/4) PORT MAP(a((i + 1) * 4 + 3 DOWNTO (i * 4) + 4), b((i + 1) * 4 + 3 DOWNTO (i *4) + 4), CARRYS(i), result((i + 1) * 4 + 3 DOWNTO (i *4) + 4), CARRYS(i + 1));

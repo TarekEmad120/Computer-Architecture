@@ -1,7 +1,7 @@
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 
-ENTITY lab1_mux IS
+ENTITY ALU IS
 generic (bits: integer := 16);
     PORT (
         input1 : IN STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
@@ -11,11 +11,11 @@ generic (bits: integer := 16);
         output1 : OUT STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
         C_out : OUT STD_LOGIC
     );
-END lab1_mux;
+END ALU;
 
-ARCHITECTURE mux OF lab1_mux IS
+ARCHITECTURE ALU_Arch OF ALU IS
 
-    COMPONENT ALU IS
+    COMPONENT ALUB IS
     generic (bits: integer := 16);
         PORT (
             A : IN STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
@@ -25,7 +25,7 @@ ARCHITECTURE mux OF lab1_mux IS
             F : OUT STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
             Cout : OUT STD_LOGIC);
     END COMPONENT;
-    COMPONENT ALUd IS
+    COMPONENT ALUD IS
     generic (bits: integer := 16);
         PORT (
             A : IN STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
@@ -36,7 +36,7 @@ ARCHITECTURE mux OF lab1_mux IS
             Cout : OUT STD_LOGIC);
     END COMPONENT;
 
-    COMPONENT ALUc IS
+    COMPONENT ALUC IS
     generic (bits: integer := 16);
         PORT (
             A : IN STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
@@ -47,7 +47,7 @@ ARCHITECTURE mux OF lab1_mux IS
             Cout : OUT STD_LOGIC);
     END COMPONENT;
     
-    COMPONENT partaAdder IS
+    COMPONENT ALUA IS
     generic (bits: integer := 16);
         PORT (
             A : IN STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
@@ -65,7 +65,7 @@ ARCHITECTURE mux OF lab1_mux IS
 BEGIN
     --we need to check on first bit of selections to choose between ALUd , ALUc,and ALU
 
-    ALUd1 : ALUd
+    ALUd1 : ALUD
     PORT MAP(
         A => input1,
         B => input2,
@@ -74,7 +74,7 @@ BEGIN
         F => output_ALUd,
         Cout => C_out_ALUd);
 
-    ALUc1 : ALUc
+    ALUc1 : ALUC
     PORT MAP(
         A => input1,
         B => input2,
@@ -83,7 +83,7 @@ BEGIN
         F => output_ALUc,
         Cout => C_out_ALUc);
 
-    ALU1 : ALU
+    ALU1 : ALUB
     PORT MAP(
         A => input1,
         B => input2,
@@ -91,7 +91,7 @@ BEGIN
         Cin => C_in,
         F => output_ALU,
         Cout => C_out_ALU);
-    ALU0 : partaAdder
+    ALU0 : ALUA
     PORT MAP(
         A => input1,
         B => input2,
@@ -132,4 +132,4 @@ BEGIN
 
 
 
-END mux;
+END ALU_Arch;

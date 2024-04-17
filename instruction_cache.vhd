@@ -3,7 +3,7 @@ LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.ALL;
 
-ENTITY register_ram IS
+ENTITY instruction_cache IS
     PORT (
         clk : IN STD_LOGIC;
         rest : IN STD_LOGIC;
@@ -19,9 +19,9 @@ ENTITY register_ram IS
         data_out2 : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
     );
 
-END register_ram;
+END instruction_cache;
 
-ARCHITECTURE register_ram OF register_ram IS
+ARCHITECTURE register_ram_arch OF instruction_cache IS
     TYPE ram_type IS ARRAY (0 to 63) OF STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL ram : ram_type;
 
@@ -47,4 +47,4 @@ BEGIN
     data_out2 <= ram(TO_INTEGER(UNSIGNED(readaddress2)));
 
 
-END register_ram;
+END register_ram_arch;

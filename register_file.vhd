@@ -1,113 +1,54 @@
-
 -- ● A register file which contains 7 registers, each register has 12-bits widths. 
 -- The register file has:
 -- o 2-read addresses and 2-write address.
 -- o 2-read ports and 2-write port. 
 -- o write enables and reset signal. 
 -- (What is the size of address bus? What is the size of data bus?)
--- ● Use the given registers (DFF) to create the register files.
-
---includes
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.ALL;
 
---entity
---entity
+
 ENTITY register_file IS
-generic ( bits : INTEGER := 16);
-    PORT (
-        clk : IN STD_LOGIC;
-        reset : IN STD_LOGIC;
-        data_in1 : IN STD_LOGIC_VECTOR(bits-1 DOWNTO 0);
-        data_in2 : IN STD_LOGIC_VECTOR(bits-1 DOWNTO 0);
-        data_out1 : OUT STD_LOGIC_VECTOR(bits-1 DOWNTO 0);
-        data_out2 : OUT STD_LOGIC_VECTOR(bits-1 DOWNTO 0);
-        write_enable : IN STD_LOGIC;
-        read_address1 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-        read_address2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-        write_address1 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-        write_address2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0)
-    );
+GENERIC (bits : INTEGER := 16);
+PORT (
+    clk : IN STD_LOGIC;
+    reset : IN STD_LOGIC;
+    data_in1 : IN STD_LOGIC_VECTOR(bits - 1 DOWNTO 0);
+    data_in2 : IN STD_LOGIC_VECTOR(bits - 1 DOWNTO 0);
+    data_out1 : OUT STD_LOGIC_VECTOR(bits - 1 DOWNTO 0);
+    data_out2 : OUT STD_LOGIC_VECTOR(bits - 1 DOWNTO 0);
+    write_enable : IN STD_LOGIC;
+    read_address1 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+    read_address2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+    write_address1 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+    write_address2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0)
+);
+
 END register_file;
 
-ARCHITECTURE Behavioral OF register_file IS
-    COMPONENT my_nDFF2 IS
-        GENERIC (n : INTEGER := 16);
-        PORT (
-            Clk, Rst : IN STD_LOGIC;
-            d : IN STD_LOGIC_VECTOR(n - 1 DOWNTO 0);
-            q : OUT STD_LOGIC_VECTOR(n - 1 DOWNTO 0);
-            en_write : IN STD_LOGIC
-        );
-    END COMPONENT;
+ARCHITECTURE register_ram OF register_file IS
+    TYPE ram_type IS ARRAY (0 TO 7) OF STD_LOGIC_VECTOR(bits-1 DOWNTO 0);
+    SIGNAL ram : ram_type;
 
-    SIGNAL we0, we1, we2, we3, we4, we5, we6 : STD_LOGIC;
-    SIGNAL d0, d1, d2, d3, d4, d5, d6 : STD_LOGIC_VECTOR(bits-1 DOWNTO 0);
-    SIGNAL q0, q1, q2, q3, q4, q5, q6 : STD_LOGIC_VECTOR(bits-1 DOWNTO 0);
 BEGIN
-    registerA : my_nDFF2 PORT MAP(clk, reset, d0, q0, we0);
-    registerB : my_nDFF2 PORT MAP(clk, reset, d1, q1, we1);
-    registerC : my_nDFF2 PORT MAP(clk, reset, d2, q2, we2);
-    registerD : my_nDFF2 PORT MAP(clk, reset, d3, q3, we3);
-    registerE : my_nDFF2 PORT MAP(clk, reset, d4, q4, we4);
-    registerF : my_nDFF2 PORT MAP(clk, reset, d5, q5, we5);
-    registerG : my_nDFF2 PORT MAP(clk, reset, d6, q6, we6);
 
-    we0 <= write_enable WHEN write_address1 = "000" OR write_address2 = "000" ELSE
-        '0';
-    we1 <= write_enable WHEN write_address1 = "001" OR write_address2 = "001" ELSE
-        '0';
-    we2 <= write_enable WHEN write_address1 = "010" OR write_address2 = "010" ELSE
-        '0';
-    we3 <= write_enable WHEN write_address1 = "011" OR write_address2 = "011" ELSE
-        '0';
-    we4 <= write_enable WHEN write_address1 = "100" OR write_address2 = "100" ELSE
-        '0';
-    we5 <= write_enable WHEN write_address1 = "101" OR write_address2 = "101" ELSE
-        '0';
-    we6 <= write_enable WHEN write_address1 = "110" OR write_address2 = "110" ELSE
-        '0';
+    PROCESS (clk, reset)
+    BEGIN
+        IF reset = '1' THEN
+            FOR i IN 0 TO 7 LOOP
+                ram(i) <= (OTHERS => '0');
+            END LOOP;
+        ELSIF clk'EVENT AND clk = '1' THEN
+            IF write_enable = '1' THEN
+                ram(to_integer(unsigned(write_address1))) <= data_in1;
+                ram(TO_INTEGER(UNSIGNED(write_address2))) <= data_in2;
+            END IF;
+        END IF;
+    END PROCESS;
 
-    d0 <= data_in1 WHEN write_address1 = "000" ELSE
-        data_in2 WHEN write_address2 = "000" ELSE
-        data_in1 ;
-    d1 <= data_in1 WHEN write_address1 = "001" ELSE
-        data_in2 WHEN write_address2 = "001" ELSE
-        data_in1;
-    d2 <= data_in1 WHEN write_address1 = "010" ELSE
-        data_in2 WHEN write_address2 = "010" ELSE
-        data_in1;
-    d3 <= data_in1 WHEN write_address1 = "011" ELSE
-        data_in2 WHEN write_address2 = "011" ELSE
-        data_in1;
-    d4 <= data_in1 WHEN write_address1 = "100" ELSE
-        data_in2 WHEN write_address2 = "100" ELSE
-        data_in1;
-    d5 <= data_in1 WHEN write_address1 = "101" ELSE
-        data_in2 WHEN write_address2 = "101" ELSE
-        data_in1;
-    d6 <= data_in1 WHEN write_address1 = "110" ELSE
-        data_in2 WHEN write_address2 = "110" ELSE
-        data_in1;
-
-    data_out1 <= q0 WHEN read_address1 = "000" ELSE
-        q1 WHEN read_address1 = "001" ELSE
-        q2 WHEN read_address1 = "010" ELSE
-        q3 WHEN read_address1 = "011" ELSE
-        q4 WHEN read_address1 = "100" ELSE
-        q5 WHEN read_address1 = "101" ELSE
-        q6 WHEN read_address1 = "110" ELSE
-        (OTHERS => '0');
-    data_out2 <= q0 WHEN read_address2 = "000" ELSE
-        q1 WHEN read_address2 = "001" ELSE
-        q2 WHEN read_address2 = "010" ELSE
-        q3 WHEN read_address2 = "011" ELSE
-        q4 WHEN read_address2 = "100" ELSE
-        q5 WHEN read_address2 = "101" ELSE
-        q6 WHEN read_address2 = "110" ELSE
-        (OTHERS => '0');
+    data_out1 <= ram(TO_INTEGER(UNSIGNED(read_address1)));
+    data_out2 <= ram(TO_INTEGER(UNSIGNED(read_address2)));
 
 
-
-END Behavioral;
+END register_ram;

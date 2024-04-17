@@ -15,7 +15,7 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 
-ENTITY partaAdder IS
+ENTITY ALUA IS
     GENERIC (bits : INTEGER := 16);
     PORT (
         A : IN STD_LOGIC_VECTOR (bits - 1 DOWNTO 0);
@@ -24,9 +24,9 @@ ENTITY partaAdder IS
         S : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
         result : OUT STD_LOGIC_VECTOR (bits - 1 DOWNTO 0);
         Cout : OUT STD_LOGIC);
-END partaAdder;
+END ALUA;
 
-ARCHITECTURE Behavioral OF partaAdder IS
+ARCHITECTURE Behavioral OF ALUA IS
     COMPONENT n_bit_adder IS
         GENERIC (bits : INTEGER := 16);
         PORT (

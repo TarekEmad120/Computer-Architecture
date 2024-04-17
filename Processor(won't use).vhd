@@ -75,7 +75,7 @@ ARCHITECTURE Behavioral OF mini_processor IS
             write_address2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0)
         );
     END COMPONENT;
-    COMPONENT lab1_mux IS
+    COMPONENT ALU IS
         GENERIC (bits : INTEGER := 16);
         PORT (
             input1 : IN STD_LOGIC_VECTOR (bits - 1 DOWNTO 0);
@@ -126,7 +126,7 @@ BEGIN
             decode_execute_reg_input <= weWB & Reg1 & Reg2 & Sel & OutFD1(12 DOWNTO 10) & Cin;
             Decode_Execute_Reg : my_nDFF GENERIC MAP(41) PORT MAP(clk, outrest(0), decode_execute_reg_input, OutDD1, weDD1);
             -- alu will take the output of decode_execute_reg as 3 inputs , 2 of them are inputs and 3rd is sel to choose the operation
-            Alu : lab1_mux GENERIC MAP(16) PORT MAP(OutDD1(39 DOWNTO 24), OutDD1(23 DOWNTO 8), OutDD1(7 DOWNTO 4), OutDD1(0), OutputALU, Cout);
+            Alu : ALU GENERIC MAP(16) PORT MAP(OutDD1(39 DOWNTO 24), OutDD1(23 DOWNTO 8), OutDD1(7 DOWNTO 4), OutDD1(0), OutputALU, Cout);
     
             writeback_input <= OutDD1(40) & OutputALU & OutDD1(3 DOWNTO 1);
             Write_Back : my_nDFF GENERIC MAP(20) PORT MAP(clk, reset, writeback_input, OutWB, '1');

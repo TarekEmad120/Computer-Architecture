@@ -8,16 +8,16 @@ USE IEEE.math_real.ALL;
 -- clock cycle. The counter increments only if the enable is set to 1. (Hint: you 
 -- can use the ‘+’
 
-ENTITY counter IS
+ENTITY PC IS
     GENERIC (N : INTEGER := 6);
     PORT (
         clk : IN STD_LOGIC;
         reset : IN STD_LOGIC;
         enable : IN STD_LOGIC;
         PC : OUT STD_LOGIC_VECTOR (N - 1 DOWNTO 0));
-END counter;
+END PC;
 
-ARCHITECTURE Behavioral OF counter IS
+ARCHITECTURE Behavioral OF PC IS
 
     
 BEGIN
