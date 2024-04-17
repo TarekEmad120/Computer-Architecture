@@ -2,134 +2,85 @@ LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 
 ENTITY ALU IS
-generic (bits: integer := 16);
     PORT (
-        input1 : IN STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-        input2 : IN STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-        selections : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
-        C_in : IN STD_LOGIC;
-        output1 : OUT STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-        C_out : OUT STD_LOGIC
+        input1 : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+        input2 : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+        carryin : IN STD_LOGIC;
+        S : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+        outpt : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+        carryout : OUT STD_LOGIC;
+
     );
 END ALU;
 
-ARCHITECTURE ALU_Arch OF ALU IS
+ARCHITECTURE My_imp_of_ALU OF ALU IS
 
-    COMPONENT ALUB IS
-    generic (bits: integer := 16);
+    COMPONENT n_bit_adder IS
+        GENERIC (bits : INTEGER := 32);
         PORT (
-            A : IN STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-            B : IN STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-            S : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
-            Cin : IN STD_LOGIC;
-            F : OUT STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-            Cout : OUT STD_LOGIC);
+            a, b : IN STD_LOGIC_VECTOR(bits - 1 DOWNTO 0);
+            cin : IN STD_LOGIC;
+            result : OUT STD_LOGIC_VECTOR(bits - 1 DOWNTO 0);
+            c_out : OUT STD_LOGIC);
     END COMPONENT;
-    COMPONENT ALUD IS
-    generic (bits: integer := 16);
-        PORT (
-            A : IN STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-            B : IN STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-            S : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
-            Cin : IN STD_LOGIC;
-            F : OUT STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-            Cout : OUT STD_LOGIC);
-    END COMPONENT;
-
-    COMPONENT ALUC IS
-    generic (bits: integer := 16);
-        PORT (
-            A : IN STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-            B : IN STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-            S : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
-            Cin : IN STD_LOGIC;
-            F : OUT STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-            Cout : OUT STD_LOGIC);
-    END COMPONENT;
-    
-    COMPONENT ALUA IS
-    generic (bits: integer := 16);
-        PORT (
-            A : IN STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-            B : IN STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-            C_in : IN STD_LOGIC;
-            S : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
-            result : OUT STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-            Cout : OUT STD_LOGIC);
-    END COMPONENT;
-
-    --SIGNAL mux : STD_LOGIC_VECTOR (15 DOWNTO 0);
-    --SIGNAL C_out_mux : STD_LOGIC;
-    SIGNAL output_ALUd, output_ALUc, output_ALU, output_ALU0 : STD_LOGIC_VECTOR (bits-1 DOWNTO 0);
-    SIGNAL C_out_ALUd, C_out_ALUc, C_out_ALU, C_out_ALU0 : STD_LOGIC;
+    SIGNAL ax, bx, a2, b2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL temp, temp2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL temp_cout, temp_cout2 : STD_LOGIC;
+    SIGNAL cin, cin2 : STD_LOGIC;
 BEGIN
-    --we need to check on first bit of selections to choose between ALUd , ALUc,and ALU
+    -- output <= not input1 when s = "0010" NOT
+    -- output <=  -input1 when s = "0100"  NEG    input2 - input1 at (input2 0)  input2 + not input1 + 1
+    -- output <= input1 +1  when s = "0110"  inc
+    -- output <= input1 -1 when s = "1000"           DEC   input1 - 1    input1 + not 1 + 1
+    -- output <= input1  when s = "0001"  move
+    -- output <= input1 - input2 when s = "0011"  SWAPPPPPPPPPPP
+    -- output <= input1 + input2 when s = "0101"  ADD
+    -- output <= input1 - input2 when s = "0111"  SUB    input1 + not input2 + 1
+    -- output <= input1 AND input2 when s = "1001"  AND
+    -- output <= input1 OR input2 when s = "1011"  OR
+    -- output <= input1 XOR input2 when s = "1111"  XOR
+    -- output <= input1 - input2 when s = "1101"  Cmp
 
-    ALUd1 : ALUD
-    PORT MAP(
-        A => input1,
-        B => input2,
-        S => selections,
-        Cin => C_in,
-        F => output_ALUd,
-        Cout => C_out_ALUd);
+    
 
-    ALUc1 : ALUC
-    PORT MAP(
-        A => input1,
-        B => input2,
-        S => selections,
-        Cin => C_in,
-        F => output_ALUc,
-        Cout => C_out_ALUc);
+    
+    outpt <= NOT input1 WHEN s = "0010" ELSE
+        temp WHEN s = "0100" ELSE
+        temp WHEN s = "0110" ELSE
+        temp WHEN s = "1000" ELSE
+        input1 WHEN s = "0001" ELSE
+        temp WHEN s = "0011" ELSE---------------------SWAP
+        temp WHEN s = "0101" ELSE
+        temp WHEN s = "0111" or s = "1101" ELSE
+        input1 AND input2 WHEN s = "1001" ELSE
+        input1 OR input2 WHEN s = "1011" ELSE
+        input1 XOR input2 WHEN s = "1111" ELSE
+        x"00000000";
 
-    ALU1 : ALUB
-    PORT MAP(
-        A => input1,
-        B => input2,
-        S => selections,
-        Cin => C_in,
-        F => output_ALU,
-        Cout => C_out_ALU);
-    ALU0 : ALUA
-    PORT MAP(
-        A => input1,
-        B => input2,
-        C_in => C_in,
-        S => selections,
-        result => output_ALU0,
-        Cout => C_out_ALU0);
+    ax <=
+        x"00000000" WHEN s = "0100" ELSE
+        input1 WHEN s = "0110" ELSE
+        input1 WHEN s = "1000" ELSE
+        input1 WHEN s = "0101" ELSE
+        input1 WHEN (s = "0111" or s = "1101") ELSE
+        x"00000000";
 
-    -- output1 <= output_ALU0 WHEN selections(3 DOWNTO 2) = "00"
-    --     ELSE
-    --     output_ALU WHEN selections(3 DOWNTO 2) = "01"
-    --     ELSE
-    --     output_ALUc WHEN selections(3 DOWNTO 2) = "10"
-    --     ELSE
-    --     output_ALUd WHEN selections(3 DOWNTO 2) = "11";
-    -- C_out <= C_out_ALU0 WHEN selections(3 DOWNTO 2) = "00"
-    --     ELSE
-    --     C_out_ALU WHEN selections(3 DOWNTO 2) = "01"
-    --     ELSE
-    --     C_out_ALUc WHEN selections(3 DOWNTO 2) = "10"
-    --     ELSE
-    --     C_out_ALUd WHEN selections(3 DOWNTO 2) = "11";
+    bx <=
+        NOT input2 WHEN s = "0100" ELSE
+        x"00000000" WHEN s = "0110" ELSE
+        NOT x"00000001" WHEN s = "1000" ELSE
+        input2 WHEN s = "0101" ELSE
+        NOT input2 WHEN (s = "0111" or s = "1101") ELSE
+        x"00000000";
 
-        with selections(3 DOWNTO 2) select
-        output1 <= output_ALU0 WHEN "00",
-        output_ALU WHEN "01",
-        output_ALUc WHEN "10",
-        output_ALUd WHEN "11",
-        (others => '0') when others;
+    cin <=
+        '1' WHEN s = "0100" ELSE
+        '1' WHEN s = "0110" ELSE
+        '1' WHEN s = "1000" ELSE
+        '0' WHEN s = "0101" ELSE
+        '1' WHEN (s = "0111" or s = "1101") ELSE
+        '0';
+    adder0 : n_bit_adder GENERIC MAP(32) PORT MAP(ax, bx, cin, temp, temp_cout);
+    adder1 : n_bit_adder GENERIC MAP(32) PORT MAP(a2, b2, cin2, temp2, temp_cout2);
 
-        with selections(3 DOWNTO 2) select
-        C_out <= C_out_ALU0 WHEN "00",
-        C_out_ALU WHEN "01",
-        C_out_ALUc WHEN "10",
-        C_out_ALUd WHEN "11",
-        '0' when others;
-
-
-
-
-END ALU_Arch;
+END ARCHITECTURE My_imp_of_ALU;
