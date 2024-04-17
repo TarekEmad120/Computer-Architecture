@@ -4,9 +4,6 @@ USE ieee.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
 USE IEEE.math_real.ALL;
 
--- A 6-bit counter (PC) that starts at 0 at reset and increments with 1 each 
--- clock cycle. The counter increments only if the enable is set to 1. (Hint: you 
--- can use the ‘+’
 
 ENTITY PC IS
     GENERIC (N : INTEGER := 32);
