@@ -9,12 +9,16 @@ USE IEEE.math_real.ALL;
 -- can use the ‘+’
 
 ENTITY PC IS
-    GENERIC (N : INTEGER := 6);
+    GENERIC (N : INTEGER := 32);
     PORT (
+
         clk : IN STD_LOGIC;
         reset : IN STD_LOGIC;
-        enable : IN STD_LOGIC;
-        PC : OUT STD_LOGIC_VECTOR (N - 1 DOWNTO 0));
+        pc_in : in STD_LOGIC_VECTOR (N - 1 DOWNTO 0);
+        pc_reset_value : in STD_LOGIC_VECTOR (N - 1 DOWNTO 0); 
+        pc_out : out STD_LOGIC_VECTOR (N - 1 DOWNTO 0);
+        enable : IN STD_LOGIC
+    );
 END PC;
 
 ARCHITECTURE Behavioral OF PC IS
@@ -23,23 +27,14 @@ ARCHITECTURE Behavioral OF PC IS
 BEGIN
 
     PROCESS (clk, reset)
-    VARIABLE COUNT_TEMP : INTEGER := 0;
     BEGIN
         IF reset = '1' THEN
-            COUNT_TEMP := 0;
-            PC <= (OTHERS => '0');
-        ELSIF rising_edge(clk) THEN
-            --check if enable is set to 1 and pc is not at max value
-            IF enable = '1' THEN
-                IF COUNT_TEMP < 2 ** N - 1 THEN
-                    COUNT_TEMP := COUNT_TEMP + 1;
-                ELSE
-                    COUNT_TEMP := 0;
-                END IF;
+            pc_out <= pc_reset_value;
+        ELSIF rising_edge(clk) and enable = '1' THEN
 
-            END IF;
+        pc_out <=pc_in;
+
         END IF;
-        PC <= STD_LOGIC_VECTOR(TO_UNSIGNED(COUNT_TEMP, N));
     END PROCESS;
 
 
