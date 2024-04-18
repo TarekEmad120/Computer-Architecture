@@ -8,7 +8,7 @@ ENTITY ALU IS
         carryin : IN STD_LOGIC;
         sel : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
         outpt : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
-        carryout : OUT STD_LOGIC;
+        carryout : OUT STD_LOGIC
 
     );
 END ALU;
