@@ -15,13 +15,11 @@ entity FetchDecodeReg is
         instructionIn : in std_logic_vector(15 downto 0);
     
         instructionOut: out std_logic_vector(15 downto 0);
-        PC_data : out std_logic_vector(31 downto 0);
-        Interruptflag : out std_logic
+        PC_data : out std_logic_vector(31 downto 0)
     );
 end entity FetchDecodeReg;
 
 architecture FetchDecodeReg_Arch of FetchDecodeReg is
-
 
     begin
         process(clk, reset)
@@ -29,22 +27,18 @@ architecture FetchDecodeReg_Arch of FetchDecodeReg is
             if reset = '1' then
                 PC_data <= (others => '0');
                 instructionOut <= (others => '0');
-                Interruptflag <= '0';
+                
             elsif rising_edge(clk) then
                 if IntermediateEnable = '1' then
                     PC_data <= x"00000000";
                     instructionOut <= x"0000" ;
-                    Interruptflag <= '0';
-
                 elsif Interrupt = '1' then
                     --assging pc to pc_data using contactenation
                     PC_data <=pc;
                     instructionOut <= b"1110_0000_0000_0000";
-                    Interruptflag <= '1';
                 else
                     PC_data <=pc;
                     instructionOut <= instructionIn;
-                    Interruptflag <= '0';
                 end if;
             end if;
         end process;
