@@ -1,0 +1,359 @@
+{D:/spring 24/Arch/Project/Computer-Architecture/tb_ALUC.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/tb_ALUC.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity testbenchC
+-- Compiling architecture tb_partC of testbenchC
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/IN_Port.vhd} {1 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/IN_Port.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Compiling entity IN_Port
+-- Compiling architecture MY_imp_of_IN_Port of IN_Port
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/tb_ALUD.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/tb_ALUD.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity testbenchD
+-- Compiling architecture tb_partD of testbenchD
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/n_bit_adder.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/n_bit_adder.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity n_bit_adder
+-- Compiling architecture a_n_bit_adder of n_bit_adder
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/Forward_unit.vhd} {1 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/Forward_unit.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity Forward_unit
+-- Compiling architecture My_imp_of_Forward_unit of Forward_unit
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/Mem_WB_reg.vhd} {1 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/Mem_WB_reg.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity Mem_WB_reg
+-- Compiling architecture My_imp_of_Mem_WB_reg of Mem_WB_reg
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/select_adder(won't use).vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/select_adder(won't use).vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity select_adder
+-- Compiling architecture a_my_adder of select_adder
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/nDFF_rising_edge.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/nDFF_rising_edge.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity nDFF_rising_edge
+-- Compiling architecture a_nDFF_rising_edge of nDFF_rising_edge
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/nDFF_falling_edge.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/nDFF_falling_edge.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity nDFF_falling_edge
+-- Compiling architecture a_nDFF_falling_edge of nDFF_falling_edge
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/n_bits_adder.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/n_bits_adder.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Compiling entity n_bit_adder
+-- Compiling architecture Behavioral of n_bit_adder
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/Decode_exceute.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/Decode_exceute.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity decode_excute
+-- Compiling architecture decode_excute of decode_excute
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/tb_ALU.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/tb_ALU.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity testmux
+-- Compiling architecture tb_mux of testmux
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/DFF_rising_edge.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/DFF_rising_edge.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity DFF_rising_edge
+-- Compiling architecture a_DFF_rising_edge of DFF_rising_edge
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/DFF_falling_edge.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/DFF_falling_edge.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity DFF_falling_edge
+-- Compiling architecture a_DFF_falling_edge of DFF_falling_edge
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/register_12bits_width.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/register_12bits_width.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity register_12bits
+-- Compiling architecture Behavioral of register_12bits
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/tb_register_ram.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/tb_register_ram.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity testram
+-- Compiling architecture behavior of testram
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/ALU.vhd} {1 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/ALU.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity ALU
+-- Compiling architecture My_imp_of_ALU of ALU
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/tb_processor(won't use).vhd} {0 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/tb_processor(won't use).vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Compiling entity Tt_mini_processor
+-- Compiling architecture Behavioral of Tt_mini_processor
+** Error: D:/spring 24/Arch/Project/Computer-Architecture/tb_processor(won't use).vhd(92): near "Behavioral": (vcom-1576) expecting PROCESS.
+
+} {11.0 12.0} {}} {D:/spring 24/Arch/Project/Computer-Architecture/tb_register.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/tb_register.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity register_12bits_tb
+-- Compiling architecture behavior of register_12bits_tb
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/ALUA.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/ALUA.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity ALUA
+-- Compiling architecture Behavioral of ALUA
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/PC.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/PC.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Compiling entity PC
+-- Compiling architecture Behavioral of PC
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/OUT_Port.vhd} {1 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/OUT_Port.vhd}
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Compiling entity OUT_Port
+-- Compiling architecture My_Imp_of_OUT_Port of OUT_Port
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/controller.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/controller.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Compiling entity controller
+-- Compiling architecture Behavioral of controller
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/ALUB.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/ALUB.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity ALU
+-- Compiling architecture partB of ALU
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/register_file.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/register_file.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity register_file
+-- Compiling architecture register_ram of register_file
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/ALUC.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/ALUC.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity ALUc
+-- Compiling architecture partC of ALUc
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/ALU_Controller.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/ALU_Controller.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity ALU_Controller
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/instruction_cache.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/instruction_cache.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity instruction_cache
+-- Compiling architecture register_ram_arch of instruction_cache
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/bit_adder.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/bit_adder.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity bit_adder
+-- Compiling architecture behavioral of bit_adder
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/ALUD.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/ALUD.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity ALUd
+-- Compiling architecture partD of ALUd
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/mux4x1_.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/mux4x1_.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity mux_4x1
+-- Compiling architecture when_else_mux of mux_4x1
+-- Compiling architecture with_select_mux of mux_4x1
+-- Loading entity mux_4x1
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/ALU(won't use).vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/ALU(won't use).vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity ALU
+-- Compiling architecture ALU_Arch of ALU
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/processor.vhd} {0 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/processor.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package MATH_REAL
+-- Compiling entity processor
+** Error: D:/spring 24/Arch/Project/Computer-Architecture/processor.vhd(13): near ")": (vcom-1576) expecting IDENTIFIER.
+
+} {10.0 11.0} {}} {D:/spring 24/Arch/Project/Computer-Architecture/ram.vhd} {0 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/ram.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity Memory_Data
+-- Compiling architecture IMP of Memory_Data
+** Error: D:/spring 24/Arch/Project/Computer-Architecture/ram.vhd(26): Illegal target for signal assignment.
+** Error: D:/spring 24/Arch/Project/Computer-Architecture/ram.vhd(26): (vcom-1136) Unknown identifier "ram".
+** Error: D:/spring 24/Arch/Project/Computer-Architecture/ram.vhd(29): near "PROCESS": (vcom-1576) expecting IF.
+** Error: D:/spring 24/Arch/Project/Computer-Architecture/ram.vhd(30): (vcom-1136) Unknown identifier "ram".
+** Error: D:/spring 24/Arch/Project/Computer-Architecture/ram.vhd(31): near "IMP": (vcom-1576) expecting PROCESS.
+
+} {10.0 15.0} {}} {D:/spring 24/Arch/Project/Computer-Architecture/tb_ALUA.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/tb_ALUA.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity test_parta
+-- Compiling architecture test_parta of test_parta
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/register_file(won't use).vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/register_file(won't use).vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity register_file
+-- Compiling architecture Behavioral of register_file
+
+} {} {}} {D:/spring 24/Arch/Project/Computer-Architecture/tb_ALUB.vhd} {2 {vcom -work work -2002 -explicit -stats=none {D:/spring 24/Arch/Project/Computer-Architecture/tb_ALUB.vhd}
+** Warning: (vcom-14) Failed to open "D:/spring 24/Arch/Project/Computer-Architecture/ARCH_Project.mpf" specified by the MODELSIM environment variable.
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity testbench
+-- Compiling architecture tb_partB of testbench
+
+} {} {}}
