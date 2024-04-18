@@ -14,7 +14,7 @@ ENTITY processor IS
 
 END processor;
 
-ARCHITECTURE IMP OF processor IS
+ARCHITECTURE behavioral OF processor IS
 -------------------------------------------- FETCH STAGE 
 component  PCmux is
     port(
@@ -337,9 +337,9 @@ begin
     MemWBregister :Mem_WB_reg PORT MAP (clk=>clk,reset=>reset,enable=>Enable_Mem_Wb,
     Ra2_in=>Ra_Out_Execute_Mem,
     Mem_data_in=>Ra_Out_Execute_Mem,----------------------------------------------------------- TO BE EDITED WITH MEMERY ACUTALLY DATA 
-    Alu_data_in=>AluOut_Out_Execute_Mem,
+    Alu_data_in=>luOut_Out_Execute_Mem,
     Rd_address_in=>Rd_out_Execute_Mem,
-    WBS_in=>WRB_S_Out_Execute_Mem,
+    WBS_in=>RB_S_Out_Execute_Mem,
     WB_EN_in=>WRITE_BACK_out_Execute_Mem,
     Ra2_out=>Ra2_out_mem_wb,
     Mem_data_out=>Mem_data_out_mem_wbt,
@@ -363,7 +363,7 @@ begin
     Mem_free_enable=>Mem_free_enable_con,
     aluControl=>alu_controll_signal,
     RS1_RD_SEL=>rs1_rd_controll,
-    RS2_RD_SEL=>rs2_rd_controll
+    RS2_RD_SEL=>rs2_rd_controll,
     );
 ------------------------------ MUX WRITE BACK
     muxWB : mux_WB PORT MAP (InPortData=>InPortData_MUX_WB,
@@ -372,6 +372,8 @@ begin
     RA2=>Ra2_out_mem_wb,
     DataWriteBack=>Data_write_back_out_muxWB,
     WBW_s=>WBS_out_mem_wb
-    );
+    )  
 
-end ARCHITECTURE IMP ;
+
+
+end architecture behavioral;
