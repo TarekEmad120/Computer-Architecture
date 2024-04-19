@@ -43,7 +43,7 @@ BEGIN
             MEM_READ_Out<= '0';
             MEM_WRITE_Out<='0';
             WRITE_BACK_Out<='0';
-            WRB_S_Out<=(OTHERS => 'x');
+            WRB_S_Out<=(OTHERS => '0');
         ELSIF clk'EVENT AND clk = '1' THEN
             IF enable = '1' THEN
               RD_Out<=RD_In;

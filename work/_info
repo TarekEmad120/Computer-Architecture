@@ -1,0 +1,645 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/intelFPGA_lite/18.1
+Ealu
+Z0 w1713444762
+Z1 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z2 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+Z3 dF:/Computer Archectiture/project/Computer-Architecture
+Z4 8F:/Computer Archectiture/project/Computer-Architecture/Execution/ALU.vhd
+Z5 FF:/Computer Archectiture/project/Computer-Architecture/Execution/ALU.vhd
+l0
+L4
+VHd3A2cI@^l6RhkCAio;HU3
+!s100 7R]5JM0j3=I::mO@Jo0O?1
+Z6 OV;C;10.5b;63
+32
+Z7 !s110 1713515203
+!i10b 1
+Z8 !s108 1713515203.000000
+Z9 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|F:/Computer Archectiture/project/Computer-Architecture/Execution/ALU.vhd|
+Z10 !s107 F:/Computer Archectiture/project/Computer-Architecture/Execution/ALU.vhd|
+!i113 1
+Z11 o-work work -2002 -explicit
+Z12 tExplicit 1 CvgOpt 0
+Amy_imp_of_alu
+R1
+R2
+DEx4 work 3 alu 0 22 Hd3A2cI@^l6RhkCAio;HU3
+l27
+L14
+V0?dLh5cKBkaH`om7jhg6z2
+!s100 F86DJBN9Rb1>Y:2NR7lXJ1
+R6
+32
+R7
+!i10b 1
+R8
+R9
+R10
+!i113 1
+R11
+R12
+Econtroller
+Z13 w1713513268
+Z14 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+R1
+R2
+R3
+Z15 8F:/Computer Archectiture/project/Computer-Architecture/Decode/Controller.vhd
+Z16 FF:/Computer Archectiture/project/Computer-Architecture/Decode/Controller.vhd
+l0
+L5
+V;3k2bmAhA;:ffcHUVlb4i3
+!s100 c:GP9ke@76GU<hQ6F1Wjh2
+R6
+32
+R7
+!i10b 1
+R8
+Z17 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|F:/Computer Archectiture/project/Computer-Architecture/Decode/Controller.vhd|
+Z18 !s107 F:/Computer Archectiture/project/Computer-Architecture/Decode/Controller.vhd|
+!i113 1
+R11
+R12
+Aimp
+R14
+R1
+R2
+DEx4 work 10 controller 0 22 ;3k2bmAhA;:ffcHUVlb4i3
+l25
+L23
+V7lg^2[;F54ARVZeg]T:>H3
+!s100 HI3AT8Y9]4:7M5K8Xf5_R1
+R6
+32
+R7
+!i10b 1
+R8
+R17
+R18
+!i113 1
+R11
+R12
+Edecode_execute
+Z19 w1713513336
+R14
+R1
+R2
+R3
+Z20 8F:/Computer Archectiture/project/Computer-Architecture/Decode/Decode_Execute.vhd
+Z21 FF:/Computer Archectiture/project/Computer-Architecture/Decode/Decode_Execute.vhd
+l0
+L6
+VQ^Y8a9Qk<`lM1R:DbFig70
+!s100 eQ2DKAcR^Je8U4d=C;dl93
+R6
+32
+R7
+!i10b 1
+R8
+Z22 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|F:/Computer Archectiture/project/Computer-Architecture/Decode/Decode_Execute.vhd|
+Z23 !s107 F:/Computer Archectiture/project/Computer-Architecture/Decode/Decode_Execute.vhd|
+!i113 1
+R11
+R12
+Aimp
+R14
+R1
+R2
+DEx4 work 14 decode_execute 0 22 Q^Y8a9Qk<`lM1R:DbFig70
+l32
+L29
+VcZO:LM704Hc3ia40F1mmR1
+!s100 AHf@[NCnWn:DcXkoBZOTl1
+R6
+32
+R7
+!i10b 1
+R8
+R22
+R23
+!i113 1
+R11
+R12
+Eexecute_mememory_register
+Z24 w1713394665
+R14
+R1
+R2
+R3
+Z25 8F:/Computer Archectiture/project/Computer-Architecture/Execution/Execution_Mem_register.vhd
+Z26 FF:/Computer Archectiture/project/Computer-Architecture/Execution/Execution_Mem_register.vhd
+l0
+L6
+V:4SJ6GQM<XAOTP;JMmCMz0
+!s100 eH95HHo?`Vk4]nlPTO2521
+R6
+32
+Z27 !s110 1713515204
+!i10b 1
+R8
+Z28 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|F:/Computer Archectiture/project/Computer-Architecture/Execution/Execution_Mem_register.vhd|
+Z29 !s107 F:/Computer Archectiture/project/Computer-Architecture/Execution/Execution_Mem_register.vhd|
+!i113 1
+R11
+R12
+Aimp
+R14
+R1
+R2
+DEx4 work 25 execute_mememory_register 0 22 :4SJ6GQM<XAOTP;JMmCMz0
+l27
+L26
+VX]PiiHKSLkZ9S06nK[HUf0
+!s100 @MnOFX2mGfTl1ncCV]kgm3
+R6
+32
+R27
+!i10b 1
+R8
+R28
+R29
+!i113 1
+R11
+R12
+Efetchdecodereg
+R0
+Z30 DPx4 ieee 9 math_real 0 22 Sk6CSihbPL<f[^Shm]=KX0
+R14
+R1
+R2
+R3
+Z31 8F:/Computer Archectiture/project/Computer-Architecture/fetch stage/FetchDecodeReg.vhd
+Z32 FF:/Computer Archectiture/project/Computer-Architecture/fetch stage/FetchDecodeReg.vhd
+l0
+L7
+V5;lKPnPzQNlgWmbkBJPQM2
+!s100 `e^d5;00igZjgm3n_iCW50
+R6
+32
+R27
+!i10b 1
+Z33 !s108 1713515204.000000
+Z34 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|F:/Computer Archectiture/project/Computer-Architecture/fetch stage/FetchDecodeReg.vhd|
+Z35 !s107 F:/Computer Archectiture/project/Computer-Architecture/fetch stage/FetchDecodeReg.vhd|
+!i113 1
+R11
+R12
+Afetchdecodereg_arch
+R30
+R14
+R1
+R2
+DEx4 work 14 fetchdecodereg 0 22 5;lKPnPzQNlgWmbkBJPQM2
+l24
+L22
+V8OVk4BBekG_2b8GOeijH`3
+!s100 6TmijP;i]_OAj3=N0SN0P2
+R6
+32
+R27
+!i10b 1
+R33
+R34
+R35
+!i113 1
+R11
+R12
+Einstructionmemory
+R24
+R14
+Z36 DPx4 ieee 15 std_logic_arith 0 22 [G314=:2zXJ`VORJe1J@Z1
+Z37 DPx4 ieee 18 std_logic_unsigned 0 22 ;eZjO2D4ZDz<]0>8AL<ne1
+Z38 DPx4 ieee 16 std_logic_textio 0 22 V5TSK`;aJKC<l]CEg1>mz1
+R1
+R2
+R3
+Z39 8F:/Computer Archectiture/project/Computer-Architecture/fetch stage/InstructionCache.vhd
+Z40 FF:/Computer Archectiture/project/Computer-Architecture/fetch stage/InstructionCache.vhd
+l0
+L11
+VO8hT4]71=lZWVk4i;EJkj3
+!s100 i`@zFRJKzPhI>F7C=J6O10
+R6
+32
+R27
+!i10b 1
+R33
+Z41 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|F:/Computer Archectiture/project/Computer-Architecture/fetch stage/InstructionCache.vhd|
+Z42 !s107 F:/Computer Archectiture/project/Computer-Architecture/fetch stage/InstructionCache.vhd|
+!i113 1
+R11
+R12
+Abehavioral
+R14
+R36
+R37
+R38
+R1
+R2
+DEx4 work 17 instructionmemory 0 22 O8hT4]71=lZWVk4i;EJkj3
+l23
+L18
+VBTl>6:2ImLhg;kj@kh^F>0
+!s100 [A3FdHd0K?04OWX`koXb[0
+R6
+32
+R27
+!i10b 1
+R33
+R41
+R42
+!i113 1
+R11
+R12
+Emem_wb_reg
+R0
+R14
+R1
+R2
+R3
+Z43 8F:/Computer Archectiture/project/Computer-Architecture/WriteBack/Mem_WB_reg.vhd
+Z44 FF:/Computer Archectiture/project/Computer-Architecture/WriteBack/Mem_WB_reg.vhd
+l0
+L5
+VPV;[QM1e[`eR`nPZaiBGM2
+!s100 2h5_jZooRE2eUnLZc8To;0
+R6
+32
+R27
+!i10b 1
+R33
+Z45 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|F:/Computer Archectiture/project/Computer-Architecture/WriteBack/Mem_WB_reg.vhd|
+Z46 !s107 F:/Computer Archectiture/project/Computer-Architecture/WriteBack/Mem_WB_reg.vhd|
+!i113 1
+R11
+R12
+Amy_imp_of_mem_wb_reg
+R14
+R1
+R2
+DEx4 work 10 mem_wb_reg 0 22 PV;[QM1e[`eR`nPZaiBGM2
+l27
+L25
+VZc;MLl[9AJkYkOhb;?NDb0
+!s100 <_3D1@LMOXjJj0JG[hf:@2
+R6
+32
+R27
+!i10b 1
+R33
+R45
+R46
+!i113 1
+R11
+R12
+Emux_regfile_out
+R0
+R30
+R14
+R1
+R2
+R3
+Z47 8F:/Computer Archectiture/project/Computer-Architecture/Decode/mux_regFile_out.vhd
+Z48 FF:/Computer Archectiture/project/Computer-Architecture/Decode/mux_regFile_out.vhd
+l0
+L7
+VGVgFC>bYQlF`7F_bTFYbn1
+!s100 L4zmb[eIZUISEzm]B94@G2
+R6
+32
+R7
+!i10b 1
+R8
+Z49 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|F:/Computer Archectiture/project/Computer-Architecture/Decode/mux_regFile_out.vhd|
+Z50 !s107 F:/Computer Archectiture/project/Computer-Architecture/Decode/mux_regFile_out.vhd|
+!i113 1
+R11
+R12
+Amux
+R30
+R14
+R1
+R2
+DEx4 work 15 mux_regfile_out 0 22 GVgFC>bYQlF`7F_bTFYbn1
+l16
+L15
+VFX]OcU94dL<[h^6dbFI;l1
+!s100 ;:dhW[g]oJh]dN9CjTA>20
+R6
+32
+R7
+!i10b 1
+R8
+R49
+R50
+!i113 1
+R11
+R12
+Emux_rs1
+Z51 w1713513372
+R30
+R14
+R1
+R2
+R3
+Z52 8F:/Computer Archectiture/project/Computer-Architecture/Decode/mux_rs1.vhd
+Z53 FF:/Computer Archectiture/project/Computer-Architecture/Decode/mux_rs1.vhd
+l0
+L7
+VHU=UcanE?K5@03Jm@A51Q2
+!s100 ^QN?N[lnnF[F1dT:KMFm13
+R6
+32
+R7
+!i10b 1
+R8
+Z54 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|F:/Computer Archectiture/project/Computer-Architecture/Decode/mux_rs1.vhd|
+Z55 !s107 F:/Computer Archectiture/project/Computer-Architecture/Decode/mux_rs1.vhd|
+!i113 1
+R11
+R12
+Amux
+R30
+R14
+R1
+R2
+DEx4 work 7 mux_rs1 0 22 HU=UcanE?K5@03Jm@A51Q2
+l16
+L15
+V98aIKLzoD`l35fMaAg?iF2
+!s100 ^FZ:5@N032>3Q]_lPfbQO1
+R6
+32
+R7
+!i10b 1
+R8
+R54
+R55
+!i113 1
+R11
+R12
+Emux_rs2
+Z56 w1713513384
+R30
+R14
+R1
+R2
+R3
+Z57 8F:/Computer Archectiture/project/Computer-Architecture/Decode/mux_rs2.vhd
+Z58 FF:/Computer Archectiture/project/Computer-Architecture/Decode/mux_rs2.vhd
+l0
+L7
+VKVjDkB49?ljQHAPb9VdH=0
+!s100 jI@7eh<69gj4>bEfTg?e61
+R6
+32
+R7
+!i10b 1
+R8
+Z59 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|F:/Computer Archectiture/project/Computer-Architecture/Decode/mux_rs2.vhd|
+Z60 !s107 F:/Computer Archectiture/project/Computer-Architecture/Decode/mux_rs2.vhd|
+!i113 1
+R11
+R12
+Amux
+R30
+R14
+R1
+R2
+DEx4 work 7 mux_rs2 0 22 KVjDkB49?ljQHAPb9VdH=0
+l17
+L16
+V]L;GU[D8BzG4[PY39i64J1
+!s100 mNm`Q7UJ?`A5mi`;dYTCJ3
+R6
+32
+R7
+!i10b 1
+R8
+R59
+R60
+!i113 1
+R11
+R12
+Emux_wb
+Z61 w1713512018
+R30
+R14
+R1
+R2
+R3
+Z62 8F:/Computer Archectiture/project/Computer-Architecture/WriteBack/mux_wb.vhd
+Z63 FF:/Computer Archectiture/project/Computer-Architecture/WriteBack/mux_wb.vhd
+l0
+L7
+V9Ci5niO[B08F;I7JjEX=I1
+!s100 0g`j7V?6_[?Lf9dTB[<[51
+R6
+32
+R27
+!i10b 1
+R33
+Z64 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|F:/Computer Archectiture/project/Computer-Architecture/WriteBack/mux_wb.vhd|
+Z65 !s107 F:/Computer Archectiture/project/Computer-Architecture/WriteBack/mux_wb.vhd|
+!i113 1
+R11
+R12
+Amux
+R30
+R14
+R1
+R2
+DEx4 work 6 mux_wb 0 22 9Ci5niO[B08F;I7JjEX=I1
+l17
+L16
+V;Q<f44EWej<bWcEYKG3ca0
+!s100 9B7U2On8<8Rh3YhfHd8>e3
+R6
+32
+R27
+!i10b 1
+R33
+R64
+R65
+!i113 1
+R11
+R12
+Epcmux
+R24
+R30
+R14
+R1
+R2
+R3
+Z66 8F:/Computer Archectiture/project/Computer-Architecture/fetch stage/PCmux.vhd
+Z67 FF:/Computer Archectiture/project/Computer-Architecture/fetch stage/PCmux.vhd
+l0
+L7
+VMeGWh7XDZg[6F35?16UgX2
+!s100 5k;UezH^;^IL:kXS[?6Gf1
+R6
+32
+R27
+!i10b 1
+R33
+Z68 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|F:/Computer Archectiture/project/Computer-Architecture/fetch stage/PCmux.vhd|
+Z69 !s107 F:/Computer Archectiture/project/Computer-Architecture/fetch stage/PCmux.vhd|
+!i113 1
+R11
+R12
+Amux
+R30
+R14
+R1
+R2
+DEx4 work 5 pcmux 0 22 MeGWh7XDZg[6F35?16UgX2
+l23
+L22
+VfTU]cV]6djWcnVUW[G1A02
+!s100 oiN>@HEOc^F`AP9E[5J_00
+R6
+32
+R27
+!i10b 1
+R33
+R68
+R69
+!i113 1
+R11
+R12
+Epcregister
+R24
+R30
+R14
+R1
+R2
+R3
+Z70 8F:/Computer Archectiture/project/Computer-Architecture/fetch stage/PCregister.vhd
+Z71 FF:/Computer Archectiture/project/Computer-Architecture/fetch stage/PCregister.vhd
+l0
+L6
+VN3m2;N?omfRA>V1BEUgdi0
+!s100 [0Sl2`^_<iRo[GMYC]hE?0
+R6
+32
+R27
+!i10b 1
+R33
+Z72 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|F:/Computer Archectiture/project/Computer-Architecture/fetch stage/PCregister.vhd|
+Z73 !s107 F:/Computer Archectiture/project/Computer-Architecture/fetch stage/PCregister.vhd|
+!i113 1
+R11
+R12
+Abehavioral
+R30
+R14
+R1
+R2
+DEx4 work 10 pcregister 0 22 N3m2;N?omfRA>V1BEUgdi0
+l18
+L17
+VgHK62CDWW1@Gm;YI:OX<42
+!s100 GSWV=T9H4Vk05W<g@i5YC3
+R6
+32
+R27
+!i10b 1
+R33
+R72
+R73
+!i113 1
+R11
+R12
+Eprocessor
+Z74 w1713515196
+R30
+R14
+R1
+R2
+R3
+Z75 8F:/Computer Archectiture/project/Computer-Architecture/processor.vhd
+Z76 FF:/Computer Archectiture/project/Computer-Architecture/processor.vhd
+l0
+L7
+V3OMFYLF0D?6_iajkzN_?c0
+!s100 B2hGA`;ETVh2WV8MDQ<_T3
+R6
+32
+R27
+!i10b 1
+R33
+Z77 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|F:/Computer Archectiture/project/Computer-Architecture/processor.vhd|
+Z78 !s107 F:/Computer Archectiture/project/Computer-Architecture/processor.vhd|
+!i113 1
+R11
+R12
+Aimp
+R30
+R14
+R1
+R2
+DEx4 work 9 processor 0 22 3OMFYLF0D?6_iajkzN_?c0
+l238
+L17
+ViDm9HFBOZSSfmmHS`UzlL0
+!s100 bh^bW:0fBZ8C0UGzT=27z3
+R6
+32
+R27
+!i10b 1
+R33
+R77
+R78
+!i113 1
+R11
+R12
+Eregister_file
+R24
+R14
+R1
+R2
+R3
+Z79 8F:/Computer Archectiture/project/Computer-Architecture/Decode/register_file.vhd
+Z80 FF:/Computer Archectiture/project/Computer-Architecture/Decode/register_file.vhd
+l0
+L6
+V70SJIl5BNfbkacV5obRS;2
+!s100 `Vo^`gdaX<004L^LzJY8`3
+R6
+32
+R7
+!i10b 1
+R8
+Z81 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|F:/Computer Archectiture/project/Computer-Architecture/Decode/register_file.vhd|
+Z82 !s107 F:/Computer Archectiture/project/Computer-Architecture/Decode/register_file.vhd|
+!i113 1
+R11
+R12
+Aimp
+R14
+R1
+R2
+DEx4 work 13 register_file 0 22 70SJIl5BNfbkacV5obRS;2
+l28
+L25
+VCDKWCmk11SHg@z@ZHRFc81
+!s100 =NfN^UMgzN0Rg3]d3NjbQ1
+R6
+32
+R7
+!i10b 1
+R8
+R81
+R82
+!i113 1
+R11
+R12

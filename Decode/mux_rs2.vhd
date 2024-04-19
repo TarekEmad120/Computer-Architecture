@@ -18,9 +18,9 @@ begin
     process (rs2, rd, rs2_rd) is
         begin
             case rs2_rd is
-                when "0" =>
+                when '0' =>
                     ra2 <= rs2;
-                when "1" =>
+                when '1' =>
                     ra2 <= rd;
                 when others =>
                     ra2 <= (others => 'X');
