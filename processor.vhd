@@ -71,7 +71,8 @@ architecture IMP of processor is
       Free_P_Enable                       : out STD_LOGIC;
       Mem_protect_enable, Mem_free_enable : out STD_LOGIC;
       aluControl                          : out STD_LOGIC_VECTOR(3 downto 0);
-      RS1_RD_SEL, RS2_RD_SEL              : out STD_LOGIC
+      RS1_RD_SEL, RS2_RD_SEL              : out STD_LOGIC;
+      Interrupt_Signal                    : out  STD_LOGIC
     );
   end component;
 
@@ -194,11 +195,13 @@ architecture IMP of processor is
 
   signal controller_pc_Enable                                                : std_logic;
   signal Reset_Pc_Value, Interrupt_PC_Value, PC_value_selected, PC_VALUE_OUT : unsigned(11 downto 0);
+  SIGNAL PC_INSTRUCTION_INCREMNTED: std_logic_vector(31 downto 0);
   SIGNAL PC_VALUE_SELECTED_STD_LOGIC: std_logic_vector(11 downto 0);
   SIGNAL IMM_CONCATENATED: std_logic_vector(31 downto 0);
   SIGNAL PC_VALUE_SELECTED_CONCATENATED: std_logic_vector(31 downto 0);
   SIGNAL PC_VALUE_CONCATENATED: std_logic_vector(31 downto 0);
   SIGNAL PC_VALUE_OUT_STD_LOGIC: std_logic_vector(11 downto 0);
+  SIGNAL PC_MUX_OUT: std_logic_vector(31 downto 0);
   signal PC_next_Instruction, PC_BR_Ra_value, PC_Ret_value, PC_Execption_value : std_logic_vector(31 downto 0);
   signal flushEx_signal, flushMem_signal                                         : std_logic;
   signal Instruction_from_memory                                                 : STD_LOGIC_VECTOR(15 downto 0);
@@ -216,6 +219,7 @@ architecture IMP of processor is
   signal alu_control_out_Decode_Execute                                          : STD_LOGIC_VECTOR(3 downto 0);
   signal RD_Out_Decode_Execute, RS1_out_Decode_Execute, RS2_out_Decode_Execute   : STD_LOGIC_VECTOR(2 downto 0);
   -- SIGNAL controller_alu_operation:STD_LOGIC_VECTOR (3 DOWNTO 0);
+  signal interrupt_signal_controller_out                                                      : std_logic;
   signal Alu_output_data                                                                          : STD_LOGIC_VECTOR(31 downto 0);
   signal OF_flag                                                                                  : std_logic;
   signal MEM_READ_IN_Decode_Execute, MEM_WRITE_IN_Decode_Execute, WRITE_BACK_IN_Decode_Execute    : std_logic;
@@ -234,9 +238,6 @@ architecture IMP of processor is
   signal WRB_S_con, WRB_S_Decode_Execute                                : STD_LOGIC_VECTOR(1 downto 0);
   signal Data_write_back_out_muxWB                                      : std_logic_vector(31 downto 0);
   signal InPortData_MUX_WB                                              : std_logic_vector(31 downto 0);
-  SIGNAL PC_TEST : std_logic_vector(31 downto 0);
-  SIGNAL PC_TEST_PCREG :unsigned(11 downto 0);
-  SIGNAL PC_INSTRUCTION_INCREMNTED: std_logic_vector(31 downto 0);
 
 begin
 
@@ -244,23 +245,22 @@ begin
   Rs1 <= Instruction_from_Fetch_Decode(6 downto 4);
   Rs2 <= Instruction_from_Fetch_Decode(3 downto 1);
   Rd  <= Instruction_from_Fetch_Decode(9 downto 7);
-  PC_INSTRUCTION_INCREMNTED <= std_logic_vector(unsigned(PC_VALUE_CONCATENATED)+1);
-  PC_TEST_PCREG <=unsigned(PC_TEST(11 downto 0));
 
   PC1: PCregister
-    port map (clk => clk, reset => reset, Interrupt => signal_int,
+    port map (clk => clk, reset => reset, Interrupt => interrupt_signal_controller_out,
               writeEnable => controller_pc_Enable,
               ResetValue => Reset_Pc_Value, InterruptValue => Interrupt_PC_Value,
-              PCValue =>PC_TEST_PCREG,
+              PCValue => unsigned(PC_MUX_OUT(11 downto 0)),
               PCout => (PC_VALUE_OUT)
     );
 
   PC_MUX: PCmux
     port map (
-      PCnext => PC_INSTRUCTION_INCREMNTED, PC_BR_Ra => PC_BR_Ra_value, PC_Ret => PC_Ret_value,
+      PCnext => PC_INSTRUCTION_INCREMNTED,
+       PC_BR_Ra => PC_BR_Ra_value, PC_Ret => PC_Ret_value,
       PC_value => PC_Execption_value, flushEX => flushEx_signal,
       flushMem => flushMem_signal,
-      PC => PC_TEST
+      PC => PC_MUX_OUT
     );
 
   InstructionMemory1: InstructionMemory
@@ -269,7 +269,7 @@ begin
 
   FetchDecodeReg1: FetchDecodeReg
     port map (clk => clk, reset => reset, ---- THERE NO ENABLE 
-              Interrupt => signal_int, IntermediateEnable => Intermediate_Enable_controller,
+              Interrupt => interrupt_signal_controller_out, IntermediateEnable => Intermediate_Enable_controller,
               pc => PC_VALUE_CONCATENATED, instructionIn => Instruction_from_memory, ------------- CHECK PC VALUE 
               instructionOut => Instruction_from_Fetch_Decode,
               PC_data => PC_value_from_Fetch_Decode
@@ -381,13 +381,14 @@ begin
               Mem_free_enable => Mem_free_enable_con,
               aluControl => alu_controll_signal,
               RS1_RD_SEL => rs1_rd_controll,
-              RS2_RD_SEL => rs2_rd_controll
+              RS2_RD_SEL => rs2_rd_controll,
+              Interrupt_Signal => interrupt_signal_controller_out
     );
   ------------------------------ MUX WRITE BACK
   muxWB: mux_WB
     port map (InPortData    => InPortData_MUX_WB,
               Mem_data      => Mem_data_out_mem_wbt,
-              Alu_Data      => Alu_data_out_mem_wb,
+              Alu_Data      => AluOut_Out_Execute_Mem,
               RA2           => Ra2_out_mem_wb,
               DataWriteBack => Data_write_back_out_muxWB,
               WBW_s         => WBS_out_mem_wb
@@ -395,9 +396,9 @@ begin
 
     PC_VALUE_SELECTED_STD_LOGIC <= std_logic_vector(PC_value_selected);
     PC_VALUE_OUT_STD_LOGIC <= std_logic_vector(PC_VALUE_OUT);
-    PC_VALUE_CONCATENATED <= x"00000" & PC_VALUE_OUT_STD_LOGIC;
+    PC_VALUE_CONCATENATED <= x"00000" & PC_VALUE_OUT_STD_LOGIC;-- TO BE 32 
     IMM_CONCATENATED <= x"00000" & PC_VALUE_OUT_STD_LOGIC;
     PC_VALUE_SELECTED_CONCATENATED <= x"00000" & PC_VALUE_SELECTED_STD_LOGIC;
-
+    PC_INSTRUCTION_INCREMNTED <= std_logic_vector(unsigned(PC_VALUE_CONCATENATED) + 1);
 
 end architecture;

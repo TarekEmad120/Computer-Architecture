@@ -1,3 +1,4 @@
+
 library IEEE;
   use IEEE.STD_LOGIC_1164.all;
   use IEEE.numeric_std.all;
@@ -15,7 +16,8 @@ entity Controller is
     Free_P_Enable                       : out STD_LOGIC;
     Mem_protect_enable, Mem_free_enable : out STD_LOGIC;
     aluControl                          : out STD_LOGIC_VECTOR(3 downto 0);
-    RS1_RD_SEL, RS2_RD_SEL              : out STD_LOGIC
+    RS1_RD_SEL, RS2_RD_SEL              : out STD_LOGIC;
+    Interrupt_Signal                    : out  STD_LOGIC
   );
 
 end entity;
@@ -23,7 +25,7 @@ end entity;
 architecture IMP of Controller is
 
 begin
-  PROCESS (oppCode,Func,one_two_attrib) IS
+  PROCESS (oppCode) IS
   BEGIN
   case oppCode is
     when "001" =>
@@ -44,7 +46,16 @@ begin
       end case;
       when others=>
   end case;
+
+  if (oppCode = "100" and Func = "011") then
+    Interrupt_Signal <= '1';
+  else
+    Interrupt_Signal <= '0';
+  end if;
+
+
   end process;
+
 
 
 
