@@ -2,9 +2,9 @@ import re
 
 no_operand_insts = ['nop', 'ret', 'rti']
 one_operand_insts = ['not', 'neg','dec','inc', 'out', 'in', 'jz', 'jmp', 'call', 'protect', 'free', 'push', 'pop']
-two_operand_insts = ['swap', 'cmp', 'ldm', 'ldd', 'std', 'std']
-three_operand_insts = ['add', 'addi', 'sub', 'and', 'or', 'xor']
-thirty2_bit_inst=  ['addi','subi', 'ldm','std','ldd','ldm', 'ldd', 'std', 'std']
+two_operand_insts = ['swap', 'cmp', 'ldm', 'ldd', 'std']
+three_operand_insts = ['add', 'addi', 'sub', 'subi', 'and', 'or', 'xor']
+thirty2_bit_inst=  ['addi','subi', 'ldm','std','ldd','ldm', 'ldd']
 
 is_immidiate = ['addi', 'rcl', 'rcr', 'ldm', 'ldd', 'std']
 
@@ -30,8 +30,15 @@ op_code = {
     "inc" : "001",
     "dec" : "001",
     "swap" : "001",
-    
+    "add" : "001",
+    "sub" : "001",
+    "and" : "001",
+    "or" : "001",
+    "xor" : "001",
     "cmp" : "001",
+
+    "subi" : "010",
+    "addi" : "010",
 
     "out" : "011",
     "in" : "011",
@@ -99,8 +106,15 @@ func = {
     "inc" : "0110",
     "dec" : "1000",
     "swap" : "0011",
-    
+    "add" : "0101",
+    "sub" : "0111",
+    "and" : "1001",
+    "or" : "1011",
+    "xor" : "1111",
     "cmp" : "1101",
+
+    "subi" : "001x",
+    "addi" : "010x",
 
     "out" : "001x",
     "in" : "010x",
@@ -233,7 +247,14 @@ def two_operand_instructions(instruction):
 
     return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + register_bank[instruction[2]] + "xxx" + func[instruction[0]][3]
 
+def three_operand_instructions(instruction):
 
+    # AND R1, R2, R3 -> len is 
+    # return binary number (001 010 001 010 011 1)
+    if instruction[0] == 'addi' or instruction[0] == 'subi':
+        return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + register_bank[instruction[2]] + "xxx" + func[instruction[0]][3]
+
+    return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + register_bank[instruction[2]] + register_bank[instruction[3]] + func[instruction[0]][3]
 
 
 
@@ -265,7 +286,7 @@ for instruction in instructions:
     elif instruction[0] in two_operand_insts:
         binary_instruction.append(two_operand_instructions(instruction))
     elif instruction[0] in three_operand_insts:
-        None
+        binary_instruction.append(three_operand_instructions(instruction))
     else:
         print ("operand not found: " + instruction[0])
 
