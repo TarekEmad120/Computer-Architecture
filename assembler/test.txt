@@ -1,19 +1,23 @@
 
-NOT R1
-NEG R2
-DEC R3
-INC R4
-OUT R5
-IN r6
-jz R1
-jmp R2
-jmp R3
-jmp r4
-call R5
-protect r6
-free R1
-push R2
-pop R1
+NOP
+RET
+RTI
+
+# NOT R1
+# NEG R2
+# DEC R3
+# INC R4
+# OUT R5
+# IN r6
+# jz R1
+# jmp R2
+# jmp R3
+# jmp r4
+# call R5
+# protect r6
+# free R1
+# push R2
+# pop R1
 
 
 

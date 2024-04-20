@@ -24,6 +24,8 @@ eacat=['push', 'pop','std','ldd','protect','free']
 
 op_code = {
 
+    "nop" : "000",
+
     "not" : "001",
     "neg" : "001",
     "inc" : "001",
@@ -41,6 +43,8 @@ op_code = {
     "jz" : "110",
     "jmp" : "110",
     "call" : "110",
+    "ret" : "110",
+    "rti" : "110",
 
 
 
@@ -83,6 +87,8 @@ op_code = {
 # function set is 4 bits long
 func = {
 
+    "nop" : "xxxx",
+
     "not" : "0010",
     "neg" : "0100",
     "inc" : "0110",
@@ -100,6 +106,8 @@ func = {
     "jz" : "001x",
     "jmp" : "010x",
     "call" : "011x",
+    "ret" : "100x",
+    "rti" : "101x",
 
 
 
@@ -141,24 +149,23 @@ for i in range(8):
     print(register_bank[f"r{i}"])
 
 
-# cleans instructions from spaces and operands
+# cleans instructions from spaces
 def clean_instructions(instruction_line):
 
-    # Remove anything after '#' and leading/trailing spaces
+    # remove spaces and ignore #
     cleaned_line = instruction_line.split('#')[0].strip()
     print(cleaned_line)
     instructions = []
     words = [word.lower() for word in re.split(r'[,\s]+', instruction_line.split('#')[0].strip())]
     if words[0] == "":
         return None
-    # print(words)
-    # print("*"*50)
+
     if (len(words)==1 or len(words)==2) and cleaned_line.count(',')==0: #no operand/one operand
-            None
+        None
     elif len(words)==3 and cleaned_line.count(',')==1: #two operand
-            None
+        None
     elif len(words)==4 and cleaned_line.count(',')==2: #two operand
-            None
+        None
     else:
         print("syntax error in "+ cleaned_line)
 
@@ -183,14 +190,25 @@ def read_file(file_path):
 
     
     return instructions
-            
+
+
+
+
+
+
+def no_operand_instructions(instruction):
+
+    # NOP -> len is 1
+    # return binary number (000 xxx xxx xxx xxx x)
+
+    # print (op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + "xxxxxx" + func[instruction[0]][3])
+    return op_code[instruction[0]] + func[instruction[0]][0:3] + "xxxxxxxxx" + func[instruction[0]][3]
 
 def one_operand_instructions(instruction):
 
     # NOT R1 -> len is two
     # return binary number (001 001 001 xxx xxx 0)
 
-    binary_line = ""
     # print (op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + "xxxxxx" + func[instruction[0]][3])
     return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + "xxxxxx" + func[instruction[0]][3]
 
@@ -216,7 +234,7 @@ for instruction in instructions:
 for instruction in instructions:
     
     if instruction[0] in no_operand_insts:
-        None
+        binary_instruction.append(no_operand_instructions(instruction))
     elif instruction[0] in one_operand_insts:
         binary_instruction.append(one_operand_instructions(instruction))
     elif instruction[0] in two_operand_insts:
@@ -226,7 +244,7 @@ for instruction in instructions:
     else:
         print ("operand not found: " + instruction[0])
 
-print(binary_instruction)
+# print(binary_instruction)
 
 
 save_binary_instructions(binary_instruction)
