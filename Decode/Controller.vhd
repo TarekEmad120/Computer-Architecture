@@ -23,7 +23,7 @@ end entity;
 architecture IMP of Controller is
 
 begin
-  PROCESS (oppCode) IS
+  PROCESS (oppCode,Func,one_two_attrib) IS
   BEGIN
   case oppCode is
     when "001" =>

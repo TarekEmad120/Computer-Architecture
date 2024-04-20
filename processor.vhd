@@ -234,6 +234,9 @@ architecture IMP of processor is
   signal WRB_S_con, WRB_S_Decode_Execute                                : STD_LOGIC_VECTOR(1 downto 0);
   signal Data_write_back_out_muxWB                                      : std_logic_vector(31 downto 0);
   signal InPortData_MUX_WB                                              : std_logic_vector(31 downto 0);
+  SIGNAL PC_TEST : std_logic_vector(31 downto 0);
+  SIGNAL PC_TEST_PCREG :unsigned(11 downto 0);
+  SIGNAL PC_INSTRUCTION_INCREMNTED: std_logic_vector(31 downto 0);
 
 begin
 
@@ -241,21 +244,23 @@ begin
   Rs1 <= Instruction_from_Fetch_Decode(6 downto 4);
   Rs2 <= Instruction_from_Fetch_Decode(3 downto 1);
   Rd  <= Instruction_from_Fetch_Decode(9 downto 7);
+  PC_INSTRUCTION_INCREMNTED <= std_logic_vector(unsigned(PC_VALUE_CONCATENATED)+1);
+  PC_TEST_PCREG <=unsigned(PC_TEST(11 downto 0));
 
   PC1: PCregister
     port map (clk => clk, reset => reset, Interrupt => signal_int,
               writeEnable => controller_pc_Enable,
               ResetValue => Reset_Pc_Value, InterruptValue => Interrupt_PC_Value,
-              PCValue => PC_value_selected,
+              PCValue =>PC_TEST_PCREG,
               PCout => (PC_VALUE_OUT)
     );
 
   PC_MUX: PCmux
     port map (
-      PCnext => PC_next_Instruction, PC_BR_Ra => PC_BR_Ra_value, PC_Ret => PC_Ret_value,
+      PCnext => PC_INSTRUCTION_INCREMNTED, PC_BR_Ra => PC_BR_Ra_value, PC_Ret => PC_Ret_value,
       PC_value => PC_Execption_value, flushEX => flushEx_signal,
       flushMem => flushMem_signal,
-      PC => PC_VALUE_SELECTED_CONCATENATED
+      PC => PC_TEST
     );
 
   InstructionMemory1: InstructionMemory
@@ -382,7 +387,7 @@ begin
   muxWB: mux_WB
     port map (InPortData    => InPortData_MUX_WB,
               Mem_data      => Mem_data_out_mem_wbt,
-              Alu_Data      => AluOut_Out_Execute_Mem,
+              Alu_Data      => Alu_data_out_mem_wb,
               RA2           => Ra2_out_mem_wb,
               DataWriteBack => Data_write_back_out_muxWB,
               WBW_s         => WBS_out_mem_wb
