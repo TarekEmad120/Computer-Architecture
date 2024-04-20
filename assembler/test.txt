@@ -1,0 +1,29 @@
+
+NOT R1
+NEG R2
+DEC R3
+INC R4
+OUT R5
+IN r6
+jz R1
+jmp R2
+jmp R3
+jmp r4
+call R5
+protect r6
+free R1
+push R2
+pop R1
+
+
+
+#    ADD R4 ,  R1  , R2
+#    SUB R0,R1,R5
+#    AND R4,R1,R2
+#    OR R4,R1,R2
+#    xoR R4 , R1 , R2
+#    CMP R4,R1,R2
+#    SWAP R4,R1
+    
+
+# 'not', 'neg','dec','inc', 'out', 'in', 'jz', 'jmp', 'call', 'protect', 'free', 'push', 'pop'
