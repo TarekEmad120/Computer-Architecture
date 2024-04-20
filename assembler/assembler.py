@@ -1,6 +1,5 @@
 import re
 
-
 no_operand_insts = ['nop', 'ret', 'rti']
 one_operand_insts = ['not', 'neg','dec','inc', 'out', 'in', 'jz', 'jmp', 'call', 'protect', 'free', 'push', 'pop']
 two_operand_insts = ['swap', 'cmp', 'ldm', 'ldd', 'std', 'std']
@@ -30,12 +29,18 @@ op_code = {
     "neg" : "001",
     "inc" : "001",
     "dec" : "001",
+    "swap" : "001",
+    
+    "cmp" : "001",
 
     "out" : "011",
     "in" : "011",
 
     "push" : "100",
     "pop" : "100",
+    "ldm" : "100",
+    "ldd" : "100",
+    "std" : "100",
 
     "protect" : "101",
     "free" : "101",
@@ -93,12 +98,18 @@ func = {
     "neg" : "0100",
     "inc" : "0110",
     "dec" : "1000",
+    "swap" : "0011",
+    
+    "cmp" : "1101",
 
     "out" : "001x",
     "in" : "010x",
 
     "push" : "001x",
     "pop" : "010x",
+    "ldm" : "011x",
+    "ldd" : "100x",
+    "std" : "101x",
 
     "protect" : "001x",
     "free" : "010x",
@@ -201,16 +212,30 @@ def no_operand_instructions(instruction):
     # NOP -> len is 1
     # return binary number (000 xxx xxx xxx xxx x)
 
-    # print (op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + "xxxxxx" + func[instruction[0]][3])
     return op_code[instruction[0]] + func[instruction[0]][0:3] + "xxxxxxxxx" + func[instruction[0]][3]
 
 def one_operand_instructions(instruction):
 
-    # NOT R1 -> len is two
+    # NOT R1 -> len is 2
     # return binary number (001 001 001 xxx xxx 0)
 
-    # print (op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + "xxxxxx" + func[instruction[0]][3])
     return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + "xxxxxx" + func[instruction[0]][3]
+
+def two_operand_instructions(instruction):
+
+    # swap R1 R2 -> len is 3
+    # return binary number (001 001 001 002 xxx 1)
+
+    if instruction[0] == 'cmp':
+        return op_code[instruction[0]] + func[instruction[0]][0:3] + "xxx" + register_bank[instruction[1]] + register_bank[instruction[2]] + func[instruction[0]][3]
+    elif instruction[0] == 'ldm':
+        return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + "xxxxxx" + func[instruction[0]][3]
+
+    return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + register_bank[instruction[2]] + "xxx" + func[instruction[0]][3]
+
+
+
+
 
 
 
@@ -238,7 +263,7 @@ for instruction in instructions:
     elif instruction[0] in one_operand_insts:
         binary_instruction.append(one_operand_instructions(instruction))
     elif instruction[0] in two_operand_insts:
-        None
+        binary_instruction.append(two_operand_instructions(instruction))
     elif instruction[0] in three_operand_insts:
         None
     else:
