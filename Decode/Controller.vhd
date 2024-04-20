@@ -25,7 +25,7 @@ end entity;
 architecture IMP of Controller is
 
 begin
-  PROCESS (oppCode) IS
+  PROCESS (oppCode, Func,one_two_attrib) IS
   BEGIN
   case oppCode is
     when "001" =>
@@ -47,7 +47,7 @@ begin
       when others=>
   end case;
 
-  if (oppCode = "100" and Func = "011") then
+  if (oppCode = "111" and Func = "100") then
     Interrupt_Signal <= '1';
   else
     Interrupt_Signal <= '0';
