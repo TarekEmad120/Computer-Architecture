@@ -72,7 +72,8 @@ architecture IMP of processor is
       Mem_protect_enable, Mem_free_enable : out STD_LOGIC;
       aluControl                          : out STD_LOGIC_VECTOR(3 downto 0);
       RS1_RD_SEL, RS2_RD_SEL              : out STD_LOGIC;
-      Interrupt_Signal                    : out  STD_LOGIC
+      Interrupt_Signal                    : out  STD_LOGIC;
+      STALL_FETCH_IMM                     : out  STD_LOGIC
     );
   end component;
 
@@ -165,18 +166,21 @@ END Component;
   component Execute_Mememory_Register is
 
     port (
-      clk, reset, enable                          : in  STD_LOGIC;
-      MEM_READ_In, MEM_WRITE_In, WRITE_BACK_In    : in  STD_LOGIC;
-      WRB_S_In                                    : in  STD_LOGIC_VECTOR(1 downto 0);
-      Rd_address_In                               : in  STD_LOGIC_VECTOR(2 downto 0);
-      Ra_In                                       : in  STD_LOGIC_VECTOR(31 downto 0);
-      AluOut_In                                   : in  STD_LOGIC_VECTOR(31 downto 0);
-
-      MEM_READ_Out, MEM_WRITE_Out, WRITE_BACK_Out : out STD_LOGIC;
-      WRB_S_Out                                   : out STD_LOGIC_VECTOR(1 downto 0);
-      Rd_address_Out                              : out STD_LOGIC_VECTOR(2 downto 0);
-      Ra_Out                                      : out STD_LOGIC_VECTOR(31 downto 0);
-      AluOut_Out                                  : out STD_LOGIC_VECTOR(31 downto 0)
+      clk,reset,enable : IN STD_LOGIC;
+      MEM_READ_In,MEM_WRITE_In,WRITE_BACK_In:IN STD_LOGIC;
+      WRB_S_In: IN  STD_LOGIC_VECTOR (1 DOWNTO 0);
+      Rd_address_In: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+      Ra_In:In STD_LOGIC_VECTOR(31 DOWNTO 0);
+      AluOut_In: In STD_LOGIC_VECTOR(31 DOWNTO 0);
+      RA2_DATA_WB_IN:In STD_LOGIC_VECTOR(31 DOWNTO 0);
+  
+  
+      MEM_READ_Out,MEM_WRITE_Out,WRITE_BACK_Out:OUT STD_LOGIC;
+      WRB_S_Out: OUT  STD_LOGIC_VECTOR (1 DOWNTO 0);
+      Rd_address_Out: OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+      Ra_Out:Out STD_LOGIC_VECTOR(31 DOWNTO 0);
+      AluOut_Out: Out STD_LOGIC_VECTOR(31 DOWNTO 0);
+      RA2_DATA_WB_OUT: OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
   end component;
   -------------------------------------------- WRITE BACK STAGE
@@ -268,10 +272,11 @@ END Component;
   signal alu_controll_signal                                            : STD_LOGIC_VECTOR(3 downto 0);
   signal WRB_S_con, WRB_S_Decode_Execute                                : STD_LOGIC_VECTOR(1 downto 0);
   signal Data_write_back_out_muxWB                                      : std_logic_vector(31 downto 0);
-  signal InPortData_MUX_WB                                              : std_logic_vector(31 downto 0);
+  signal InPortData_MUX_WB ,RA2_DATA_WB_OUT_DATA                        : std_logic_vector(31 downto 0);
   -- Forward Unit
   signal RA1_TO_ALU,RA2_TO_ALU                                          :std_logic_vector(31 downto 0);
   signal SEL1_FU,SEL2_FU                                                :std_logic_vector(1 downto 0);
+  signal DATA_OUT_MUX_IMM_RA_PC                                         :std_logic_vector(31 downto 0);
 
 begin
 
@@ -314,10 +319,10 @@ begin
   muxRS2: mux_rs2 port map (rs2 => Rs2, rd => Rd, ra2 => Rs2_output_Mux, rs2_rd => rs2_rd_controll);
 
   mux_regFile_ra2: mux_regFile_out
-    port map (ra2     => Ra2_value_RegisterFile,
+    port map (ra2     => Ra2_value_enter_Decode_Execute,
               IMM     => IMM_CONCATENATED, ------------------------------------------------------------CHECK
               Pc      => PC_value_from_Fetch_Decode,
-              ra2_out => Ra2_value_enter_Decode_Execute,
+              ra2_out => DATA_OUT_MUX_IMM_RA_PC,
               ra2_Sel => ra2_sel_controll);
 
   Registerfilecomp1: register_file
@@ -334,9 +339,9 @@ begin
   DecodeExecute: Decode_Execute
     port map (clk => clk, reset => reset, enable => Enable_Decode_Execute,
               dataIn1 => Ra1_value_RegisterFile,
-              dataIn2 => Ra2_value_enter_Decode_Execute,
+              dataIn2 => DATA_OUT_MUX_IMM_RA_PC,
               alu_control_in => alu_controll_signal,
-              RA_In => Ra2_value_RegisterFile,
+              RA_In => Ra2_value_enter_Decode_Execute,
               RD_In => Rd,
               Rs1_In => Rs1_output_Mux,
               RS2_In => Rs2_output_Mux,
@@ -403,18 +408,21 @@ begin
               Rd_address_In => RD_Out_Decode_Execute,
               Ra_In => RA_out_Decode_Execute,
               AluOut_In => Alu_output_data,
+              RA2_DATA_WB_IN=>RA2_Decode_Execute,
               MEM_READ_Out => MEM_READ_out_Execute_Mem,
               MEM_WRITE_Out => MEM_WRITE_out_Execute_Mem,
               WRITE_BACK_Out => WRITE_BACK_out_Execute_Mem,
               WRB_S_Out => WRB_S_Out_Execute_Mem,
               Rd_address_Out => Rd_out_Execute_Mem,
               Ra_Out => Ra_Out_Execute_Mem,
-              AluOut_Out => AluOut_Out_Execute_Mem
+              AluOut_Out => AluOut_Out_Execute_Mem,
+              RA2_DATA_WB_OUT=>RA2_DATA_WB_OUT_DATA
     );
+
 
   MemWBregister: Mem_WB_reg
     port map (clk => clk, reset => reset, enable => Enable_Mem_Wb,
-              Ra2_in => Ra_Out_Execute_Mem,
+              Ra2_in => RA2_DATA_WB_OUT_DATA,
               Mem_data_in => Ra_Out_Execute_Mem, ----------------------------------------------------------- TO BE EDITED WITH MEMERY ACUTALLY DATA 
               Alu_data_in => AluOut_Out_Execute_Mem,
               Rd_address_in => Rd_out_Execute_Mem,
@@ -444,13 +452,14 @@ begin
               aluControl => alu_controll_signal,
               RS1_RD_SEL => rs1_rd_controll,
               RS2_RD_SEL => rs2_rd_controll,
-              Interrupt_Signal => interrupt_signal_controller_out
+              Interrupt_Signal => interrupt_signal_controller_out,
+              STALL_FETCH_IMM => Intermediate_Enable_controller
     );
   ------------------------------ MUX WRITE BACK
   muxWB: mux_WB
     port map (InPortData    => InPortData_MUX_WB,
               Mem_data      => Mem_data_out_mem_wbt,
-              Alu_Data      => AluOut_Out_Execute_Mem,
+              Alu_Data      => Alu_data_out_mem_wb,
               RA2           => Ra2_out_mem_wb,
               DataWriteBack => Data_write_back_out_muxWB,
               WBW_s         => WBS_out_mem_wb
@@ -459,7 +468,7 @@ begin
     PC_VALUE_SELECTED_STD_LOGIC <= std_logic_vector(PC_value_selected);
     PC_VALUE_OUT_STD_LOGIC <= std_logic_vector(PC_VALUE_OUT);
     PC_VALUE_CONCATENATED <= x"00000" & PC_VALUE_OUT_STD_LOGIC;-- TO BE 32 
-    IMM_CONCATENATED <= x"00000" & PC_VALUE_OUT_STD_LOGIC;
+    IMM_CONCATENATED <= x"0000" & Instruction_from_memory;
     PC_VALUE_SELECTED_CONCATENATED <= x"00000" & PC_VALUE_SELECTED_STD_LOGIC;
     PC_INSTRUCTION_INCREMNTED <= std_logic_vector(unsigned(PC_VALUE_CONCATENATED) + 1);
 

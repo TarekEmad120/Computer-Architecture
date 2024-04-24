@@ -12,13 +12,15 @@ PORT (
     Rd_address_In: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     Ra_In:In STD_LOGIC_VECTOR(31 DOWNTO 0);
     AluOut_In: In STD_LOGIC_VECTOR(31 DOWNTO 0);
+    RA2_DATA_WB_IN:In STD_LOGIC_VECTOR(31 DOWNTO 0);
 
 
     MEM_READ_Out,MEM_WRITE_Out,WRITE_BACK_Out:OUT STD_LOGIC;
     WRB_S_Out: OUT  STD_LOGIC_VECTOR (1 DOWNTO 0);
     Rd_address_Out: OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
     Ra_Out:Out STD_LOGIC_VECTOR(31 DOWNTO 0);
-    AluOut_Out: Out STD_LOGIC_VECTOR(31 DOWNTO 0)
+    AluOut_Out: Out STD_LOGIC_VECTOR(31 DOWNTO 0);
+    RA2_DATA_WB_OUT: OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 
 );
 END Execute_Mememory_Register;
@@ -35,6 +37,7 @@ BEGIN
                 MEM_WRITE_Out<='0';
                 WRITE_BACK_Out<='0';
                 WRB_S_Out<=(OTHERS => '0');
+                RA2_DATA_WB_OUT<=(OTHERS => '0');
         ELSIF clk'EVENT AND clk = '1' THEN
             IF enable = '1' THEN
                 Rd_address_Out<=Rd_address_In;
@@ -44,6 +47,7 @@ BEGIN
                 MEM_WRITE_Out<=MEM_WRITE_In;
                 WRITE_BACK_Out<=WRITE_BACK_In;
                 WRB_S_Out<=WRB_S_In;
+                RA2_DATA_WB_OUT<=RA2_DATA_WB_IN;
             END IF;
         END IF;
     END PROCESS;

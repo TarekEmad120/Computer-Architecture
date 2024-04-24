@@ -24,7 +24,7 @@ begin
                 when "10" =>
                     ra2_out <= Pc;
                 when others =>
-                    ra2_out <= (others => 'X');
+                    ra2_out <= (others => '0');
             end case;
         end process;
 end architecture mux;

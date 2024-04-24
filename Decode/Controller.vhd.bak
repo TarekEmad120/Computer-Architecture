@@ -47,7 +47,7 @@ begin
       end case;
       case Func IS
 	when "110" =>
-       	WRITE_BACK    <= '0';
+       WRITE_BACK    <= '0';
       when others => WRITE_BACK    <= '1';
       end case;
     when "100" => 
