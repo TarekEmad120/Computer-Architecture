@@ -139,15 +139,20 @@ architecture IMP of processor is
     );
   end component;
   -------------------------------------------- EXECUTE STAGE 
-  component ALU is
-    port (
-      input1   : in  STD_LOGIC_VECTOR(31 downto 0);
-      input2   : in  STD_LOGIC_VECTOR(31 downto 0);
-      sel      : in  STD_LOGIC_VECTOR(3 downto 0);
-      outpt    : out STD_LOGIC_VECTOR(31 downto 0);
-      carryout : out STD_LOGIC
+  component ALU IS
+    PORT (
+        input1 : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+        input2 : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+        sel : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+        outpt : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+
+        Zero_flag : OUT STD_LOGIC;
+        Negative_flag : OUT STD_LOGIC;
+        Overflow_flag : OUT STD_LOGIC;
+        Carry_flag : OUT STD_LOGIC
+
     );
-  end component;
+END Component;
   component Execute_Mememory_Register is
 
     port (
@@ -221,7 +226,8 @@ architecture IMP of processor is
   -- SIGNAL controller_alu_operation:STD_LOGIC_VECTOR (3 DOWNTO 0);
   signal interrupt_signal_controller_out                                                      : std_logic;
   signal Alu_output_data                                                                          : STD_LOGIC_VECTOR(31 downto 0);
-  signal OF_flag                                                                                  : std_logic;
+
+  signal Cary_flag, Z_flag, Neg_flag, OF_flag                                       : std_logic;
   signal MEM_READ_IN_Decode_Execute, MEM_WRITE_IN_Decode_Execute, WRITE_BACK_IN_Decode_Execute    : std_logic;
   signal MEM_READ_out_Decode_Execute, MEM_WRITE_out_Decode_Execute, WRITE_BACK_out_Decode_Execute : std_logic;
   signal MEM_READ_out_Execute_Mem, MEM_WRITE_out_Execute_Mem, WRITE_BACK_out_Execute_Mem          : std_logic;
@@ -328,7 +334,10 @@ begin
               input2   => RA2_Decode_Execute,
               sel      => alu_control_out_Decode_Execute,
               outpt    => Alu_output_data,
-              carryout => OF_flag
+              Carry_flag => Cary_flag,
+              Zero_flag => Z_flag,
+                Negative_flag => Neg_flag,
+                Overflow_flag => OF_flag
     );
 
   --------- NEED TO ADD MUXES OF FREE/PROTECTED ENABLES AND FORWARD UNITS 
@@ -400,5 +409,6 @@ begin
     IMM_CONCATENATED <= x"00000" & PC_VALUE_OUT_STD_LOGIC;
     PC_VALUE_SELECTED_CONCATENATED <= x"00000" & PC_VALUE_SELECTED_STD_LOGIC;
     PC_INSTRUCTION_INCREMNTED <= std_logic_vector(unsigned(PC_VALUE_CONCATENATED) + 1);
+
 
 end architecture;

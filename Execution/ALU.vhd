@@ -5,9 +5,16 @@ ENTITY ALU IS
     PORT (
         input1 : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
         input2 : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+
         sel : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
         outpt : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
-        carryout : OUT STD_LOGIC
+        carryout : OUT STD_LOGIC;
+
+        Zero_flag : OUT STD_LOGIC;
+        Negative_flag : OUT STD_LOGIC;
+        Overflow_flag : OUT STD_LOGIC;
+        Carry_flag : OUT STD_LOGIC
+
     );
 END ALU;
 
@@ -20,10 +27,20 @@ ARCHITECTURE My_imp_of_ALU OF ALU IS
             s : out std_logic_vector(31 downto 0);
             cout : OUT std_logic);
     END COMPONENT;
-    SIGNAL ax, bx, a2, b2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    SIGNAL temp, temp2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    SIGNAL temp_cout, temp_cout2 : STD_LOGIC;
-    SIGNAL cin, cin2 : STD_LOGIC;
+    SIGNAL ax, bx: STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL temp : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    
+    --SIGNAL a2, b2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    --SIGNAL temp2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    
+    SIGNAL temp_cout : STD_LOGIC;
+    SIGNAL cin : STD_LOGIC;
+
+    signal outpt_signal : STD_LOGIC_VECTOR(31 DOWNTO 0);
+
+    --SIGNAL temp_cout2 : STD_LOGIC;
+    --SIGNAL cin2 : STD_LOGIC;
+
 BEGIN
     -- output <= not input1 when s = "0010" NOT
     -- output <=  -input1 when s = "0100"  NEG    input2 - input1 at (input2 0)  input2 + not input1 + 1
@@ -41,7 +58,7 @@ BEGIN
     
 
     
-    outpt <= NOT input1 WHEN sel = "0010" ELSE
+    outpt_signal <= NOT input1 WHEN sel = "0010" ELSE
         temp WHEN sel = "0100" ELSE
         temp WHEN sel = "0110" ELSE
         temp WHEN sel = "1000" ELSE
@@ -77,7 +94,14 @@ BEGIN
         '0' WHEN sel = "0101" ELSE
         '1' WHEN (sel = "0111" or sel = "1101") ELSE
         '0';
+    
+    outpt <= outpt_signal;
+    Zero_flag <= '1' WHEN outpt_signal = x"00000000" ELSE '0';
+    Carry_flag <= temp_cout;
+    Negative_flag <= temp(31);
+    Overflow_flag <= temp(31) XOR temp_cout;
+
     adder0 : n_bit_adder  PORT MAP(ax, bx, cin, temp, temp_cout);
-    adder1 : n_bit_adder PORT MAP(a2, b2, cin2, temp2, temp_cout2);
+    --adder1 : n_bit_adder PORT MAP(a2, b2, cin2, temp2, temp_cout2);
 
 END ARCHITECTURE My_imp_of_ALU;
