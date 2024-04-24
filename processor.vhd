@@ -153,6 +153,15 @@ architecture IMP of processor is
 
     );
 END Component;
+
+  component mux_source_alu1 is
+    port(
+      RA,SRC_DATA_EXE,SRC_DATA_MEM   : in  std_logic_vector(31 downto 0);
+      DATA_OUT_TO_ALU     : out std_logic_vector(31 downto 0);
+      ForwardUnit_sel    : in  std_logic_vector (1 DOWNTO 0)
+  );
+  END Component;
+
   component Execute_Mememory_Register is
 
     port (
@@ -197,6 +206,22 @@ END Component;
     );
 
   end component;
+  -------------------------------------------- HAZARDS COMPONENTS 
+  component ForwardUnit IS
+    PORT (
+        RS1_address : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        RS2_address : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        Rd_address_EM_reg : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        WRB_EN_EM_reg : IN STD_LOGIC;
+        Rd_address_MW_reg : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        WRB_EN_MW_reg : IN STD_LOGIC;
+
+        Alu_src2_sel : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+        Alu_src1_sel : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
+
+    );
+  end component;
+
 
   signal controller_pc_Enable                                                : std_logic;
   signal Reset_Pc_Value, Interrupt_PC_Value, PC_value_selected, PC_VALUE_OUT : unsigned(11 downto 0);
@@ -244,6 +269,9 @@ END Component;
   signal WRB_S_con, WRB_S_Decode_Execute                                : STD_LOGIC_VECTOR(1 downto 0);
   signal Data_write_back_out_muxWB                                      : std_logic_vector(31 downto 0);
   signal InPortData_MUX_WB                                              : std_logic_vector(31 downto 0);
+  -- Forward Unit
+  signal RA1_TO_ALU,RA2_TO_ALU                                          :std_logic_vector(31 downto 0);
+  signal SEL1_FU,SEL2_FU                                                :std_logic_vector(1 downto 0);
 
 begin
 
@@ -330,16 +358,41 @@ begin
     );
 
   alucomp1: ALU
-    port map (input1   => RA1_Decode_Execute,
-              input2   => RA2_Decode_Execute,
+    port map (input1   => RA1_TO_ALU,
+              input2   => RA2_TO_ALU,
               sel      => alu_control_out_Decode_Execute,
               outpt    => Alu_output_data,
               Carry_flag => Cary_flag,
               Zero_flag => Z_flag,
-                Negative_flag => Neg_flag,
-                Overflow_flag => OF_flag
+              Negative_flag => Neg_flag,
+              Overflow_flag => OF_flag
+    );
+    muxsourcealu1: mux_source_alu1 PORT MAP (RA=>RA1_Decode_Execute,
+      SRC_DATA_EXE=>AluOut_Out_Execute_Mem,
+      SRC_DATA_MEM=>Alu_data_out_mem_wb,
+      DATA_OUT_TO_ALU=> RA1_TO_ALU,
+      ForwardUnit_sel=> SEL1_FU
     );
 
+    muxsource_alu2: mux_source_alu1 PORT MAP (RA=>RA2_Decode_Execute,
+      SRC_DATA_EXE=>AluOut_Out_Execute_Mem,
+      SRC_DATA_MEM=>Alu_data_out_mem_wb,
+      DATA_OUT_TO_ALU=> RA2_TO_ALU,
+      ForwardUnit_sel=> SEL2_FU
+    );
+
+
+    Forwardunit1  : ForwardUnit PORT MAP (RS1_address=>RS1_out_Decode_Execute,
+      RS2_address=>RS2_out_Decode_Execute,
+      Rd_address_EM_reg=>Rd_out_Execute_Mem,
+      WRB_EN_EM_reg=>WRITE_BACK_out_Execute_Mem,
+      Rd_address_MW_reg=>Rd_address_out_mem_wb,
+      WRB_EN_MW_reg=>WB_EN_out_mem_wb,
+      Alu_src2_sel=>SEL2_FU,
+      Alu_src1_sel=>SEL1_FU
+    );
+
+    
   --------- NEED TO ADD MUXES OF FREE/PROTECTED ENABLES AND FORWARD UNITS 
   ExecuteMememoryRegister: Execute_Mememory_Register
     port map (clk => clk, reset => reset, enable => Enable_Execute_Memory,
