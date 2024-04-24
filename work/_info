@@ -1,0 +1,770 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/intelFPGA_lite/18.1
+Ealu
+Z0 w1713986886
+Z1 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z2 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+Z3 dD:/spring 24/Arch/Project/Computer-Architecture
+Z4 8D:/spring 24/Arch/Project/Computer-Architecture/Execution/ALU.vhd
+Z5 FD:/spring 24/Arch/Project/Computer-Architecture/Execution/ALU.vhd
+l0
+L4
+VHlV`OiFMe2HLgMo]UXfD<1
+!s100 9H;Xo=GLMKj@^SFXc^ji`1
+Z6 OV;C;10.5b;63
+32
+Z7 !s110 1713987249
+!i10b 1
+Z8 !s108 1713987249.000000
+Z9 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/Execution/ALU.vhd|
+Z10 !s107 D:/spring 24/Arch/Project/Computer-Architecture/Execution/ALU.vhd|
+!i113 1
+Z11 o-work work -2002 -explicit
+Z12 tExplicit 1 CvgOpt 0
+Amy_imp_of_alu
+R1
+R2
+DEx4 work 3 alu 0 22 HlV`OiFMe2HLgMo]UXfD<1
+l44
+L21
+VlJd5jzlgfk>DFSoZ89Kaf2
+!s100 97ee;A87o[_nJmOT<Lg[K0
+R6
+32
+R7
+!i10b 1
+R8
+R9
+R10
+!i113 1
+R11
+R12
+Ebit_adder
+Z13 w1713985292
+R1
+R2
+R3
+Z14 8D:/spring 24/Arch/Project/Computer-Architecture/Execution/bit_adder.vhd
+Z15 FD:/spring 24/Arch/Project/Computer-Architecture/Execution/bit_adder.vhd
+l0
+L4
+V>^]>EaT5i`>G;2@jSC1WO1
+!s100 oD<MWC:iP`DEzbP?SG<Fk1
+R6
+32
+R7
+!i10b 1
+R8
+Z16 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/Execution/bit_adder.vhd|
+Z17 !s107 D:/spring 24/Arch/Project/Computer-Architecture/Execution/bit_adder.vhd|
+!i113 1
+R11
+R12
+Abehavioral
+R1
+R2
+DEx4 work 9 bit_adder 0 22 >^]>EaT5i`>G;2@jSC1WO1
+l10
+L9
+V3V>MMFd1_Q4VcUl0=fd963
+!s100 8B_fg4V=e3K9gcn`l3ZPC3
+R6
+32
+R7
+!i10b 1
+R8
+R16
+R17
+!i113 1
+R11
+R12
+Econtroller
+R13
+Z18 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+R1
+R2
+R3
+Z19 8D:/spring 24/Arch/Project/Computer-Architecture/Decode/Controller.vhd
+Z20 FD:/spring 24/Arch/Project/Computer-Architecture/Decode/Controller.vhd
+l0
+L6
+VQ;NV]R[?AQ:bP0Ugfhe<j1
+!s100 zD;X40K5KQDUNO79NzjJ;0
+R6
+32
+R7
+!i10b 1
+R8
+Z21 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/Decode/Controller.vhd|
+Z22 !s107 D:/spring 24/Arch/Project/Computer-Architecture/Decode/Controller.vhd|
+!i113 1
+R11
+R12
+Aimp
+R18
+R1
+R2
+DEx4 work 10 controller 0 22 Q;NV]R[?AQ:bP0Ugfhe<j1
+l27
+L25
+VGY;]h8Jb0>om`4?oMDb?f0
+!s100 zK3Bzl=WgHN>PEW0UeR;`3
+R6
+32
+R7
+!i10b 1
+R8
+R21
+R22
+!i113 1
+R11
+R12
+Edecode_execute
+R13
+R18
+R1
+R2
+R3
+Z23 8D:/spring 24/Arch/Project/Computer-Architecture/Decode/Decode_Execute.vhd
+Z24 FD:/spring 24/Arch/Project/Computer-Architecture/Decode/Decode_Execute.vhd
+l0
+L6
+VQ^Y8a9Qk<`lM1R:DbFig70
+!s100 eQ2DKAcR^Je8U4d=C;dl93
+R6
+32
+R7
+!i10b 1
+R8
+Z25 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/Decode/Decode_Execute.vhd|
+Z26 !s107 D:/spring 24/Arch/Project/Computer-Architecture/Decode/Decode_Execute.vhd|
+!i113 1
+R11
+R12
+Aimp
+R18
+R1
+R2
+DEx4 work 14 decode_execute 0 22 Q^Y8a9Qk<`lM1R:DbFig70
+l32
+L29
+VcZO:LM704Hc3ia40F1mmR1
+!s100 AHf@[NCnWn:DcXkoBZOTl1
+R6
+32
+R7
+!i10b 1
+R8
+R25
+R26
+!i113 1
+R11
+R12
+Eexecute_mememory_register
+Z27 w1713404735
+R18
+R1
+R2
+R3
+Z28 8D:/spring 24/Arch/Project/Computer-Architecture/Execution/Execution_Mem_register.vhd
+Z29 FD:/spring 24/Arch/Project/Computer-Architecture/Execution/Execution_Mem_register.vhd
+l0
+L6
+V:4SJ6GQM<XAOTP;JMmCMz0
+!s100 eH95HHo?`Vk4]nlPTO2521
+R6
+32
+R7
+!i10b 1
+R8
+Z30 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/Execution/Execution_Mem_register.vhd|
+Z31 !s107 D:/spring 24/Arch/Project/Computer-Architecture/Execution/Execution_Mem_register.vhd|
+!i113 1
+R11
+R12
+Aimp
+R18
+R1
+R2
+DEx4 work 25 execute_mememory_register 0 22 :4SJ6GQM<XAOTP;JMmCMz0
+l27
+L26
+VX]PiiHKSLkZ9S06nK[HUf0
+!s100 @MnOFX2mGfTl1ncCV]kgm3
+R6
+32
+R7
+!i10b 1
+R8
+R30
+R31
+!i113 1
+R11
+R12
+Efetchdecodereg
+R13
+Z32 DPx4 ieee 9 math_real 0 22 Sk6CSihbPL<f[^Shm]=KX0
+R18
+R1
+R2
+R3
+Z33 8D:/spring 24/Arch/Project/Computer-Architecture/fetch stage/FetchDecodeReg.vhd
+Z34 FD:/spring 24/Arch/Project/Computer-Architecture/fetch stage/FetchDecodeReg.vhd
+l0
+L7
+V5;lKPnPzQNlgWmbkBJPQM2
+!s100 `e^d5;00igZjgm3n_iCW50
+R6
+32
+Z35 !s110 1713987248
+!i10b 1
+Z36 !s108 1713987248.000000
+Z37 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/fetch stage/FetchDecodeReg.vhd|
+Z38 !s107 D:/spring 24/Arch/Project/Computer-Architecture/fetch stage/FetchDecodeReg.vhd|
+!i113 1
+R11
+R12
+Afetchdecodereg_arch
+R32
+R18
+R1
+R2
+DEx4 work 14 fetchdecodereg 0 22 5;lKPnPzQNlgWmbkBJPQM2
+l24
+L22
+V8OVk4BBekG_2b8GOeijH`3
+!s100 6TmijP;i]_OAj3=N0SN0P2
+R6
+32
+R35
+!i10b 1
+R36
+R37
+R38
+!i113 1
+R11
+R12
+Einstructionmemory
+R13
+R18
+Z39 DPx4 ieee 15 std_logic_arith 0 22 [G314=:2zXJ`VORJe1J@Z1
+Z40 DPx4 ieee 18 std_logic_unsigned 0 22 ;eZjO2D4ZDz<]0>8AL<ne1
+Z41 DPx4 ieee 16 std_logic_textio 0 22 V5TSK`;aJKC<l]CEg1>mz1
+R1
+R2
+R3
+Z42 8D:/spring 24/Arch/Project/Computer-Architecture/fetch stage/InstructionCache.vhd
+Z43 FD:/spring 24/Arch/Project/Computer-Architecture/fetch stage/InstructionCache.vhd
+l0
+L10
+VccgAOF@kFeeiHo<22?V3n1
+!s100 9zOG2R;em2c5i>;`JJ7z91
+R6
+32
+R35
+!i10b 1
+R36
+Z44 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/fetch stage/InstructionCache.vhd|
+Z45 !s107 D:/spring 24/Arch/Project/Computer-Architecture/fetch stage/InstructionCache.vhd|
+!i113 1
+R11
+R12
+Abehavioral
+R18
+R39
+R40
+R41
+R1
+R2
+DEx4 work 17 instructionmemory 0 22 ccgAOF@kFeeiHo<22?V3n1
+l22
+L17
+V791RER`k=2A[VKmaW_3ZE0
+!s100 `FjA;AQ=U]coEC0[T?ioD2
+R6
+32
+R35
+!i10b 1
+R36
+R44
+R45
+!i113 1
+R11
+R12
+Emem_wb_reg
+R13
+R18
+R1
+R2
+R3
+Z46 8D:/spring 24/Arch/Project/Computer-Architecture/WriteBack/Mem_WB_reg.vhd
+Z47 FD:/spring 24/Arch/Project/Computer-Architecture/WriteBack/Mem_WB_reg.vhd
+l0
+L5
+VPV;[QM1e[`eR`nPZaiBGM2
+!s100 2h5_jZooRE2eUnLZc8To;0
+R6
+32
+Z48 !s110 1713987250
+!i10b 1
+Z49 !s108 1713987250.000000
+Z50 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/WriteBack/Mem_WB_reg.vhd|
+Z51 !s107 D:/spring 24/Arch/Project/Computer-Architecture/WriteBack/Mem_WB_reg.vhd|
+!i113 1
+R11
+R12
+Amy_imp_of_mem_wb_reg
+R18
+R1
+R2
+DEx4 work 10 mem_wb_reg 0 22 PV;[QM1e[`eR`nPZaiBGM2
+l27
+L25
+VZc;MLl[9AJkYkOhb;?NDb0
+!s100 <_3D1@LMOXjJj0JG[hf:@2
+R6
+32
+R48
+!i10b 1
+R49
+R50
+R51
+!i113 1
+R11
+R12
+Ememory
+R13
+R18
+R39
+R40
+R41
+R1
+R2
+R3
+Z52 8D:/spring 24/Arch/Project/Computer-Architecture/Memory/MemoryCache.vhd
+Z53 FD:/spring 24/Arch/Project/Computer-Architecture/Memory/MemoryCache.vhd
+l0
+L9
+V^1DU]h64mS=5N?87AdGTg3
+!s100 W=WIjR];PkZfz<]QPegHc2
+R6
+32
+R48
+!i10b 1
+R8
+Z54 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/Memory/MemoryCache.vhd|
+Z55 !s107 D:/spring 24/Arch/Project/Computer-Architecture/Memory/MemoryCache.vhd|
+!i113 1
+R11
+R12
+Abehavioral
+R18
+R39
+R40
+R41
+R1
+R2
+DEx4 work 6 memory 0 22 ^1DU]h64mS=5N?87AdGTg3
+l34
+L28
+V0H[3maCYNW50Ba`D;^fc71
+!s100 Xk:g;]>ETbgg1WWVh6f7e3
+R6
+32
+R48
+!i10b 1
+R8
+R54
+R55
+!i113 1
+R11
+R12
+Emux_regfile_out
+R13
+R32
+R18
+R1
+R2
+R3
+Z56 8D:/spring 24/Arch/Project/Computer-Architecture/Decode/mux_regFile_out.vhd
+Z57 FD:/spring 24/Arch/Project/Computer-Architecture/Decode/mux_regFile_out.vhd
+l0
+L7
+VGVgFC>bYQlF`7F_bTFYbn1
+!s100 L4zmb[eIZUISEzm]B94@G2
+R6
+32
+R7
+!i10b 1
+R8
+Z58 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/Decode/mux_regFile_out.vhd|
+Z59 !s107 D:/spring 24/Arch/Project/Computer-Architecture/Decode/mux_regFile_out.vhd|
+!i113 1
+R11
+R12
+Amux
+R32
+R18
+R1
+R2
+DEx4 work 15 mux_regfile_out 0 22 GVgFC>bYQlF`7F_bTFYbn1
+l16
+L15
+VFX]OcU94dL<[h^6dbFI;l1
+!s100 ;:dhW[g]oJh]dN9CjTA>20
+R6
+32
+R7
+!i10b 1
+R8
+R58
+R59
+!i113 1
+R11
+R12
+Emux_rs1
+R13
+R32
+R18
+R1
+R2
+R3
+Z60 8D:/spring 24/Arch/Project/Computer-Architecture/Decode/mux_rs1.vhd
+Z61 FD:/spring 24/Arch/Project/Computer-Architecture/Decode/mux_rs1.vhd
+l0
+L7
+VHU=UcanE?K5@03Jm@A51Q2
+!s100 ^QN?N[lnnF[F1dT:KMFm13
+R6
+32
+R7
+!i10b 1
+R8
+Z62 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/Decode/mux_rs1.vhd|
+Z63 !s107 D:/spring 24/Arch/Project/Computer-Architecture/Decode/mux_rs1.vhd|
+!i113 1
+R11
+R12
+Amux
+R32
+R18
+R1
+R2
+DEx4 work 7 mux_rs1 0 22 HU=UcanE?K5@03Jm@A51Q2
+l16
+L15
+V98aIKLzoD`l35fMaAg?iF2
+!s100 ^FZ:5@N032>3Q]_lPfbQO1
+R6
+32
+R7
+!i10b 1
+R8
+R62
+R63
+!i113 1
+R11
+R12
+Emux_rs2
+R13
+R32
+R18
+R1
+R2
+R3
+Z64 8D:/spring 24/Arch/Project/Computer-Architecture/Decode/mux_rs2.vhd
+Z65 FD:/spring 24/Arch/Project/Computer-Architecture/Decode/mux_rs2.vhd
+l0
+L7
+VKVjDkB49?ljQHAPb9VdH=0
+!s100 jI@7eh<69gj4>bEfTg?e61
+R6
+32
+R7
+!i10b 1
+R8
+Z66 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/Decode/mux_rs2.vhd|
+Z67 !s107 D:/spring 24/Arch/Project/Computer-Architecture/Decode/mux_rs2.vhd|
+!i113 1
+R11
+R12
+Amux
+R32
+R18
+R1
+R2
+DEx4 work 7 mux_rs2 0 22 KVjDkB49?ljQHAPb9VdH=0
+l17
+L16
+V]L;GU[D8BzG4[PY39i64J1
+!s100 mNm`Q7UJ?`A5mi`;dYTCJ3
+R6
+32
+R7
+!i10b 1
+R8
+R66
+R67
+!i113 1
+R11
+R12
+Emux_wb
+R13
+R32
+R18
+R1
+R2
+R3
+Z68 8D:/spring 24/Arch/Project/Computer-Architecture/WriteBack/mux_wb.vhd
+Z69 FD:/spring 24/Arch/Project/Computer-Architecture/WriteBack/mux_wb.vhd
+l0
+L7
+V9Ci5niO[B08F;I7JjEX=I1
+!s100 0g`j7V?6_[?Lf9dTB[<[51
+R6
+32
+R48
+!i10b 1
+R49
+Z70 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/WriteBack/mux_wb.vhd|
+Z71 !s107 D:/spring 24/Arch/Project/Computer-Architecture/WriteBack/mux_wb.vhd|
+!i113 1
+R11
+R12
+Amux
+R32
+R18
+R1
+R2
+DEx4 work 6 mux_wb 0 22 9Ci5niO[B08F;I7JjEX=I1
+l17
+L16
+V;Q<f44EWej<bWcEYKG3ca0
+!s100 9B7U2On8<8Rh3YhfHd8>e3
+R6
+32
+R48
+!i10b 1
+R49
+R70
+R71
+!i113 1
+R11
+R12
+En_bit_adder
+R13
+R1
+R2
+R3
+Z72 8D:/spring 24/Arch/Project/Computer-Architecture/Execution/n_bit_adder.vhd
+Z73 FD:/spring 24/Arch/Project/Computer-Architecture/Execution/n_bit_adder.vhd
+l0
+L4
+VQ_;G4c=NYVC@nZM^?YLYG0
+!s100 7`en7dDKT@nN]W<EICF]`2
+R6
+32
+R7
+!i10b 1
+R8
+Z74 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/Execution/n_bit_adder.vhd|
+Z75 !s107 D:/spring 24/Arch/Project/Computer-Architecture/Execution/n_bit_adder.vhd|
+!i113 1
+R11
+R12
+Aa_n_bit_adder
+R1
+R2
+DEx4 work 11 n_bit_adder 0 22 Q_;G4c=NYVC@nZM^?YLYG0
+l19
+L12
+V?ZE3ZaDl[dIOPX9B7H?>`1
+!s100 C:hndjzMIFY9QEfl4ToRf2
+R6
+32
+R7
+!i10b 1
+R8
+R74
+R75
+!i113 1
+R11
+R12
+Epcmux
+R27
+R32
+R18
+R1
+R2
+R3
+Z76 8D:/spring 24/Arch/Project/Computer-Architecture/fetch stage/PCmux.vhd
+Z77 FD:/spring 24/Arch/Project/Computer-Architecture/fetch stage/PCmux.vhd
+l0
+L7
+VMeGWh7XDZg[6F35?16UgX2
+!s100 5k;UezH^;^IL:kXS[?6Gf1
+R6
+32
+R35
+!i10b 1
+R36
+Z78 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/fetch stage/PCmux.vhd|
+Z79 !s107 D:/spring 24/Arch/Project/Computer-Architecture/fetch stage/PCmux.vhd|
+!i113 1
+R11
+R12
+Amux
+R32
+R18
+R1
+R2
+DEx4 work 5 pcmux 0 22 MeGWh7XDZg[6F35?16UgX2
+l23
+L22
+VfTU]cV]6djWcnVUW[G1A02
+!s100 oiN>@HEOc^F`AP9E[5J_00
+R6
+32
+R35
+!i10b 1
+R36
+R78
+R79
+!i113 1
+R11
+R12
+Epcregister
+R27
+R32
+R18
+R1
+R2
+R3
+Z80 8D:/spring 24/Arch/Project/Computer-Architecture/fetch stage/PCregister.vhd
+Z81 FD:/spring 24/Arch/Project/Computer-Architecture/fetch stage/PCregister.vhd
+l0
+L6
+VN3m2;N?omfRA>V1BEUgdi0
+!s100 [0Sl2`^_<iRo[GMYC]hE?0
+R6
+32
+R7
+!i10b 1
+R8
+Z82 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/fetch stage/PCregister.vhd|
+Z83 !s107 D:/spring 24/Arch/Project/Computer-Architecture/fetch stage/PCregister.vhd|
+!i113 1
+R11
+R12
+Abehavioral
+R32
+R18
+R1
+R2
+DEx4 work 10 pcregister 0 22 N3m2;N?omfRA>V1BEUgdi0
+l18
+L17
+VgHK62CDWW1@Gm;YI:OX<42
+!s100 GSWV=T9H4Vk05W<g@i5YC3
+R6
+32
+R7
+!i10b 1
+R8
+R82
+R83
+!i113 1
+R11
+R12
+Eprocessor
+Z84 w1713987243
+R32
+R18
+R1
+R2
+R3
+Z85 8D:/spring 24/Arch/Project/Computer-Architecture/processor.vhd
+Z86 FD:/spring 24/Arch/Project/Computer-Architecture/processor.vhd
+l0
+L7
+V3OMFYLF0D?6_iajkzN_?c0
+!s100 B2hGA`;ETVh2WV8MDQ<_T3
+R6
+32
+R48
+!i10b 1
+R49
+Z87 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/processor.vhd|
+Z88 !s107 D:/spring 24/Arch/Project/Computer-Architecture/processor.vhd|
+!i113 1
+R11
+R12
+Aimp
+R32
+R18
+R1
+R2
+Z89 DEx4 work 9 processor 0 22 3OMFYLF0D?6_iajkzN_?c0
+l248
+L17
+VNkUnl::J7fAAhFl@fZ73Z2
+!s100 GV@VBAbAaGoc;0jC0^5^40
+R6
+32
+R48
+!i10b 1
+R49
+R87
+R88
+!i113 1
+R11
+R12
+Eregister_file
+R27
+R18
+R1
+R2
+R3
+Z90 8D:/spring 24/Arch/Project/Computer-Architecture/Decode/register_file.vhd
+Z91 FD:/spring 24/Arch/Project/Computer-Architecture/Decode/register_file.vhd
+l0
+L6
+V70SJIl5BNfbkacV5obRS;2
+!s100 `Vo^`gdaX<004L^LzJY8`3
+R6
+32
+R7
+!i10b 1
+R8
+Z92 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|D:/spring 24/Arch/Project/Computer-Architecture/Decode/register_file.vhd|
+Z93 !s107 D:/spring 24/Arch/Project/Computer-Architecture/Decode/register_file.vhd|
+!i113 1
+R11
+R12
+Aimp
+R18
+R1
+R2
+DEx4 work 13 register_file 0 22 70SJIl5BNfbkacV5obRS;2
+l28
+L25
+VCDKWCmk11SHg@z@ZHRFc81
+!s100 =NfN^UMgzN0Rg3]d3NjbQ1
+R6
+32
+R7
+!i10b 1
+R8
+R92
+R93
+!i113 1
+R11
+R12

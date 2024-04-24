@@ -5,7 +5,7 @@ ENTITY ALU IS
     PORT (
         input1 : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
         input2 : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-        carryin : IN STD_LOGIC;
+
         sel : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
         outpt : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
         carryout : OUT STD_LOGIC;
