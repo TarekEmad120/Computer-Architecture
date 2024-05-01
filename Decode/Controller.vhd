@@ -18,7 +18,8 @@ entity Controller is
     aluControl                          : out STD_LOGIC_VECTOR(3 downto 0);
     RS1_RD_SEL, RS2_RD_SEL              : out STD_LOGIC;
     Interrupt_Signal                    : out  STD_LOGIC;
-    STALL_FETCH_IMM                     : out  STD_LOGIC
+    STALL_FETCH_IMM                     : out  STD_LOGIC;
+    Signal_br                           : out STD_LOGIC_VECTOR (1 DOWNTO 0)   --- SIGNAL BRANCHING
   );
 
 end entity;
@@ -40,6 +41,7 @@ begin
       Mem_protect_enable <= '0';
       Mem_free_enable    <= '0';
       STALL_FETCH_IMM    <= '0';
+      Signal_br          <= "00";
       case one_two_attrib is 
         when  '0' =>
           RS1_RD_SEL <= '1';
@@ -65,6 +67,7 @@ begin
         WRITE_BACK         <= '1';
         Free_P_Enable      <= '0';
         STALL_FETCH_IMM    <= '1';
+        Signal_br          <= "00";
         when others=>
         end case;
     when "000" =>
@@ -77,6 +80,7 @@ begin
         Free_P_Enable      <= '0';
         WRB_S              <= "00";
         RA2_SEL            <= "00";
+        Signal_br          <= "00";
     when "010" =>            --- ADDI , SUBI
         Mem_protect_enable <= '0';
         Mem_free_enable    <= '0';
@@ -89,6 +93,7 @@ begin
         WRITE_BACK         <= '1';
         WRB_S              <= "10";
         RA2_SEL            <= "01";
+        Signal_br          <= "00";
         case Func is
           when "001" =>
            aluControl   <= "0111";
@@ -96,45 +101,32 @@ begin
           aluControl   <= "0101";
           when others =>
           end case;
+    when "110" =>
+          case Func is
+            when "010" =>
+              Signal_br          <= "01";
+            when "011" =>
+              Signal_br          <= "10";
+          when others =>
+          end case;
+          RS1_RD_SEL         <= '1';
+          Mem_protect_enable <= '0';
+          Mem_free_enable    <= '0';
+          STALL_FETCH_IMM    <= '0';
+          Free_P_Enable      <= '0';
+          MEM_READ           <= '0';
+          MEM_WRITE          <= '0';
+          RS2_RD_SEL         <= 'X';
+          WRB_S              <= "XX";
+          RA2_SEL            <= "XX";
+        
     when others=>
   end case;
 
-  -- if (oppCode = "111" and Func = "100") then
-  --   Interrupt_Signal <= '1';
-  -- else
-  --   Interrupt_Signal <= '0';
-  -- end if;
+
 
 
   end process;
 
-
-
-
---   aluControl    <= Func & one_two_attrib when oppCode = "001";
---   WRB_S         <= "10" when oppCode = "001"; -- select ALU Data to write Back
---   WRITE_BACK    <= '1' when oppCode = "001";
---   Free_P_Enable <= '0' when oppCode = "001";
-
---   -- to be edited --
--- RA2_SEL <= "00" when oppCode = "001" else
---     "01";
-
---   -- to be edited --
---   RS2_RD_SEL <= '0' when oppCode = "001";
---   RS1_RD_SEL <= '1' when one_two_attrib = '0' else
---                  '0';
-
---   MEM_READ           <= '0' when oppCode = "001";
---   MEM_WRITE          <= '0' when oppCode = "001";
---   Mem_protect_enable <= '0' when oppCode = "001";
---   Mem_free_enable    <= '0' when oppCode = "001";
---   -- LDM OPERATION 
---   WRITE_BACK         <= '1' when oppCode = "100" and Func = "011";
---   WRB_S              <= "11" when oppCode = "100" and Func = "011";
---   MEM_READ           <= '0' when oppCode = "100" and Func = "011";
---   MEM_WRITE          <= '0' when oppCode = "100" and Func = "011";
---   Mem_protect_enable <= '0' when oppCode = "100" and Func = "011";
---   Mem_free_enable    <= '0' when oppCode = "100" and Func = "011";
 
 end architecture;

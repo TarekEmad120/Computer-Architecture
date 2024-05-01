@@ -73,7 +73,8 @@ architecture IMP of processor is
       aluControl                          : out STD_LOGIC_VECTOR(3 downto 0);
       RS1_RD_SEL, RS2_RD_SEL              : out STD_LOGIC;
       Interrupt_Signal                    : out  STD_LOGIC;
-      STALL_FETCH_IMM                     : out  STD_LOGIC
+      STALL_FETCH_IMM                     : out  STD_LOGIC;
+      Signal_br                           : out STD_LOGIC_VECTOR (1 DOWNTO 0)
     );
   end component;
 
@@ -129,6 +130,8 @@ architecture IMP of processor is
       RS1_In, RS2_In                              : in  STD_LOGIC_VECTOR(2 downto 0);  -- to forward unit
       MEM_READ_In, MEM_WRITE_In, WRITE_BACK_In    : in  STD_LOGIC;
       WRB_S_In                                    : in  STD_LOGIC_VECTOR(1 downto 0);
+      Signal_br_control_In                        : in  STD_LOGIC_VECTOR(1 downto 0);
+      
 
       RA_OUT                                      : out STD_LOGIC_VECTOR(31 downto 0);
       alu_control_out                             : out STD_LOGIC_VECTOR(3 downto 0);  --
@@ -136,7 +139,9 @@ architecture IMP of processor is
       RD_Out                                      : out STD_LOGIC_VECTOR(2 downto 0);
       MEM_READ_Out, MEM_WRITE_Out, WRITE_BACK_Out : out STD_LOGIC;
       RS1_out, RS2_out                            : out STD_LOGIC_VECTOR(2 downto 0);
-      WRB_S_Out                                   : out STD_LOGIC_VECTOR(1 downto 0)
+      WRB_S_Out                                   : out STD_LOGIC_VECTOR(1 downto 0);
+      Signal_br_control_Out                       : out  STD_LOGIC_VECTOR(1 downto 0)
+
     );
   end component;
   -------------------------------------------- EXECUTE STAGE 
@@ -181,6 +186,15 @@ END Component;
       Ra_Out:Out STD_LOGIC_VECTOR(31 DOWNTO 0);
       AluOut_Out: Out STD_LOGIC_VECTOR(31 DOWNTO 0);
       RA2_DATA_WB_OUT: OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+  end component;
+
+  component ExeceptionBranch IS
+	PORT (
+        clk: IN std_logic;
+        signal_br: IN std_logic_vector (1 downto 0);
+        bit_predict: IN std_logic;
+        Flush_F : OUT std_logic
     );
   end component;
   -------------------------------------------- WRITE BACK STAGE
@@ -273,10 +287,16 @@ END Component;
   signal WRB_S_con, WRB_S_Decode_Execute                                : STD_LOGIC_VECTOR(1 downto 0);
   signal Data_write_back_out_muxWB                                      : std_logic_vector(31 downto 0);
   signal InPortData_MUX_WB ,RA2_DATA_WB_OUT_DATA                        : std_logic_vector(31 downto 0);
+  signal Signal_br_control                                              : STD_LOGIC_VECTOR(1 downto 0);
   -- Forward Unit
   signal RA1_TO_ALU,RA2_TO_ALU                                          :std_logic_vector(31 downto 0);
   signal SEL1_FU,SEL2_FU                                                :std_logic_vector(1 downto 0);
   signal DATA_OUT_MUX_IMM_RA_PC                                         :std_logic_vector(31 downto 0);
+
+  -- Branch_prediction
+  Signal predicted,flush_f                                              : std_logic; 
+  Signal resetD,resetF                                                  : std_logic; 
+  signal Signal_br_control_DE                                           :std_logic_vector(1 downto 0);
 
 begin
 
@@ -296,9 +316,9 @@ begin
   PC_MUX: PCmux
     port map (
       PCnext => PC_INSTRUCTION_INCREMNTED,
-       PC_BR_Ra => PC_BR_Ra_value, PC_Ret => PC_Ret_value,
-      PC_value => PC_Execption_value, flushEX => flushEx_signal,
-      flushMem => flushMem_signal,
+       PC_BR_Ra => RA1_TO_ALU, PC_Ret => PC_Ret_value, -------------aloooo
+      PC_value => PC_Execption_value, flushEX => flush_f,
+      flushMem => '0',
       PC => PC_MUX_OUT
     );
 
@@ -307,7 +327,7 @@ begin
               address => PC_VALUE_OUT_STD_LOGIC, data => Instruction_from_memory);
 
   FetchDecodeReg1: FetchDecodeReg
-    port map (clk => clk, reset => reset, ---- THERE NO ENABLE 
+    port map (clk => clk, reset => flush_f, ---- THERE NO ENABLE 
               Interrupt => interrupt_signal_controller_out, IntermediateEnable => Intermediate_Enable_controller,
               pc => PC_VALUE_CONCATENATED, instructionIn => Instruction_from_memory, ------------- CHECK PC VALUE 
               instructionOut => Instruction_from_Fetch_Decode,
@@ -337,7 +357,7 @@ begin
     );
 
   DecodeExecute: Decode_Execute
-    port map (clk => clk, reset => reset, enable => Enable_Decode_Execute,
+    port map (clk => clk, reset => flush_f, enable => Enable_Decode_Execute,
               dataIn1 => Ra1_value_RegisterFile,
               dataIn2 => DATA_OUT_MUX_IMM_RA_PC,
               alu_control_in => alu_controll_signal,
@@ -349,6 +369,7 @@ begin
               MEM_WRITE_In => MEM_WRITE_IN_Decode_Execute,
               WRITE_BACK_In => WRITE_BACK_IN_Decode_Execute,
               WRB_S_In => WRB_S_con,
+              Signal_br_control_In=>Signal_br_control,
               RA_OUT => RA_out_Decode_Execute,
               alu_control_out => alu_control_out_Decode_Execute,
               dataOut1 => RA1_Decode_Execute,
@@ -359,7 +380,9 @@ begin
               WRITE_BACK_Out => WRITE_BACK_out_Decode_Execute,
               RS1_out => RS1_out_Decode_Execute,
               RS2_out => RS2_out_Decode_Execute,
-              WRB_S_Out => WRB_S_Decode_Execute
+              WRB_S_Out => WRB_S_Decode_Execute,
+              Signal_br_control_Out=>Signal_br_control_DE
+              
     );
 
   alucomp1: ALU
@@ -453,8 +476,17 @@ begin
               RS1_RD_SEL => rs1_rd_controll,
               RS2_RD_SEL => rs2_rd_controll,
               Interrupt_Signal => interrupt_signal_controller_out,
-              STALL_FETCH_IMM => Intermediate_Enable_controller
+              STALL_FETCH_IMM => Intermediate_Enable_controller,
+              Signal_br => Signal_br_control
     );
+
+  ExeceptionBranch1: ExeceptionBranch 
+  port map (clk=>clk,
+  signal_br=>Signal_br_control_DE,
+  bit_predict=>predicted,
+  Flush_F=>flush_f
+  );
+
   ------------------------------ MUX WRITE BACK
   muxWB: mux_WB
     port map (InPortData    => InPortData_MUX_WB,
@@ -471,6 +503,16 @@ begin
     IMM_CONCATENATED <= x"0000" & Instruction_from_memory;
     PC_VALUE_SELECTED_CONCATENATED <= x"00000" & PC_VALUE_SELECTED_STD_LOGIC;
     PC_INSTRUCTION_INCREMNTED <= std_logic_vector(unsigned(PC_VALUE_CONCATENATED) + 1);
+    -- process(flush_f)
+    -- begin
+    -- if flush_f = '1' then
+    --     resetF <= '1';
+    --     resetD <= '1';
+    -- else
+    --     resetF <= '0';
+    --     resetD <= '0';
+    -- end if;
+
 
 
 end architecture;

@@ -14,6 +14,7 @@ PORT (
     RS1_In,RS2_In: IN STD_LOGIC_VECTOR(2 DOWNTO 0); -- to forward unit
     MEM_READ_In,MEM_WRITE_In,WRITE_BACK_In:IN STD_LOGIC;
     WRB_S_In: IN  STD_LOGIC_VECTOR (1 DOWNTO 0);
+    Signal_br_control_In:IN  STD_LOGIC_VECTOR (1 DOWNTO 0);
 
     RA_OUT:OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
     alu_control_out: OUT STD_LOGIC_VECTOR(3 DOWNTO 0);  --
@@ -21,7 +22,8 @@ PORT (
     RD_Out: OUT STD_LOGIC_VECTOR(2 DOWNTO 0); 
     MEM_READ_Out,MEM_WRITE_Out,WRITE_BACK_Out:OUT STD_LOGIC;
     RS1_out,RS2_out: OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-    WRB_S_Out: OUT  STD_LOGIC_VECTOR (1 DOWNTO 0)
+    WRB_S_Out: OUT  STD_LOGIC_VECTOR (1 DOWNTO 0);
+    Signal_br_control_Out:OUT  STD_LOGIC_VECTOR (1 DOWNTO 0)
 );
 
 END Decode_Execute;
@@ -43,6 +45,7 @@ BEGIN
             MEM_READ_Out<= '0';
             MEM_WRITE_Out<='0';
             WRITE_BACK_Out<='0';
+            Signal_br_control_Out<="00";
             WRB_S_Out<=(OTHERS => '0');
         ELSIF clk'EVENT AND clk = '1' THEN
             IF enable = '1' THEN
@@ -57,6 +60,7 @@ BEGIN
               MEM_WRITE_Out<=MEM_WRITE_In;
               WRITE_BACK_Out<=WRITE_BACK_In;
               WRB_S_Out<=WRB_S_In;
+              Signal_br_control_Out<=Signal_br_control_In;
             END IF;
         END IF;
     END PROCESS;

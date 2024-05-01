@@ -24,11 +24,11 @@ begin
     process(PCnext, PC_BR_Ra, PC_Ret, PC_value, flushEX, flushMem)
     begin
         if flushEX = '1' and flushMem = '1' then
-            PC <= PC_BR_Ra;
+            PC <= PC_value;
         elsif flushMem = '1'and flushEX = '0' then
             PC <= PC_Ret;
-        elsif flushEX = '1' and flushMem = '0' then
-            PC <= PC_value;
+        elsif flushEX = '1' then
+            PC <= PC_BR_Ra;
 
         else
             PC <= PCnext;
