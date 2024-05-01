@@ -20,18 +20,19 @@ ARCHITECTURE My_imp_of_Forward_unit OF ForwardUnit IS
 
 BEGIN
     
-        Alu_src2_sel <= "00" WHEN (WRB_EN_EM_reg = '0') ELSE 
+        Alu_src2_sel <=
             "01" WHEN (RS2_address = Rd_address_EM_reg AND  WRB_EN_EM_reg = '1') ELSE
             "10" WHEN (RS2_address = Rd_address_MW_reg AND  WRB_EN_MW_reg = '1')
             --AND (RS2_address != Rd_address_EM_reg AND WRB_EN_EM_reg = '1') 
             ELSE
             "00";
-        Alu_src1_sel <= "00" WHEN (WRB_EN_EM_reg = '0') ELSE
+        Alu_src1_sel <= 
             "01" WHEN (RS1_address = Rd_address_EM_reg AND WRB_EN_EM_reg = '1') ELSE
             "10" WHEN (RS1_address = Rd_address_MW_reg AND WRB_EN_MW_reg = '1')
             --AND (RS1_address != Rd_address_EM_reg AND WRB_EN_EM_reg = '1') 
             ELSE
             "00";
-
+            -- Rd_address_MW_reg=>Rd_address_out_mem_wb,
+            -- WRB_EN_MW_reg=>WB_EN_out_mem_wb,
     
 END My_imp_of_Forward_unit;

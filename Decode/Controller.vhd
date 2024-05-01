@@ -46,7 +46,7 @@ begin
         when others => RS1_RD_SEL <= '0';
       end case;
       case Func IS
-	when "110" =>
+	    when "110" =>
        	WRITE_BACK    <= '0';
       when others => WRITE_BACK    <= '1';
       end case;
@@ -77,7 +77,25 @@ begin
         Free_P_Enable      <= '0';
         WRB_S              <= "00";
         RA2_SEL            <= "00";
-
+    when "010" =>            --- ADDI , SUBI
+        Mem_protect_enable <= '0';
+        Mem_free_enable    <= '0';
+        STALL_FETCH_IMM    <= '1';
+        Free_P_Enable      <= '0';
+        MEM_READ           <= '0';
+        MEM_WRITE          <= '0';
+        RS1_RD_SEL         <= '0';
+        RS2_RD_SEL         <= 'X';
+        WRITE_BACK         <= '1';
+        WRB_S              <= "10";
+        RA2_SEL            <= "01";
+        case Func is
+          when "001" =>
+           aluControl   <= "0111";
+          when "010"=>
+          aluControl   <= "0101";
+          when others =>
+          end case;
     when others=>
   end case;
 
