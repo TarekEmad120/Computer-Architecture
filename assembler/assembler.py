@@ -1,7 +1,9 @@
 import re
 
+ORG_LINE = 0
+
 # list of instructions based of number of operands 
-no_operand_insts = ['nop', 'ret', 'rti', 'int']
+no_operand_insts = ['nop', 'ret', 'rti']
 one_operand_insts = ['not', 'neg','dec','inc', 'out', 'in', 'jz', 'jmp', 'call', 'protect', 'free', 'push', 'pop', 'call']
 two_operand_insts = ['swap', 'cmp', 'ldm', 'mov']
 three_operand_insts = ['add', 'sub', 'and', 'or', 'xor']
@@ -59,9 +61,6 @@ op_code = {
     "ret"     : "110",
     "rti"     : "110",
 
-    # Int
-    "int"     : "111",
-
 }
 
 # function set is 4 bits long
@@ -109,9 +108,6 @@ func = {
     "call"    : "0110",
     "ret"     : "1000",
     "rti"     : "1010",
-    
-    # Int
-    "int"     : "1000",
 
 }
 
@@ -156,9 +152,11 @@ def one_operand_check(instruction):
      else: 
         return False
 def two_operand_check(instruction):
-     if len(instruction)==3 and len(instruction[1])==2 and instruction[1][0]=='r' and len(instruction[2])==2  and instruction[2][0]=='r' and 0 <= int(instruction[1][1]) <= 7 and 0 <= int(instruction[2][1]) <= 7 :
+    if instruction[0] == 'ldm':
         return True
-     else: 
+    elif len(instruction)==3 and len(instruction[1])==2 and instruction[1][0]=='r' and len(instruction[2])==2  and instruction[2][0]=='r' and 0 <= int(instruction[1][1]) <= 7 and 0 <= int(instruction[2][1]) <= 7 :
+        return True
+    else: 
         return False
 
 def three_operand_check(instruction):
@@ -173,8 +171,8 @@ def three_operand_check(instruction):
 def clean_instructions(instruction_line):
 
     # remove spaces and ignore #
-    if instruction_line.startswith('.'):
-        return None
+    # if instruction_line.startswith('.'):
+    #     return None
     cleaned_line = instruction_line.split('#')[0].strip()
     
     instructions = []
@@ -263,24 +261,15 @@ def immediate_operand_instructions(instruction):
 
 
 
-def save_binary_instructions(binary_instruction):
+def save_binary_instructions(binary_instruction, file):
+
+        # with open("binary.txt", 'w') as file:
     
-        with open("binary.txt", 'w') as file:
-    
-            for line in binary_instruction:
-                file.write(line + '\n')
+        for line in binary_instruction:
+            file.write(line + '\n')
     
         print("Binary instructions saved to binary.txt")
-
-
-
-
-
-
-
-
-
-
+        file.close()
 
 
 
@@ -288,49 +277,81 @@ def save_binary_instructions(binary_instruction):
 instructions = read_file("Instructions.txt")
 binary_instruction = []
 
-# convert each instruction to binary instruction
+# sill memory with zeros
+with open("binary.txt", "r+") as file:
+    
+    for _ in range(4095):
+        file.write("0000000000000000\n")
+    
+    # Move the file pointer to the beginning of the file
+    file.seek(0)
+
+    # Read all lines into memory
+    mem_lines = file.readlines()
+
+
 
 for instruction in instructions:
     
     if instruction[0] in no_operand_insts:
         if no_operand_check(instruction):
-            binary_instruction.append(no_operand_instructions(instruction))
+            mem_lines[ORG_LINE] = no_operand_instructions(instruction) + '\n'
+            ORG_LINE += 1
+
         else:
             print("Error in assembly instruction")
 
 
     elif instruction[0] in one_operand_insts:
         if one_operand_check(instruction):
-            binary_instruction.append(one_operand_instructions(instruction))
+            mem_lines[ORG_LINE] = one_operand_instructions(instruction) + '\n'
+            ORG_LINE += 1
         else:
             print("Error in assembly instruction")
     
 
     elif instruction[0] in two_operand_insts:
         if two_operand_check(instruction):
-            binary_instruction.append(two_operand_instructions(instruction))
+
+            mem_lines[ORG_LINE] = two_operand_instructions(instruction) + '\n'
+            ORG_LINE += 1
+
             if instruction[0] == 'ldm':
-                binary_instruction.append(hex_to_binary(instruction[2])) 
+                mem_lines[ORG_LINE] = hex_to_binary(instruction[2]) + '\n'
+                ORG_LINE += 1
         else:
             print("Error in assembly instruction")
     
        
     elif instruction[0] in three_operand_insts:
-        if two_operand_check(instruction):
-            binary_instruction.append(three_operand_instructions(instruction))
-            if instruction[0] == 'ldm':
-                binary_instruction.append(hex_to_binary(instruction[2])) 
+        if three_operand_check(instruction):
+            # binary_instruction.append(three_operand_instructions(instruction))
+            mem_lines[ORG_LINE] = three_operand_instructions(instruction) + '\n'
+            ORG_LINE += 1
+                 
         else:
             print("Error in assembly instruction")
 
 
     elif instruction[0] in immidiate_insts:
-        binary_instruction.append(immediate_operand_instructions(instruction))
-        binary_instruction.append(hex_to_binary(instruction[3])) 
+        mem_lines[ORG_LINE] = immediate_operand_instructions(instruction) + '\n'
+        ORG_LINE += 1
+        # binary_instruction.append(immediate_operand_instructions(instruction))
+        # binary_instruction.append(hex_to_binary(instruction[3])) 
+        mem_lines[ORG_LINE] = hex_to_binary(instruction[3]) + '\n'
 
+    # handle .org
+    elif instruction[0] == '.org':
+        ORG_LINE = int(instruction[1])
+        
     else:
         print ("operand not found: " + instruction[0])
+        
 
 
-# save instruction to binary.txt
-save_binary_instructions(binary_instruction)
+
+# write all binary codes to file
+with open("binary.txt", "w") as file:
+    # Write the modified lines back to the file
+    file.writelines(mem_lines)
+    print("Binary instructions saved to binary.txt")
