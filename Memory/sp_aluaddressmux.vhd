@@ -23,8 +23,8 @@ begin
     sp_minus_1 <= stack_pointer - 1;
     sp_plus_1  <= stack_pointer + 1;
 
-    data_out <= sp_minus_1(11 downto 0)  when push_enable = '0' and sp_enable = '1' else
-                sp_plus_1(11 downto 0) when push_enable = '1' and sp_enable = '1' else
+    data_out <= sp_minus_1(11 downto 0)  when push_enable = '1' and sp_enable = '1' else
+                sp_plus_1(11 downto 0) when push_enable = '0' and sp_enable = '1' else
                 EA;
 
 end architecture;

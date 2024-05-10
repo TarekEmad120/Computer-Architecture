@@ -1,132 +1,128 @@
 
-library IEEE;
-  use IEEE.STD_LOGIC_1164.all;
-  use IEEE.numeric_std.all;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.numeric_std.ALL;
 
-entity Controller is
+ENTITY Controller IS
 
-  port (
-    enable                              : in  STD_LOGIC;
-    oppCode                             : in  STD_LOGIC_VECTOR(2 downto 0);
-    Func                                : in  STD_LOGIC_VECTOR(2 downto 0);
-    one_two_attrib                      : in  STD_LOGIC;
-    MEM_READ, MEM_WRITE, WRITE_BACK     : out STD_LOGIC;
-    RA2_SEL                             : out STD_LOGIC_VECTOR(1 downto 0);
-    WRB_S                               : out STD_LOGIC_VECTOR(1 downto 0);
-    Free_P_Enable                       : out STD_LOGIC;
-    Mem_protect_enable, Mem_free_enable : out STD_LOGIC;
-    aluControl                          : out STD_LOGIC_VECTOR(3 downto 0);
-    RS1_RD_SEL, RS2_RD_SEL              : out STD_LOGIC;
-    Interrupt_Signal                    : out  STD_LOGIC;
-    STALL_FETCH_IMM                     : out  STD_LOGIC;
-    Signal_br                           : out STD_LOGIC_VECTOR (1 DOWNTO 0)   --- SIGNAL BRANCHING
+  PORT (
+    enable : IN STD_LOGIC;
+    oppCode : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+    Func : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+    one_two_attrib : IN STD_LOGIC;
+    MEM_READ, MEM_WRITE, WRITE_BACK : OUT STD_LOGIC;
+    RA2_SEL : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+    WRB_S : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+    Free_P_Enable : OUT STD_LOGIC;
+    Mem_protect_enable, Mem_free_enable : OUT STD_LOGIC;
+    aluControl : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    RS1_RD_SEL, RS2_RD_SEL : OUT STD_LOGIC;
+    Interrupt_Signal : OUT STD_LOGIC;
+    STALL_FETCH_IMM : OUT STD_LOGIC;
+    Signal_br : OUT STD_LOGIC_VECTOR (1 DOWNTO 0); --- SIGNAL BRANCHING
+    push_signal : OUT STD_LOGIC;
+    STACK_SIGNAL : OUT STD_LOGIC
   );
 
-end entity;
+END ENTITY;
 
-architecture IMP of Controller is
+ARCHITECTURE IMP OF Controller IS
 
-begin
-  PROCESS (oppCode, Func,one_two_attrib) IS
+BEGIN
+  PROCESS (oppCode, Func, one_two_attrib) IS
   BEGIN
-  case oppCode is
-    when "001" =>
-      aluControl    <= Func & one_two_attrib;
-      WRB_S         <= "10";
-      Free_P_Enable <= '0';
-      RA2_SEL       <= "00";
-      RS2_RD_SEL    <= '0';
-      MEM_READ      <= '0';
-      MEM_WRITE     <= '0';
-      Mem_protect_enable <= '0';
-      Mem_free_enable    <= '0';
-      STALL_FETCH_IMM    <= '0';
-      Signal_br          <= "00";
-      case one_two_attrib is 
-        when  '0' =>
-          RS1_RD_SEL <= '1';
-        when others => RS1_RD_SEL <= '0';
-      end case;
-      case Func IS
-	    when "110" =>
-       	WRITE_BACK    <= '0';
-      when others => WRITE_BACK    <= '1';
-      end case;
-    when "100" => 
-      case Func is
-        when "011" =>
-        aluControl   <= (others =>'0');
-        WRB_S        <= "11";
-        RA2_SEL      <= "01";
-        MEM_READ      <= '0';
-        MEM_WRITE     <= '0';
+    CASE oppCode IS
+      WHEN "001" =>
+        aluControl <= Func & one_two_attrib;
+        WRB_S <= "10";
+        Free_P_Enable <= '0';
+        RA2_SEL <= "00";
+        RS2_RD_SEL <= '0';
+        MEM_READ <= '0';
+        MEM_WRITE <= '0';
         Mem_protect_enable <= '0';
-        Mem_free_enable    <= '0';
-        RS1_RD_SEL         <= '0';
-        RS2_RD_SEL         <= '0';
-        WRITE_BACK         <= '1';
-        Free_P_Enable      <= '0';
-        STALL_FETCH_IMM    <= '1';
-        Signal_br          <= "00";
-        when others=>
-        end case;
-    when "000" =>
-        STALL_FETCH_IMM    <= '0';
+        Mem_free_enable <= '0';
+        STALL_FETCH_IMM <= '0';
+        Signal_br <= "00";
+        CASE one_two_attrib IS
+          WHEN '0' =>
+            RS1_RD_SEL <= '1';
+          WHEN OTHERS => RS1_RD_SEL <= '0';
+        END CASE;
+        CASE Func IS
+          WHEN "110" =>
+            WRITE_BACK <= '0';
+          WHEN OTHERS => WRITE_BACK <= '1';
+        END CASE;
+      WHEN "100" =>
+        CASE Func IS
+          WHEN "011" =>
+            aluControl <= (OTHERS => '0');
+            WRB_S <= "11";
+            RA2_SEL <= "01";
+            MEM_READ <= '0';
+            MEM_WRITE <= '0';
+            Mem_protect_enable <= '0';
+            Mem_free_enable <= '0';
+            RS1_RD_SEL <= '0';
+            RS2_RD_SEL <= '0';
+            WRITE_BACK <= '1';
+            Free_P_Enable <= '0';
+            STALL_FETCH_IMM <= '1';
+            Signal_br <= "00";
+          WHEN OTHERS =>
+        END CASE;
+      WHEN "000" =>
+        STALL_FETCH_IMM <= '0';
         Mem_protect_enable <= '0';
-        Mem_free_enable    <= '0';
-        RS1_RD_SEL         <= '0';
-        RS2_RD_SEL         <= '0';
-        WRITE_BACK         <= '0';
-        Free_P_Enable      <= '0';
-        WRB_S              <= "00";
-        RA2_SEL            <= "00";
-        Signal_br          <= "00";
-    when "010" =>            --- ADDI , SUBI
+        Mem_free_enable <= '0';
+        RS1_RD_SEL <= '0';
+        RS2_RD_SEL <= '0';
+        WRITE_BACK <= '0';
+        Free_P_Enable <= '0';
+        WRB_S <= "00";
+        RA2_SEL <= "00";
+        Signal_br <= "00";
+      WHEN "010" => --- ADDI , SUBI
         Mem_protect_enable <= '0';
-        Mem_free_enable    <= '0';
-        STALL_FETCH_IMM    <= '1';
-        Free_P_Enable      <= '0';
-        MEM_READ           <= '0';
-        MEM_WRITE          <= '0';
-        RS1_RD_SEL         <= '0';
-        RS2_RD_SEL         <= 'X';
-        WRITE_BACK         <= '1';
-        WRB_S              <= "10";
-        RA2_SEL            <= "01";
-        Signal_br          <= "00";
-        case Func is
-          when "001" =>
-           aluControl   <= "0111";
-          when "010"=>
-          aluControl   <= "0101";
-          when others =>
-          end case;
-    when "110" =>
-          case Func is
-            when "010" =>
-              Signal_br          <= "01";
-            when "011" =>
-              Signal_br          <= "10";
-          when others =>
-          end case;
-          RS1_RD_SEL         <= '1';
-          Mem_protect_enable <= '0';
-          Mem_free_enable    <= '0';
-          STALL_FETCH_IMM    <= '0';
-          Free_P_Enable      <= '0';
-          MEM_READ           <= '0';
-          MEM_WRITE          <= '0';
-          RS2_RD_SEL         <= 'X';
-          WRB_S              <= "XX";
-          RA2_SEL            <= "XX";
-        
-    when others=>
-  end case;
+        Mem_free_enable <= '0';
+        STALL_FETCH_IMM <= '1';
+        Free_P_Enable <= '0';
+        MEM_READ <= '0';
+        MEM_WRITE <= '0';
+        RS1_RD_SEL <= '0';
+        RS2_RD_SEL <= 'X';
+        WRITE_BACK <= '1';
+        WRB_S <= "10";
+        RA2_SEL <= "01";
+        Signal_br <= "00";
+        CASE Func IS
+          WHEN "001" =>
+            aluControl <= "0111";
+          WHEN "010" =>
+            aluControl <= "0101";
+          WHEN OTHERS =>
+        END CASE;
+      WHEN "110" =>
+        CASE Func IS
+          WHEN "010" =>
+            Signal_br <= "01";
+          WHEN "011" =>
+            Signal_br <= "10";
+          WHEN OTHERS =>
+        END CASE;
+        RS1_RD_SEL <= '1';
+        Mem_protect_enable <= '0';
+        Mem_free_enable <= '0';
+        STALL_FETCH_IMM <= '0';
+        Free_P_Enable <= '0';
+        MEM_READ <= '0';
+        MEM_WRITE <= '0';
+        RS2_RD_SEL <= 'X';
+        WRB_S <= "XX";
+        RA2_SEL <= "XX";
 
-
-
-
-  end process;
-
-
-end architecture;
+      WHEN OTHERS =>
+    END CASE;
+  END PROCESS;
+END ARCHITECTURE;

@@ -22,7 +22,7 @@ begin
             stackpointer_reg <= (others => '0');
         elsif falling_edge(clk) then
             if enable = '1' then
-                if push_pop = '1' then
+                if push_pop = '0' then
                     stackpointer_reg <= stackpointer_reg - 2;
                 else
                     stackpointer_reg <= stackpointer_reg + 2;
