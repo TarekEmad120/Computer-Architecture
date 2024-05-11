@@ -296,6 +296,8 @@ ARCHITECTURE IMP OF processor IS
   END COMPONENT;
   SIGNAL controller_pc_Enable : STD_LOGIC;
   SIGNAL Reset_Pc_Value, Interrupt_PC_Value : STD_LOGIC_VECTOR(11 DOWNTO 0);
+  signal Reset_Pc_Value_32 : STD_LOGIC_VECTOR(31 DOWNTO 0);
+  signal Interrupt_PC_Value_32 : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL PC_value_selected, PC_VALUE_OUT : unsigned(11 DOWNTO 0);
   SIGNAL PC_INSTRUCTION_INCREMNTED : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL PC_VALUE_SELECTED_STD_LOGIC : STD_LOGIC_VECTOR(11 DOWNTO 0);
@@ -534,8 +536,8 @@ BEGIN
     Push_PC => Push_signal_EX_MEM_OUT,
     alu_src => PUSH_DATA,
     data_out => MEM_DATA_OUT,
-    PC_RST => Reset_Pc_Value,
-    PC_Interrupt => Interrupt_PC_Value
+    PC_RST => Reset_Pc_Value_32,
+    PC_Interrupt => Interrupt_PC_Value_32
   );
 
   SP_MUX : sp_addressmux PORT MAP(
@@ -615,9 +617,11 @@ BEGIN
   );
 
   PC_VALUE_SELECTED_STD_LOGIC <= STD_LOGIC_VECTOR(PC_value_selected);
-  EA_UNSIGNED <= unsigned(STD_LOGIC_VECTOR(Rd_out_Execute_Mem(11 DOWNTO 0)));
+  EA_UNSIGNED <= unsigned(STD_LOGIC_VECTOR(Rd_out_Execute_Mem(11 DOWNTO 0)));--the mapping is wrong fix it please
   PC_VALUE_OUT_STD_LOGIC <= STD_LOGIC_VECTOR(PC_VALUE_OUT);
   PC_VALUE_CONCATENATED <= x"00000" & PC_VALUE_OUT_STD_LOGIC;-- TO BE 32 
+  Reset_Pc_Value_32 <= x"00000" & Reset_Pc_Value;
+  Interrupt_PC_Value_32 <= x"00000" & Interrupt_PC_Value;
   IMM_CONCATENATED <= x"0000" & Instruction_from_memory;
   PC_VALUE_SELECTED_CONCATENATED <= x"00000" & PC_VALUE_SELECTED_STD_LOGIC;
   PC_INSTRUCTION_INCREMNTED <= STD_LOGIC_VECTOR(unsigned(PC_VALUE_CONCATENATED) + 1);
