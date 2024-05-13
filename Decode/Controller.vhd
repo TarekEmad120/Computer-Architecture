@@ -101,11 +101,31 @@ BEGIN
             STACK_SIGNAL <= '1';
             Mem_protect_enable <= '0';
             Mem_free_enable <= '0';
+            WRITE_BACK <= '0';
             WRB_S <= "00";
+            RA2_SEL <= "00";
+            STALL_FETCH_IMM <= '0';
+            Signal_br <= "00";
+            RS1_RD_SEL <= '0';
+            RS2_RD_SEL <= '1';
+            SIGNAL_MUX_ALU_TO_MEM <= '0';
+            Free_P_Enable <= '0';
+          WHEN "010" =>
+            MEM_READ <= '1';
+            MEM_WRITE <= '0';
+            push_signal <= '1';
+            STACK_SIGNAL <= '1';
+            Mem_protect_enable <= '0';
+            Mem_free_enable <= '0';
+            WRB_S <= "01";
             RA2_SEL <= "00";
             RS1_RD_SEL <= '0';
             RS2_RD_SEL <= '1';
-            SIGNAL_MUX_ALU_TO_MEM <= '1';
+            Signal_br <= "00";
+            STALL_FETCH_IMM <= '0';
+            SIGNAL_MUX_ALU_TO_MEM <= '0';
+            WRITE_BACK <= '1';
+            Free_P_Enable <= '0';
 
           WHEN OTHERS =>
         END CASE;
