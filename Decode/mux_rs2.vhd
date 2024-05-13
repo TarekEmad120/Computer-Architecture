@@ -1,29 +1,27 @@
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
-use ieee.math_real.all;
-
-
-entity mux_rs2 is
-    port(
-        rs2, rd   : in  std_logic_vector(2 downto 0);
-        ra2       : out std_logic_vector(2 downto 0);
-        rs2_rd    : in  std_logic
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+USE ieee.math_real.ALL;
+ENTITY mux_rs2 IS
+    PORT (
+        rs2, rd : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        ra2 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+        rs2_rd : IN STD_LOGIC
     );
 
-end entity mux_rs2;
+END ENTITY mux_rs2;
 
-architecture mux of mux_rs2 is
-begin
-    process (rs2, rd, rs2_rd) is
-        begin
-            case rs2_rd is
-                when '0' =>
-                    ra2 <= rs2;
-                when '1' =>
-                    ra2 <= rd;
-                when others =>
-                    ra2 <= (others => 'X');
-            end case;
-        end process;
-end architecture mux;
+ARCHITECTURE mux OF mux_rs2 IS
+BEGIN
+    PROCESS (rs2, rd, rs2_rd) IS
+    BEGIN
+        CASE rs2_rd IS
+            WHEN '0' =>
+                ra2 <= rs2;
+            WHEN '1' =>
+                ra2 <= rd;
+            WHEN OTHERS =>
+                ra2 <= (OTHERS => 'X');
+        END CASE;
+    END PROCESS;
+END ARCHITECTURE mux;

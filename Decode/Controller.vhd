@@ -60,7 +60,7 @@ BEGIN
         END CASE;
       WHEN "100" =>
         CASE Func IS
-          WHEN "011" =>
+          WHEN "011" => --- LDI operation
             aluControl <= (OTHERS => '0');
             WRB_S <= "11";
             RA2_SEL <= "01";
@@ -77,7 +77,7 @@ BEGIN
             SIGNAL_MUX_ALU_TO_MEM <= '0';
             push_signal <= '0';
             STACK_SIGNAL <= '0';
-          WHEN "100" =>
+          WHEN "100" => --- LDM operation
             aluControl <= "0101";
             WRB_S <= "01";
             MEM_READ <= '1';
@@ -93,7 +93,7 @@ BEGIN
             Signal_br <= "00";
             STACK_SIGNAL <= '0';
             SIGNAL_MUX_ALU_TO_MEM <= '0';
-          WHEN "001" =>
+          WHEN "001" => ---- PUSH operation
             aluControl <= (OTHERS => '0');
             MEM_READ <= '0';
             MEM_WRITE <= '1';
@@ -110,7 +110,7 @@ BEGIN
             RS2_RD_SEL <= '1';
             SIGNAL_MUX_ALU_TO_MEM <= '0';
             Free_P_Enable <= '0';
-          WHEN "010" =>
+          WHEN "010" => ---- POP operation
             aluControl <= (OTHERS => '0');
             MEM_READ <= '1';
             MEM_WRITE <= '0';
@@ -127,7 +127,7 @@ BEGIN
             SIGNAL_MUX_ALU_TO_MEM <= '0';
             WRITE_BACK <= '1';
             Free_P_Enable <= '0';
-          WHEN "101" =>
+          WHEN "101" => --- STD operation
             MEM_READ <= '0';
             MEM_WRITE <= '1';
             push_signal <= '0';
@@ -206,7 +206,28 @@ BEGIN
         SIGNAL_MUX_ALU_TO_MEM <= '0';
         push_signal <= '0';
         STACK_SIGNAL <= '0';
+      WHEN "101" =>
+        CASE Func IS -- protect operation
+          WHEN "001" =>
+            aluControl <= (OTHERS => '0');
+            MEM_READ <= '0';
+            MEM_WRITE <= '0';
+            push_signal <= '0';
+            STACK_SIGNAL <= '0';
+            Mem_protect_enable <= '1';
+            Mem_free_enable <= '0';
+            WRB_S <= "01";
+            RA2_SEL <= "00";
+            RS1_RD_SEL <= '0';
+            RS2_RD_SEL <= '0';
+            Signal_br <= "00";
+            STALL_FETCH_IMM <= '0';
+            SIGNAL_MUX_ALU_TO_MEM <= '0';
+            WRITE_BACK <= '0';
+            Free_P_Enable <= '1';
 
+          WHEN OTHERS =>
+        END CASE;
       WHEN OTHERS =>
     END CASE;
   END PROCESS;
