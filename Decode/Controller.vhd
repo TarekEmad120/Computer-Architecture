@@ -20,8 +20,9 @@ ENTITY Controller IS
     Interrupt_Signal : OUT STD_LOGIC;
     STALL_FETCH_IMM : OUT STD_LOGIC;
     Signal_br : OUT STD_LOGIC_VECTOR (1 DOWNTO 0); --- SIGNAL BRANCHING
-    push_signal : OUT STD_LOGIC;
-    STACK_SIGNAL : OUT STD_LOGIC
+    push_signal : OUT STD_LOGIC; -- not initlized
+    STACK_SIGNAL : OUT STD_LOGIC;
+    SIGNAL_MUX_ALU_TO_MEM : OUT STD_LOGIC
   );
 
 END ENTITY;
@@ -44,6 +45,9 @@ BEGIN
         Mem_free_enable <= '0';
         STALL_FETCH_IMM <= '0';
         Signal_br <= "00";
+        SIGNAL_MUX_ALU_TO_MEM <= '0';
+        push_signal <= '0';
+        STACK_SIGNAL <= '0';
         CASE one_two_attrib IS
           WHEN '0' =>
             RS1_RD_SEL <= '1';
@@ -70,12 +74,47 @@ BEGIN
             Free_P_Enable <= '0';
             STALL_FETCH_IMM <= '1';
             Signal_br <= "00";
+            SIGNAL_MUX_ALU_TO_MEM <= '0';
+            push_signal <= '0';
+            STACK_SIGNAL <= '0';
+          WHEN "100" =>
+            aluControl <= "0101";
+            WRB_S <= "01";
+            MEM_READ <= '1';
+            MEM_WRITE <= '0';
+            Mem_protect_enable <= '0';
+            Mem_free_enable <= '0';
+            RA2_SEL <= "01";
+            RS1_RD_SEL <= '0';
+            RS2_RD_SEL <= '0';
+            WRITE_BACK <= '1';
+            Free_P_Enable <= '0';
+            STALL_FETCH_IMM <= '1';
+            Signal_br <= "00";
+            STACK_SIGNAL <= '0';
+            SIGNAL_MUX_ALU_TO_MEM <= '0';
+          WHEN "001" =>
+            aluControl <= (OTHERS => '0');
+            MEM_READ <= '0';
+            MEM_WRITE <= '1';
+            push_signal <= '0';
+            STACK_SIGNAL <= '1';
+            Mem_protect_enable <= '0';
+            Mem_free_enable <= '0';
+            WRB_S <= "00";
+            RA2_SEL <= "00";
+            RS1_RD_SEL <= '0';
+            RS2_RD_SEL <= '1';
+            SIGNAL_MUX_ALU_TO_MEM <= '1';
+
           WHEN OTHERS =>
         END CASE;
       WHEN "000" =>
         STALL_FETCH_IMM <= '0';
         Mem_protect_enable <= '0';
         Mem_free_enable <= '0';
+        MEM_READ <= '0';
+        MEM_WRITE <= '0';
         RS1_RD_SEL <= '0';
         RS2_RD_SEL <= '0';
         WRITE_BACK <= '0';
@@ -83,6 +122,9 @@ BEGIN
         WRB_S <= "00";
         RA2_SEL <= "00";
         Signal_br <= "00";
+        SIGNAL_MUX_ALU_TO_MEM <= '0';
+        push_signal <= '0';
+        STACK_SIGNAL <= '0';
       WHEN "010" => --- ADDI , SUBI
         Mem_protect_enable <= '0';
         Mem_free_enable <= '0';
@@ -96,6 +138,9 @@ BEGIN
         WRB_S <= "10";
         RA2_SEL <= "01";
         Signal_br <= "00";
+        SIGNAL_MUX_ALU_TO_MEM <= '0';
+        push_signal <= '0';
+        STACK_SIGNAL <= '0';
         CASE Func IS
           WHEN "001" =>
             aluControl <= "0111";
@@ -121,6 +166,9 @@ BEGIN
         RS2_RD_SEL <= 'X';
         WRB_S <= "XX";
         RA2_SEL <= "XX";
+        SIGNAL_MUX_ALU_TO_MEM <= '0';
+        push_signal <= '0';
+        STACK_SIGNAL <= '0';
 
       WHEN OTHERS =>
     END CASE;

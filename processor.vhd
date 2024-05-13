@@ -77,7 +77,8 @@ ARCHITECTURE IMP OF processor IS
       STALL_FETCH_IMM : OUT STD_LOGIC;
       Signal_br : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
       push_signal : OUT STD_LOGIC;
-      STACK_SIGNAL : OUT STD_LOGIC
+      STACK_SIGNAL : OUT STD_LOGIC;
+      SIGNAL_MUX_ALU_TO_MEM : OUT STD_LOGIC
     );
   END COMPONENT;
 
@@ -296,8 +297,8 @@ ARCHITECTURE IMP OF processor IS
   END COMPONENT;
   SIGNAL controller_pc_Enable : STD_LOGIC;
   SIGNAL Reset_Pc_Value, Interrupt_PC_Value : STD_LOGIC_VECTOR(11 DOWNTO 0);
-  signal Reset_Pc_Value_32 : STD_LOGIC_VECTOR(31 DOWNTO 0);
-  signal Interrupt_PC_Value_32 : STD_LOGIC_VECTOR(31 DOWNTO 0);
+  SIGNAL Reset_Pc_Value_32 : STD_LOGIC_VECTOR(31 DOWNTO 0);
+  SIGNAL Interrupt_PC_Value_32 : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL PC_value_selected, PC_VALUE_OUT : unsigned(11 DOWNTO 0);
   SIGNAL PC_INSTRUCTION_INCREMNTED : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL PC_VALUE_SELECTED_STD_LOGIC : STD_LOGIC_VECTOR(11 DOWNTO 0);
@@ -360,6 +361,7 @@ ARCHITECTURE IMP OF processor IS
   SIGNAL Push_signal_EX_MEM_OUT, Protect_signal_EX_MEM_OUT, Free_signal_EX_MEM_OUT, signal_push_controller : STD_LOGIC;
   SIGNAL stack_value : unsigned(31 DOWNTO 0);
   SIGNAL EA_UNSIGNED : unsigned(11 DOWNTO 0);
+  SIGNAL SIGNAL_MUX_ALU_TO_MEM : STD_LOGIC;
 
 BEGIN
 
@@ -594,7 +596,8 @@ BEGIN
     STALL_FETCH_IMM => Intermediate_Enable_controller,
     Signal_br => Signal_br_control,
     push_signal => signal_push_controller,
-    STACK_SIGNAL => STACK_CON_ENABLE
+    STACK_SIGNAL => STACK_CON_ENABLE,
+    SIGNAL_MUX_ALU_TO_MEM => SIGNAL_MUX_ALU_TO_MEM
   );
 
   ExeceptionBranch1 : ExeceptionBranch
@@ -617,7 +620,7 @@ BEGIN
   );
 
   PC_VALUE_SELECTED_STD_LOGIC <= STD_LOGIC_VECTOR(PC_value_selected);
-  EA_UNSIGNED <= unsigned(STD_LOGIC_VECTOR(Rd_out_Execute_Mem(11 DOWNTO 0)));--the mapping is wrong fix it please
+  EA_UNSIGNED <= unsigned(STD_LOGIC_VECTOR(AluOut_Out_Execute_Mem(11 DOWNTO 0)));
   PC_VALUE_OUT_STD_LOGIC <= STD_LOGIC_VECTOR(PC_VALUE_OUT);
   PC_VALUE_CONCATENATED <= x"00000" & PC_VALUE_OUT_STD_LOGIC;-- TO BE 32 
   Reset_Pc_Value_32 <= x"00000" & Reset_Pc_Value;

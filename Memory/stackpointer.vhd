@@ -1,35 +1,35 @@
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
-use ieee.math_real.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+USE ieee.math_real.ALL;
 
-entity stackpointer is
-    port(
-        clk : in std_logic;
-        reset : in std_logic;
-        push_pop : in std_logic;
-        enable : in std_logic;
-        stackpointer : out unsigned (31 downto 0)
+ENTITY stackpointer IS
+    PORT (
+        clk : IN STD_LOGIC;
+        reset : IN STD_LOGIC;
+        push_pop : IN STD_LOGIC;
+        enable : IN STD_LOGIC;
+        stackpointer : OUT unsigned (31 DOWNTO 0)
     );
-end entity stackpointer;
+END ENTITY stackpointer;
 
-architecture rtl of stackpointer is
-    signal stackpointer_reg : unsigned (31 downto 0) := (others => '0');
-begin
-    process(clk, reset)
-    begin
-        if reset = '1' then
-            stackpointer_reg <= (others => '0');
-        elsif falling_edge(clk) then
-            if enable = '1' then
-                if push_pop = '0' then
+ARCHITECTURE rtl OF stackpointer IS
+    SIGNAL stackpointer_reg : unsigned (31 DOWNTO 0) := (OTHERS => '0');
+BEGIN
+    PROCESS (clk, reset)
+    BEGIN
+        IF reset = '1' THEN
+            stackpointer_reg <= "00000000000000000000000000000011";
+        ELSIF falling_edge(clk) THEN
+            IF enable = '1' THEN
+                IF push_pop = '0' THEN
                     stackpointer_reg <= stackpointer_reg - 2;
-                else
+                ELSE
                     stackpointer_reg <= stackpointer_reg + 2;
-                end if;
-            end if;
-        end if;
-    end process;
+                END IF;
+            END IF;
+        END IF;
+    END PROCESS;
 
     stackpointer <= stackpointer_reg;
-end architecture rtl;
+END ARCHITECTURE rtl;

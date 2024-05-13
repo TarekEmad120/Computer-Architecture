@@ -1,91 +1,92 @@
-library IEEE;
-  use ieee.std_logic_1164.all;
-  use ieee.std_logic_textio.all;
-  use IEEE.STD_LOGIC_UNSIGNED.all;
-  use IEEE.numeric_std.all;
-  use std.textio.all;
+LIBRARY IEEE;
+USE ieee.std_logic_1164.ALL;
+USE ieee.std_logic_textio.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+USE IEEE.numeric_std.ALL;
+USE std.textio.ALL;
+ENTITY Memory IS
+  PORT (
+    clk : IN STD_LOGIC;
+    reset : IN STD_LOGIC;
+    address : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
+    data_in : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+    MEM_READ : IN STD_LOGIC;
+    MEM_WRITE : IN STD_LOGIC;
+    Protect : IN STD_LOGIC;
+    Free : IN STD_LOGIC;
+    Push_PC : IN STD_LOGIC;
+    alu_src : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+    data_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    PC_RST : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    PC_Interrupt : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 
+  );
+END Memory;
 
-  entity Memory is
-    port(
-      clk: in std_logic;
-      reset: in std_logic;
-        address: in std_logic_vector(11 downto 0);
-        data_in: in std_logic_vector(31 downto 0);
-        MEM_READ: in std_logic;
-        MEM_WRITE: in std_logic;
-        Protect: in std_logic;
-        Free : in std_logic;
-        Push_PC : in std_logic;
-        alu_src : in std_logic_vector(31 downto 0);
-        data_out: out std_logic_vector(31 downto 0);
-        PC_RST : out std_logic_vector(31 downto 0);
-        PC_Interrupt : out std_logic_vector(31 downto 0)
+ARCHITECTURE Behavioral OF Memory IS
+  TYPE memory IS ARRAY (0 TO 4095) OF STD_LOGIC_VECTOR(15 DOWNTO 0);
+  SIGNAL mem : memory;
+  TYPE ProtecedMemory IS ARRAY (0 TO 4095) OF STD_LOGIC;
+  SIGNAL ProtectedMem : ProtecedMemory;
+  SIGNAL read_flag : STD_LOGIC := '1';
+BEGIN
+  PROCESS (clk, reset)
+    -- reading from cahce file 
+    FILE file_in : text OPEN read_mode IS "D:\Arc_project\Computer-Architecture\cache.txt";
+    VARIABLE line : line;
+    VARIABLE data : STD_LOGIC_VECTOR(15 DOWNTO 0);
 
-    );
-  end Memory;
+  BEGIN
 
-  architecture Behavioral of Memory is
-  Type memory is array (0 to 4095) of std_logic_vector(15 downto 0);
-    signal mem : memory;
-  Type ProtecedMemory is array (0 to 4095) of std_logic;
-    signal ProtectedMem : ProtecedMemory;
-    signal read_flag : std_logic:='1';
-    begin
-    process(clk, reset)
--- reading from cahce file 
-    file file_in : text open read_mode is "F:\Computer Archectiture\project\Computer-Architecture\Computer-Architecture\cache.txt";
-    variable line : line;
-    variable data : std_logic_vector(15 downto 0);
-
-    begin
-
-    if (reset = '1') then
-      for i in 0 to 4095 loop
-        mem(i) <= (others => '0');
+    IF (reset = '1') THEN
+      FOR i IN 0 TO 4095 LOOP
+        mem(i) <= (OTHERS => '0');
         ProtectedMem(i) <= '0';
-      end loop;
-      PC_RST <= (others => '0');
-        PC_Interrupt <= (others => '0');
-        DATA_OUT <= (others => '0');
-        read_flag <= '1';
-    end if;
+      END LOOP;
+      PC_RST <= (OTHERS => '0');
+      PC_Interrupt <= (OTHERS => '0');
+      DATA_OUT <= (OTHERS => '0');
+      read_flag <= '1';
+    END IF;
     -- reading from cache file once 
-    if (read_flag = '1') then
-      for i in 0 to 4095 loop
-        readline(file_in, line);
-        read(line, data);
-        mem(i) <= data;
-      end loop;
-        read_flag <= '0';
+    IF (read_flag = '1') THEN
+      FOR i IN 0 TO 4095 LOOP
+        IF NOT endfile(file_in) THEN
+          readline(file_in, line);
+          read(line, data);
+          mem(i) <= data;
+        ELSE
+          EXIT; -- Exit the loop if there are no more lines to read
+        END IF;
+      END LOOP;
+      read_flag <= '0';
+    END IF;
 
-    end if;
+    IF falling_edge(clk) THEN
+      IF Mem_Write = '1' AND protectedMem(to_integer(unsigned(address))) = '0' THEN
 
-    if falling_edge(clk) then
-        if Mem_Write ='1' and protectedMem(to_integer(unsigned(address))) = '0' then
+        -- we will use big endian
+        IF push_PC = '1' THEN
+          mem(to_integer(unsigned(address))) <= alu_src(31 DOWNTO 16);
+          mem(to_integer(unsigned(address)) + 1) <= alu_src(15 DOWNTO 0);
+        ELSE
+          mem(to_integer(unsigned(address))) <= data_in(31 DOWNTO 16);
+          mem(to_integer(unsigned(address)) + 1) <= data_in(15 DOWNTO 0);
+        END IF;
+      END IF;
+      IF protect = '1' THEN
+        ProtectedMem(to_integer(unsigned(address))) <= '1';
+      END IF;
+      IF free = '1' THEN
+        ProtectedMem(to_integer(unsigned(address))) <= '0';
+      END IF;
 
-            -- we will use big endian
-            if push_PC = '1' then
-                mem(to_integer(unsigned(address))) <= alu_src(31 downto 16);
-                mem(to_integer(unsigned(address))+1) <= alu_src(15 downto 0);
-            else
-                mem(to_integer(unsigned(address))) <= data_in(31 downto 16);
-                mem(to_integer(unsigned(address))+1) <= data_in(15 downto 0);
-            end if;
-        end if;
-        if protect = '1' then
-            ProtectedMem(to_integer(unsigned(address))) <= '1';
-        end if;
-        if free = '1' then
-            ProtectedMem(to_integer(unsigned(address))) <= '0';
-        end if;
-
-    end if;
+    END IF;
     -- using big endian
-    if (MEM_READ = '1') then
-        data_out <= mem(to_integer(unsigned(address))) & mem(to_integer(unsigned(address))+1);
-    end if;
+    IF (MEM_READ = '1') THEN
+      data_out <= mem(to_integer(unsigned(address))) & mem(to_integer(unsigned(address)) + 1);
+    END IF;
     PC_RST <= mem(0) & mem(1);
     PC_Interrupt <= mem(2) & mem(3);
-    end process;
-    end Behavioral;
+  END PROCESS;
+END Behavioral;
