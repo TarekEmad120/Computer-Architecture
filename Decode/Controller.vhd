@@ -228,6 +228,28 @@ BEGIN
 
           WHEN OTHERS =>
         END CASE;
+      WHEN "111" =>
+      case Func is--interrupt
+        when "100"=>
+        MEM_READ <= '1';
+        MEM_WRITE <= '1';
+        push_signal <= '0';
+        STACK_SIGNAL <= '1';
+        WRB_S <= "01";
+        RA2_SEL <= "00";
+        RS1_RD_SEL <= '0';
+        RS2_RD_SEL <= '0';
+        aluControl <= "0000";
+        WRITE_BACK <= '1';
+        Free_P_Enable <= '0';
+        Mem_protect_enable <= '0';
+        Mem_free_enable <= '0';
+        Signal_br <= "00";
+        STALL_FETCH_IMM <= '0';
+        SIGNAL_MUX_ALU_TO_MEM <= '0';
+        when others=>
+      end case;
+
       WHEN OTHERS =>
     END CASE;
   END PROCESS;

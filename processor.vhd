@@ -383,7 +383,7 @@ BEGIN
 
   PC1 : PCregister
   PORT MAP(
-    clk => clk, reset => reset, Interrupt => interrupt_signal_controller_out,
+    clk => clk, reset => reset, Interrupt => signal_int,
     writeEnable => controller_pc_Enable,
     ResetValue => unsigned(Reset_Pc_Value), InterruptValue => unsigned(Interrupt_PC_Value),
     PCValue => unsigned(PC_MUX_OUT(11 DOWNTO 0)),
