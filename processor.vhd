@@ -51,6 +51,7 @@ ARCHITECTURE IMP OF processor IS
     PORT (
       clk : IN STD_LOGIC;
       reset : IN STD_LOGIC;
+      enable : IN STD_LOGIC;
       Interrupt : IN STD_LOGIC;
       IntermediateEnable : IN STD_LOGIC;
       pc : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -58,6 +59,17 @@ ARCHITECTURE IMP OF processor IS
       instructionOut : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
       PC_data : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
+  END COMPONENT;
+  COMPONENT hazarddectionunit IS
+    PORT (
+      oldRD : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+      currentRS1 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+      currentRS2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+      MEMRead : IN STD_LOGIC;
+      WriteBack : IN STD_LOGIC;
+      stall : OUT STD_LOGIC
+    );
+
   END COMPONENT;
   -------------------------------------------- DECODE  STAGE 
   COMPONENT Controller IS
@@ -374,17 +386,21 @@ ARCHITECTURE IMP OF processor IS
   SIGNAL EA_UNSIGNED, EA_UNSIGNED_RA : unsigned(11 DOWNTO 0);
   SIGNAL SIGNAL_MUX_ALU_TO_MEM : STD_LOGIC;
   SIGNAL Address_In_EX_MEM : unsigned(11 DOWNTO 0);
-
+  SIGNAL stallHazard, notStallHazard, enableFetch : STD_LOGIC;
 BEGIN
 
   Rs1 <= Instruction_from_Fetch_Decode(6 DOWNTO 4);
   Rs2 <= Instruction_from_Fetch_Decode(3 DOWNTO 1);
   Rd <= Instruction_from_Fetch_Decode(9 DOWNTO 7);
+  -- notStallHazard <= NOT stallHazard;
+  -- Enable_Decode_Execute <= NOT stallHazard;
+  -- enableFetch <= NOT stallHazard;
+  -- controller_pc_Enable <= NOT stallHazard;
 
   PC1 : PCregister
   PORT MAP(
-    clk => clk, reset => reset, Interrupt => signal_int,
-    writeEnable => controller_pc_Enable,
+    clk => clk, reset => reset, Interrupt => interrupt_signal_controller_out,
+    writeEnable => stallHazard,
     ResetValue => unsigned(Reset_Pc_Value), InterruptValue => unsigned(Interrupt_PC_Value),
     PCValue => unsigned(PC_MUX_OUT(11 DOWNTO 0)),
     PCout => (PC_VALUE_OUT)
@@ -406,7 +422,7 @@ BEGIN
 
   FetchDecodeReg1 : FetchDecodeReg
   PORT MAP(
-    clk => clk, reset => flush_f, ---- THERE NO ENABLE 
+    clk => clk, reset => flush_f, enable => stallHazard, ---- THERE NO ENABLE 
     Interrupt => interrupt_signal_controller_out, IntermediateEnable => Intermediate_Enable_controller,
     pc => PC_VALUE_CONCATENATED, instructionIn => Instruction_from_memory, ------------- CHECK PC VALUE 
     instructionOut => Instruction_from_Fetch_Decode,
@@ -437,9 +453,18 @@ BEGIN
     data_out2 => Ra2_value_enter_Decode_Execute
   );
 
+  HazardUnit : hazarddectionunit PORT MAP(
+    oldRD => Rd_out_Execute_Mem,
+    currentRS1 => Rs1_output_Mux,
+    currentRS2 => Rs2_output_Mux,
+    MEMRead => MEM_READ_out_Execute_Mem,
+    WriteBack => WRITE_BACK_out_Execute_Mem,
+    stall => stallHazard
+  );
+
   DecodeExecute : Decode_Execute
   PORT MAP(
-    clk => clk, reset => flush_f, enable => Enable_Decode_Execute,
+    clk => clk, reset => flush_f, enable => stallHazard,
     dataIn1 => Ra1_value_RegisterFile,
     dataIn2 => DATA_OUT_MUX_IMM_RA_PC,
     alu_control_in => alu_controll_signal,
@@ -490,7 +515,7 @@ BEGIN
   muxsourcealu1 : mux_source_alu1 PORT MAP(
     RA => RA1_Decode_Execute,
     SRC_DATA_EXE => AluOut_Out_Execute_Mem,
-    SRC_DATA_MEM => Alu_data_out_mem_wb,
+    SRC_DATA_MEM => Data_write_back_out_muxWB, ---Alu_data_out_mem_wb
     DATA_OUT_TO_ALU => RA1_TO_ALU,
     ForwardUnit_sel => SEL1_FU
   );
@@ -498,7 +523,7 @@ BEGIN
   muxsource_alu2 : mux_source_alu1 PORT MAP(
     RA => RA2_Decode_Execute,
     SRC_DATA_EXE => AluOut_Out_Execute_Mem,
-    SRC_DATA_MEM => Alu_data_out_mem_wb,
+    SRC_DATA_MEM => Alu_data_out_mem_wb, ---Alu_data_out_mem_wb
     DATA_OUT_TO_ALU => RA2_TO_ALU,
     ForwardUnit_sel => SEL2_FU
   );
