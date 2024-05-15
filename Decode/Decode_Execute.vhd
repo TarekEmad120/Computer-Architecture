@@ -18,6 +18,8 @@ ENTITY Decode_Execute IS
         Free_signal_DEC_EX_IN : IN STD_LOGIC;
         STACK_DEC_EX_IN : IN STD_LOGIC;
         Free_P_Enable_IN : IN STD_LOGIC;
+        out_enable_IN : IN STD_LOGIC;
+        In_enable_IN : IN STD_LOGIC;
 
         RA_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
         alu_control_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0); --
@@ -31,7 +33,9 @@ ENTITY Decode_Execute IS
         Protect_signal_DEC_EX_OUT : OUT STD_LOGIC;
         Free_signal_DEC_EX_OUT : OUT STD_LOGIC;
         STACK_DEC_EX_OUT : OUT STD_LOGIC;
-        Free_P_Enable_OUT : OUT STD_LOGIC
+        Free_P_Enable_OUT : OUT STD_LOGIC;
+        out_enable_OUT : OUT STD_LOGIC;
+        In_enable_OUT : OUT STD_LOGIC
     );
 
 END Decode_Execute;
@@ -58,6 +62,8 @@ BEGIN
             Free_signal_DEC_EX_OUT <= '0';
             STACK_DEC_EX_OUT <= '0';
             Free_P_Enable_OUT <= '0';
+            out_enable_OUT <= '0';
+            In_enable_OUT <= '0';
         ELSIF clk'EVENT AND clk = '1' THEN
             IF enable = '1' THEN
                 RD_Out <= RD_In;
@@ -77,6 +83,8 @@ BEGIN
                 Free_signal_DEC_EX_OUT <= Free_signal_DEC_EX_IN;
                 STACK_DEC_EX_OUT <= STACK_DEC_EX_IN;
                 Free_P_Enable_OUT <= Free_P_Enable_IN;
+                out_enable_OUT <= out_enable_IN;
+                In_enable_OUT <= In_enable_IN;
             END IF;
         END IF;
     END PROCESS;

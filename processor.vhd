@@ -90,7 +90,9 @@ ARCHITECTURE IMP OF processor IS
       Signal_br : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
       push_signal : OUT STD_LOGIC;
       STACK_SIGNAL : OUT STD_LOGIC;
-      SIGNAL_MUX_ALU_TO_MEM : OUT STD_LOGIC
+      SIGNAL_MUX_ALU_TO_MEM : OUT STD_LOGIC;
+      out_enable : OUT STD_LOGIC;
+      In_Enable : OUT STD_LOGIC
     );
   END COMPONENT;
 
@@ -152,6 +154,8 @@ ARCHITECTURE IMP OF processor IS
       Free_signal_DEC_EX_IN : IN STD_LOGIC;
       STACK_DEC_EX_IN : IN STD_LOGIC;
       Free_P_Enable_IN : IN STD_LOGIC;
+      out_enable_IN : IN STD_LOGIC;
+      In_enable_IN : IN STD_LOGIC;
 
       RA_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       alu_control_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0); --
@@ -165,8 +169,9 @@ ARCHITECTURE IMP OF processor IS
       Protect_signal_DEC_EX_OUT : OUT STD_LOGIC;
       Free_signal_DEC_EX_OUT : OUT STD_LOGIC;
       STACK_DEC_EX_OUT : OUT STD_LOGIC;
-      Free_P_Enable_OUT : OUT STD_LOGIC
-
+      Free_P_Enable_OUT : OUT STD_LOGIC;
+      out_enable_OUT : OUT STD_LOGIC;
+      In_enable_OUT : OUT STD_LOGIC
     );
   END COMPONENT;
   -------------------------------------------- EXECUTE STAGE 
@@ -208,6 +213,7 @@ ARCHITECTURE IMP OF processor IS
       Free_signal_EX_MEM_IN : IN STD_LOGIC;
       STACK_EX_MEM_IN : IN STD_LOGIC;
       Free_P_Enable_IN : IN STD_LOGIC;
+      In_port_data_In : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
 
       MEM_READ_Out, MEM_WRITE_Out, WRITE_BACK_Out : OUT STD_LOGIC;
       WRB_S_Out : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
@@ -219,7 +225,8 @@ ARCHITECTURE IMP OF processor IS
       Protect_signal_EX_MEM_OUT : OUT STD_LOGIC;
       Free_signal_EX_MEM_OUT : OUT STD_LOGIC;
       STACK_EX_MEM_OUT : OUT STD_LOGIC;
-      Free_P_Enable_OUT : OUT STD_LOGIC
+      Free_P_Enable_OUT : OUT STD_LOGIC;
+      In_port_data_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
   END COMPONENT;
   COMPONENT mux_data_address IS
@@ -286,12 +293,15 @@ ARCHITECTURE IMP OF processor IS
       Rd_address_in : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
       WBS_in : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
       WB_EN_in : IN STD_LOGIC;
+      In_port_data_In : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+
       Ra2_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       Mem_data_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       Alu_data_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       Rd_address_out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
       WBS_out : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-      WB_EN_out : OUT STD_LOGIC
+      WB_EN_out : OUT STD_LOGIC;
+      In_port_data_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
   END COMPONENT;
 
@@ -315,9 +325,27 @@ ARCHITECTURE IMP OF processor IS
 
       Alu_src2_sel : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
       Alu_src1_sel : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
-
     );
   END COMPONENT;
+  ---------------------------------------------- OUTPUT INPUTS PORT
+  COMPONENT Output IS
+    PORT (
+      enable : IN STD_LOGIC;
+      reset : IN STD_LOGIC;
+      datain : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      dataout : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+  END COMPONENT;
+
+  COMPONENT input IS
+    PORT (
+      enable : IN STD_LOGIC;
+      reset : IN STD_LOGIC;
+      datain : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      dataout : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+  END COMPONENT;
+
   SIGNAL controller_pc_Enable : STD_LOGIC;
   SIGNAL Reset_Pc_Value, Interrupt_PC_Value : STD_LOGIC_VECTOR(11 DOWNTO 0);
   SIGNAL Reset_Pc_Value_32 : STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -377,7 +405,7 @@ ARCHITECTURE IMP OF processor IS
   SIGNAL predicted, flush_f : STD_LOGIC;
   SIGNAL resetD, resetF : STD_LOGIC;
   SIGNAL Signal_br_control_DE : STD_LOGIC_VECTOR(1 DOWNTO 0);
-  SIGNAL MEM_DATA_OUT, PUSH_DATA : STD_LOGIC_VECTOR(31 DOWNTO 0);
+  SIGNAL MEM_DATA_OUT, PUSH_DATA, OUT_PORT, input_data_port_ex_mem, input_data_port : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL DATA_OUT_SP_MUX_TO_MEM : unsigned(11 DOWNTO 0);
   SIGNAL STACK_CON_ENABLE, STACK_DEC_EX, STACK_EX_MEM, STACK_EX_MEM_OUT : STD_LOGIC;
   SIGNAL FREE_SIGNAL_DEC_EX_OUT, PROTECT_SIGNAL_DEC_EX_OUT, PUSH_SIGNAL_DEC_EX_OUT : STD_LOGIC;
@@ -386,7 +414,9 @@ ARCHITECTURE IMP OF processor IS
   SIGNAL EA_UNSIGNED, EA_UNSIGNED_RA : unsigned(11 DOWNTO 0);
   SIGNAL SIGNAL_MUX_ALU_TO_MEM : STD_LOGIC;
   SIGNAL Address_In_EX_MEM : unsigned(11 DOWNTO 0);
-  SIGNAL stallHazard, notStallHazard, enableFetch : STD_LOGIC;
+  SIGNAL stallHazard, notStallHazard, enableFetch, out_enable, out_enable_dec_ex, In_enable_dec_ex : STD_LOGIC;
+  SIGNAL In_Enable : STD_LOGIC;
+  SIGNAL DATA_IN_PORT : STD_LOGIC_VECTOR(31 DOWNTO 0) := "00000000000000000000000000001110";
 BEGIN
 
   Rs1 <= Instruction_from_Fetch_Decode(6 DOWNTO 4);
@@ -482,6 +512,8 @@ BEGIN
     Free_signal_DEC_EX_IN => Mem_free_enable_con,
     STACK_DEC_EX_IN => STACK_CON_ENABLE,
     Free_P_Enable_IN => Free_P_Enable_con,
+    out_enable_IN => out_enable,
+    In_enable_IN => IN_enable,
     RA_OUT => RA_out_Decode_Execute,
     alu_control_out => alu_control_out_Decode_Execute,
     dataOut1 => RA1_Decode_Execute,
@@ -498,7 +530,9 @@ BEGIN
     Protect_signal_DEC_EX_OUT => PROTECT_SIGNAL_DEC_EX_OUT,
     Free_signal_DEC_EX_OUT => FREE_SIGNAL_DEC_EX_OUT,
     STACK_DEC_EX_OUT => STACK_DEC_EX,
-    Free_P_Enable_OUT => Free_P_Enable_DEC_EX
+    Free_P_Enable_OUT => Free_P_Enable_DEC_EX,
+    out_enable_out => out_enable_dec_ex,
+    In_enable_out => In_enable_dec_ex
   );
 
   alucomp1 : ALU
@@ -537,6 +571,19 @@ BEGIN
     Alu_src2_sel => SEL2_FU,
     Alu_src1_sel => SEL1_FU
   );
+
+  outputPort : Output PORT MAP(
+    enable => out_enable_dec_ex,
+    reset => reset,
+    datain => RA1_TO_ALU,
+    dataout => OUT_PORT
+  );
+  InputPort : input PORT MAP(
+    enable => In_enable_dec_ex,
+    reset => reset,
+    datain => DATA_IN_PORT,
+    dataout => input_data_port
+  );
   --------- NEED TO ADD MUXES OF FREE/PROTECTED ENABLES AND FORWARD UNITS 
   ExecuteMememoryRegister : Execute_Mememory_Register
   PORT MAP(
@@ -554,6 +601,7 @@ BEGIN
     Free_signal_EX_MEM_IN => FREE_SIGNAL_DEC_EX_OUT,
     STACK_EX_MEM_IN => STACK_DEC_EX,
     Free_P_Enable_IN => Free_P_Enable_DEC_EX,
+    In_port_data_In => input_data_port,
     MEM_READ_Out => MEM_READ_out_Execute_Mem,
     MEM_WRITE_Out => MEM_WRITE_out_Execute_Mem,
     WRITE_BACK_Out => WRITE_BACK_out_Execute_Mem,
@@ -566,7 +614,8 @@ BEGIN
     Protect_signal_EX_MEM_OUT => Protect_signal_EX_MEM_OUT,
     Free_signal_EX_MEM_OUT => Free_signal_EX_MEM_OUT,
     STACK_EX_MEM_OUT => STACK_EX_MEM_OUT,
-    Free_P_Enable_OUT => Free_P_Enable_EX_MEM
+    Free_P_Enable_OUT => Free_P_Enable_EX_MEM,
+    In_port_data_OUT => input_data_port_ex_mem
   );
 
   MUXDATA : mux_data_address PORT MAP(
@@ -616,12 +665,14 @@ BEGIN
     Rd_address_in => Rd_out_Execute_Mem,
     WBS_in => WRB_S_Out_Execute_Mem,
     WB_EN_in => WRITE_BACK_out_Execute_Mem,
+    In_port_data_In => input_data_port_ex_mem,
     Ra2_out => Ra2_out_mem_wb,
     Mem_data_out => Mem_data_out_mem_wbt,
     Alu_data_out => Alu_data_out_mem_wb,
     Rd_address_out => Rd_address_out_mem_wb,
     WBS_out => WBS_out_mem_wb,
-    WB_EN_out => WB_EN_out_mem_wb
+    WB_EN_out => WB_EN_out_mem_wb,
+    In_port_data_OUT => InPortData_MUX_WB
   );
 
   ----------------------------- Controller
@@ -646,7 +697,9 @@ BEGIN
     Signal_br => Signal_br_control,
     push_signal => signal_push_controller,
     STACK_SIGNAL => STACK_CON_ENABLE,
-    SIGNAL_MUX_ALU_TO_MEM => SIGNAL_MUX_ALU_TO_MEM
+    SIGNAL_MUX_ALU_TO_MEM => SIGNAL_MUX_ALU_TO_MEM,
+    out_enable => out_enable,
+    IN_enable => In_Enable
   );
 
   ExeceptionBranch1 : ExeceptionBranch

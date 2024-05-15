@@ -1,29 +1,27 @@
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
-use ieee.math_real.all;
-
-
-entity hazarddectionunit is
-    port (
-        oldRD: in std_logic_vector(2 downto 0);
-        currentRS1: in std_logic_vector(2 downto 0);
-        currentRS2: in std_logic_vector(2 downto 0);
-        MEMRead: in std_logic;
-        MEMWrite: in std_logic;
-        stall: out std_logic
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+USE ieee.math_real.ALL;
+ENTITY hazarddectionunit IS
+    PORT (
+        oldRD : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        currentRS1 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        currentRS2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        MEMRead : IN STD_LOGIC;
+        WriteBack : IN STD_LOGIC;
+        stall : OUT STD_LOGIC
     );
 
-end hazarddectionunit;
+END hazarddectionunit;
 
-architecture Behavioral of hazarddectionunit is
-begin
-    process(oldRD, currentRS1, currentRS2, MEMRead, MEMWrite)
-    begin
-        if (MEMRead ='1' and MEMWrite = '1' and (oldRD = currentRS1 or oldRD = currentRS2)) then
+ARCHITECTURE Behavioral OF hazarddectionunit IS
+BEGIN
+    PROCESS (oldRD, currentRS1, currentRS2, MEMRead, WriteBack)
+    BEGIN
+        IF (MEMRead = '1' AND WriteBack = '1' AND (oldRD = currentRS1 OR oldRD = currentRS2)) THEN
             stall <= '1';
-        else
-            stall <= '0';
-        end if;
-    end process;
-end Behavioral;
+        ELSE
+            stall <= '1';
+        END IF;
+    END PROCESS;
+END Behavioral;

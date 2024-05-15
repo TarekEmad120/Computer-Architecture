@@ -16,6 +16,7 @@ ENTITY Execute_Mememory_Register IS
         Free_signal_EX_MEM_IN : IN STD_LOGIC;
         STACK_EX_MEM_IN : IN STD_LOGIC;
         Free_P_Enable_IN : IN STD_LOGIC;
+        In_port_data_In : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
 
         MEM_READ_Out, MEM_WRITE_Out, WRITE_BACK_Out : OUT STD_LOGIC;
         WRB_S_Out : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
@@ -27,7 +28,8 @@ ENTITY Execute_Mememory_Register IS
         Protect_signal_EX_MEM_OUT : OUT STD_LOGIC;
         Free_signal_EX_MEM_OUT : OUT STD_LOGIC;
         STACK_EX_MEM_OUT : OUT STD_LOGIC;
-        Free_P_Enable_OUT : OUT STD_LOGIC
+        Free_P_Enable_OUT : OUT STD_LOGIC;
+        In_port_data_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 
     );
 END Execute_Mememory_Register;
@@ -50,6 +52,7 @@ BEGIN
             Free_signal_EX_MEM_OUT <= '0';
             STACK_EX_MEM_OUT <= '0';
             Free_P_Enable_OUT <= '0';
+            In_port_data_OUT <= (OTHERS => '0');
         ELSIF clk'EVENT AND clk = '1' THEN
             IF enable = '1' THEN
                 Rd_address_Out <= Rd_address_In;
@@ -65,6 +68,7 @@ BEGIN
                 Free_signal_EX_MEM_OUT <= Free_signal_EX_MEM_IN;
                 STACK_EX_MEM_OUT <= STACK_EX_MEM_IN;
                 Free_P_Enable_OUT <= Free_P_Enable_IN;
+                In_port_data_OUT <= In_port_data_In;
             END IF;
         END IF;
     END PROCESS;
