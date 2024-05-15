@@ -27,7 +27,7 @@ begin
             PC <= PC_value;
         elsif flushMem = '1'and flushEX = '0' then
             PC <= PC_Ret;
-        elsif flushEX = '1' then
+        elsif flushEX = '1' and flushMem = '0' then
             PC <= PC_BR_Ra;
 
         else
