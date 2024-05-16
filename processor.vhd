@@ -26,6 +26,8 @@ ARCHITECTURE IMP OF processor IS
       SIGNAL_COND : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
       flushEX : IN STD_LOGIC;
       flushMem : IN STD_LOGIC;
+      predicted : IN STD_LOGIC;
+      ZF : IN STD_LOGIC;
       PC : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
   END COMPONENT;
@@ -72,6 +74,14 @@ ARCHITECTURE IMP OF processor IS
       stall : OUT STD_LOGIC
     );
 
+  END COMPONENT;
+
+  COMPONENT PCValuecontrolbox IS
+    PORT (
+      PC_nextInstruc : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      signal_cond : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
+      PCValue : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
   END COMPONENT;
   -------------------------------------------- DECODE  STAGE 
   COMPONENT Controller IS
@@ -374,7 +384,7 @@ ARCHITECTURE IMP OF processor IS
   SIGNAL PC_VALUE_CONCATENATED : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL PC_VALUE_OUT_STD_LOGIC : STD_LOGIC_VECTOR(11 DOWNTO 0);
   SIGNAL PC_MUX_OUT : STD_LOGIC_VECTOR(31 DOWNTO 0);
-  SIGNAL PC_next_Instruction, PC_BR_Ra_value, PC_Ret_value, PC_Execption_value : STD_LOGIC_VECTOR(31 DOWNTO 0);
+  SIGNAL PC_next_Instruction, PC_BR_Ra_value, PC_Ret_value : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL flushEx_signal, flushMem_signal : STD_LOGIC;
   SIGNAL Instruction_from_memory : STD_LOGIC_VECTOR(15 DOWNTO 0);
   SIGNAL Intermediate_Enable_controller : STD_LOGIC;
@@ -415,7 +425,7 @@ ARCHITECTURE IMP OF processor IS
   -- Forward Unit
   SIGNAL RA1_TO_ALU, RA2_TO_ALU : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL SEL1_FU, SEL2_FU : STD_LOGIC_VECTOR(1 DOWNTO 0);
-  SIGNAL DATA_OUT_MUX_IMM_RA_PC : STD_LOGIC_VECTOR(31 DOWNTO 0);
+  SIGNAL DATA_OUT_MUX_IMM_RA_PC, pc_value_corrected : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
   -- Branch_prediction
   SIGNAL predicted, flush_f : STD_LOGIC;
@@ -461,12 +471,19 @@ BEGIN
   PORT MAP(
     PCnext => PC_INSTRUCTION_INCREMNTED,
     PC_BR_Ra => RA1_TO_ALU, PC_Ret => PC_Ret_value, -------------aloooo
-    PC_value => PC_Execption_value,
+    PC_value => pc_value_corrected,
     PC_DATA_MEM_BR_COND => PC_DATA_MEM_BR_CON,
     SIGNAL_COND => Signal_br_control_MEM,
     flushEX => flush_f,
     flushMem => flush_MEM,
+    predicted => '1', --------   to be edited
+    ZF => '0',
     PC => PC_MUX_OUT
+  );
+  pcvalueUnit : PCValuecontrolbox PORT MAP(
+    PC_nextInstruc => PC_MUX_OUT,
+    signal_cond => Signal_br_control,
+    PCValue => pc_value_corrected
   );
 
   InstructionMemory1 : InstructionMemory
@@ -733,14 +750,14 @@ BEGIN
   PORT MAP(
     clk => clk,
     signal_br => Signal_br_control_DE,
-    bit_predict => '0',
+    bit_predict => '1',
     Flush_F => flush_f
   );
 
   MemBranch : MemoryBranch PORT MAP(
     clk => clk,
     signal_br => Signal_br_control_MEM,
-    bit_predict => '0',
+    bit_predict => '1',
     ZF => '0',
     Flush_MEM => flush_MEM,
     predicted_out => predicted_out
