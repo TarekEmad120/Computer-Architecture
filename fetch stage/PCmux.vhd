@@ -1,37 +1,41 @@
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
-use ieee.math_real.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+USE ieee.math_real.ALL;
+ENTITY PCmux IS
+    PORT (
+        PCnext : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        PC_BR_Ra : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        PC_Ret : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        PC_value : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        PC_DATA_MEM_BR_COND : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+        SIGNAL_COND : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
+        flushEX : IN STD_LOGIC;
+        flushMem : IN STD_LOGIC;
+        predicted : IN STD_LOGIC;
+        ZF : IN STD_LOGIC;
 
-
-entity PCmux is
-    port(
-        PCnext : in std_logic_vector(31 downto 0);
-        PC_BR_Ra: in std_logic_vector(31 downto 0);
-        PC_Ret: in std_logic_vector(31 downto 0);
-        PC_value: in std_logic_vector(31 downto 0);
-        flushEX: in std_logic;
-        flushMem: in std_logic;
-
-        PC: out std_logic_vector(31 downto 0)
+        PC : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 
     );
 
-end entity PCmux;
+END ENTITY PCmux;
 
-architecture mux of PCmux is
-begin
-    process(PCnext, PC_BR_Ra, PC_Ret, PC_value, flushEX, flushMem)
-    begin
-        if flushEX = '1' and flushMem = '1' then
+ARCHITECTURE mux OF PCmux IS
+BEGIN
+    PROCESS (PCnext, PC_BR_Ra, PC_Ret, PC_value, flushEX, flushMem, PC_DATA_MEM_BR_COND, SIGNAL_COND)
+    BEGIN
+        IF ZF = '0' AND predicted = '1' AND SIGNAL_COND = "10" AND flushMem = '1' THEN
             PC <= PC_value;
-        elsif flushMem = '1'and flushEX = '0' then
+        ELSIF SIGNAL_COND = "10" AND flushMem = '1' AND flushEX = '0' THEN
+            PC <= PC_DATA_MEM_BR_COND;
+        ELSIF flushMem = '1'AND flushEX = '0' THEN
             PC <= PC_Ret;
-        elsif flushEX = '1' and flushMem = '0' then
+        ELSIF flushEX = '1' AND flushMem = '0' THEN
             PC <= PC_BR_Ra;
 
-        else
+        ELSE
             PC <= PCnext;
-        end if;
-    end process;
-end architecture mux;
+        END IF;
+    END PROCESS;
+END ARCHITECTURE mux;
