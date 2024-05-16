@@ -32,7 +32,7 @@ ARCHITECTURE Behavioral OF Memory IS
 BEGIN
   PROCESS (clk, reset)
     -- reading from cahce file 
-    FILE file_in : text OPEN read_mode IS "D:\Arc_project\Computer-Architecture\cache.txt";
+    FILE file_in : text OPEN read_mode IS "F:\Computer Archectiture\project\Computer-Architecture\Computer-Architecture\cache.txt";
     VARIABLE line : line;
     VARIABLE data : STD_LOGIC_VECTOR(15 DOWNTO 0);
 

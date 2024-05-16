@@ -25,7 +25,8 @@ ENTITY Controller IS
     SIGNAL_MUX_ALU_TO_MEM : OUT STD_LOGIC;
     out_enable : OUT STD_LOGIC;
     In_Enable : OUT STD_LOGIC;
-    control_data_mem : OUT STD_LOGIC
+    control_data_mem : OUT STD_LOGIC;
+    stallpc : OUT STD_LOGIC
   );
 
 END ENTITY;
@@ -38,6 +39,7 @@ BEGIN
     CASE oppCode IS
       WHEN "001" =>
         aluControl <= Func & one_two_attrib;
+        stallpc <= '0'; 
         WRB_S <= "10";
         Free_P_Enable <= '0';
         RA2_SEL <= "00";
@@ -85,6 +87,7 @@ BEGIN
             STACK_SIGNAL <= '0';
             out_enable <= '0';
             In_Enable <= '0';
+            stallpc<='0';
             control_data_mem <= '0';
           WHEN "100" => --- LDM operation
             aluControl <= "0101";
@@ -105,6 +108,7 @@ BEGIN
             out_enable <= '0';
             In_Enable <= '0';
             control_data_mem <= '0';
+            stallpc<='0';
           WHEN "001" => ---- PUSH operation
             aluControl <= (OTHERS => '0');
             MEM_READ <= '0';
@@ -125,6 +129,7 @@ BEGIN
             out_enable <= '0';
             In_Enable <= '0';
             control_data_mem <= '0';
+            stallpc<='0';
           WHEN "010" => ---- POP operation
             aluControl <= (OTHERS => '0');
             MEM_READ <= '1';
@@ -145,6 +150,7 @@ BEGIN
             out_enable <= '0';
             In_Enable <= '0';
             control_data_mem <= '0';
+            stallpc<='0';
           WHEN "101" => --- STD operation
             MEM_READ <= '0';
             MEM_WRITE <= '1';
@@ -165,6 +171,7 @@ BEGIN
             SIGNAL_MUX_ALU_TO_MEM <= '0';
             In_Enable <= '0';
             control_data_mem <= '0';
+            stallpc<='0';
           WHEN OTHERS =>
         END CASE;
       WHEN "000" =>
@@ -186,6 +193,7 @@ BEGIN
         out_enable <= '0';
         In_Enable <= '0';
         control_data_mem <= '0';
+        stallpc<='0';
       WHEN "010" => --- ADDI , SUBI
         Mem_protect_enable <= '0';
         Mem_free_enable <= '0';
@@ -205,6 +213,7 @@ BEGIN
         out_enable <= '0';
         In_Enable <= '0';
         control_data_mem <= '0';
+        stallpc<='0';
         CASE Func IS
           WHEN "001" =>
             aluControl <= "0111";
@@ -232,6 +241,7 @@ BEGIN
             out_enable <= '0';
             In_Enable <= '0';
             control_data_mem <= '0';
+            stallpc<='0';
           WHEN "011" => -- call 
             Signal_br <= "01";
             RS1_RD_SEL <= '1';
@@ -250,6 +260,7 @@ BEGIN
             out_enable <= '0';
             In_Enable <= '0';
             control_data_mem <= '1';
+            stallpc<='0';
           WHEN "001" => ----- JZ ------
             Signal_br <= "10";
             RS1_RD_SEL <= '1';
@@ -268,8 +279,9 @@ BEGIN
             out_enable <= '0';
             In_Enable <= '0';
             control_data_mem <= '0';
+            stallpc<='0';
           WHEN "100" => --RET
-            Signal_br <= "10";
+            Signal_br <= "11";
             RS1_RD_SEL <= '1';
             Mem_protect_enable <= '0';
             Mem_free_enable <= '0';
@@ -279,15 +291,16 @@ BEGIN
             MEM_WRITE <= '1';
             RS2_RD_SEL <= 'X';
             WRB_S <= "01";
-            RA2_SEL <= "XX";
+            RA2_SEL <= "10";
             SIGNAL_MUX_ALU_TO_MEM <= '0';
-            push_signal <= '0';
+            push_signal <= '1';
             STACK_SIGNAL <= '1';
             out_enable <= '0';
             In_Enable <= '0';
             control_data_mem <= '0';
+            stallpc<='0';
           WHEN "101" => --RTI 
-            Signal_br <= "10";
+            Signal_br <= "11";
             RS1_RD_SEL <= '1';
             Mem_protect_enable <= '0';
             Mem_free_enable <= '0';
@@ -297,13 +310,14 @@ BEGIN
             MEM_WRITE <= '1';
             RS2_RD_SEL <= 'X';
             WRB_S <= "01";
-            RA2_SEL <= "XX";
+            RA2_SEL <= "10";
             SIGNAL_MUX_ALU_TO_MEM <= '0';
-            push_signal <= '0';
+            push_signal <= '1';
             STACK_SIGNAL <= '1';
             out_enable <= '0';
             In_Enable <= '0';
             control_data_mem <= '0';
+            stallpc<='0';
           WHEN OTHERS =>
         END CASE;
       WHEN "101" =>
@@ -328,17 +342,19 @@ BEGIN
             out_enable <= '0';
             In_Enable <= '0';
             control_data_mem <= '0';
+            stallpc<='0';
           WHEN OTHERS =>
         END CASE;
       WHEN "111" =>
         CASE Func IS--interrupt
           WHEN "100" =>
+          Signal_br <= "01";
             MEM_READ <= '1';
             MEM_WRITE <= '1';
             push_signal <= '0';
             STACK_SIGNAL <= '1';
-            WRB_S <= "01";
-            RA2_SEL <= "00";
+            WRB_S <= "XX";
+            RA2_SEL <= "11";
             RS1_RD_SEL <= '0';
             RS2_RD_SEL <= '0';
             aluControl <= "0000";
@@ -346,12 +362,13 @@ BEGIN
             Free_P_Enable <= '0';
             Mem_protect_enable <= '0';
             Mem_free_enable <= '0';
-            Signal_br <= "00";
-            STALL_FETCH_IMM <= '0';
+            STALL_FETCH_IMM <= '1';
             SIGNAL_MUX_ALU_TO_MEM <= '0';
             out_enable <= '0';
             In_Enable <= '0';
-            control_data_mem <= '0';
+            control_data_mem <= '1';
+            Interrupt_Signal <= '1';
+            stallpc<='1';
           WHEN OTHERS =>
         END CASE;
       WHEN "011" =>
@@ -376,6 +393,7 @@ BEGIN
             SIGNAL_MUX_ALU_TO_MEM <= '0';
             In_Enable <= '0';
             control_data_mem <= '0';
+            stallpc<='0';
           WHEN "010" =>
             In_Enable <= '1';
             WRB_S <= "00";
@@ -396,6 +414,7 @@ BEGIN
             STACK_SIGNAL <= '0';
             RA2_SEL <= "00";
             control_data_mem <= '0';
+            stallpc<='0';
           WHEN OTHERS =>
         END CASE;
 

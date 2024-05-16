@@ -1,6 +1,8 @@
 import re
 
 ORG_LINE = 0
+IS_ORG = False
+EA = ''
 
 # list of instructions based of number of operands 
 no_operand_insts = ['nop', 'ret', 'rti']
@@ -115,18 +117,6 @@ register_bank = {} # binary value of the register
 for i in range(8):
     register_bank[f"r{i}"] = f"{i:03b}"
 
-
-# # convert decimal number to binary
-# def to_binary(decimal_number, width=16):
-#     n = int(decimal_number)
-#     if n >= 0:
-#         binary = bin(n)[2:]
-#         return binary.zfill(width)
-#     else:
-#         binary = bin(n & (2 ** width - 1))[2:]
-#         return binary.zfill(width)
-
-
 # convert hex to binary
 def hex_to_binary(hex_string):
     decimal_value = int(hex_string, 16)
@@ -138,6 +128,17 @@ def hex_to_binary(hex_string):
         binary = bin(n & (2 ** 16 - 1))[2:]
         return binary.zfill(16)
 
+def add_EA_to_reg(string):
+    pattern = r'(\d+)\(([^)]+)\)'
+    
+    match = re.match(pattern, string)
+    
+    if match:
+        number = match.group(1)
+        string_in_brackets = match.group(2)
+        return number, string_in_brackets
+    else:
+        return None, None
 
 
 def no_operand_check(instruction):
@@ -224,7 +225,7 @@ def one_operand_instructions(instruction):
     # return binary number (001 001 001 xxx xxx 0)
 
     if instruction[0] == 'protect' or instruction[0] == 'free':
-        return op_code[instruction[0]] + func[instruction[0]][0:3] + "000" + register_bank[instruction[1]] + "000" + func[instruction[0]][3]
+        return op_code[instruction[0]] + func[instruction[0]][0:3] + "000000" + register_bank[instruction[1]] + func[instruction[0]][3]
 
     return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + "000000" + func[instruction[0]][3]
 
@@ -251,11 +252,16 @@ def immediate_operand_instructions(instruction):
 
     # ADDI R1, R2, 1234
     if instruction[0] == 'addi' or instruction[0] == 'subi':
+
+        if instruction[3] in register_bank.keys():
+            return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + register_bank[instruction[2]] + register_bank[instruction[3]] + func[instruction[0]][3]
+
         return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + register_bank[instruction[2]] + "000" + func[instruction[0]][3]
     # elif instruction[0] == 'ldm':
     #     return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + "xxxxxx" + func[instruction[0]][3]
     elif instruction[0] == 'ldd' or instruction[0] == 'std':
-        return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + register_bank[instruction[2]] + "000" + func[instruction[0]][3]
+        _, reg = add_EA_to_reg(instruction[2])
+        return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + register_bank[reg] + "000" + func[instruction[0]][3]
 
 
 
@@ -290,22 +296,23 @@ with open("binary.txt", "r+") as file:
     mem_lines = file.readlines()
 
 
-
 for instruction in instructions:
     
     if instruction[0] in no_operand_insts:
         if no_operand_check(instruction):
             mem_lines[ORG_LINE] = no_operand_instructions(instruction) + '\n'
             ORG_LINE += 1
-
+            IS_ORG = False
         else:
             print("Error in assembly instruction")
 
 
     elif instruction[0] in one_operand_insts:
+        IS_ORG = False
         if one_operand_check(instruction):
             mem_lines[ORG_LINE] = one_operand_instructions(instruction) + '\n'
             ORG_LINE += 1
+
         else:
             print("Error in assembly instruction")
     
@@ -315,19 +322,21 @@ for instruction in instructions:
 
             mem_lines[ORG_LINE] = two_operand_instructions(instruction) + '\n'
             ORG_LINE += 1
+            IS_ORG = False
 
             if instruction[0] == 'ldm':
                 mem_lines[ORG_LINE] = hex_to_binary(instruction[2]) + '\n'
                 ORG_LINE += 1
+                IS_ORG = False
         else:
             print("Error in assembly instruction")
     
        
     elif instruction[0] in three_operand_insts:
         if three_operand_check(instruction):
-            # binary_instruction.append(three_operand_instructions(instruction))
             mem_lines[ORG_LINE] = three_operand_instructions(instruction) + '\n'
             ORG_LINE += 1
+            IS_ORG = False
                  
         else:
             print("Error in assembly instruction")
@@ -336,18 +345,30 @@ for instruction in instructions:
     elif instruction[0] in immidiate_insts:
         mem_lines[ORG_LINE] = immediate_operand_instructions(instruction) + '\n'
         ORG_LINE += 1
-        # binary_instruction.append(immediate_operand_instructions(instruction))
-        # binary_instruction.append(hex_to_binary(instruction[3])) 
-        mem_lines[ORG_LINE] = hex_to_binary(instruction[3]) + '\n'
+        IS_ORG = False
+
+        if instruction[0] == 'ldd' or instruction[0] == 'std':
+            EA, _ = add_EA_to_reg(instruction[2])
+            mem_lines[ORG_LINE] = hex_to_binary(EA) + '\n'
+            ORG_LINE += 1
+            IS_ORG = False
+        elif instruction[3] in register_bank.keys():
+            mem_lines[ORG_LINE] = "0000000000000000" + '\n'
+            ORG_LINE += 1
+            IS_ORG = False
+        # else:
+            # mem_lines[ORG_LINE] = hex_to_binary(instruction[3]) + '\n'
 
     # handle .org
     elif instruction[0] == '.org':
-        ORG_LINE = int(instruction[1])
-        
-    else:
-        print ("operand not found: " + instruction[0])
-        
+        ORG_LINE = int(instruction[1], 16)
+        IS_ORG = True
 
+    elif IS_ORG:
+        mem_lines[ORG_LINE] = hex_to_binary(instruction[0]) + '\n'
+        ORG_LINE += 1    
+
+    print (instruction[0])
 
 
 # write all binary codes to file

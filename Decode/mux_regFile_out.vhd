@@ -23,6 +23,10 @@ begin
                     ra2_out <= IMM;
                 when "10" =>
                     ra2_out <= Pc;
+                when "11"=>
+                    --decrement the value of pc by 1
+
+                    ra2_out <= std_logic_vector(unsigned(Pc) - 1);
                 when others =>
                     ra2_out <= (others => '0');
             end case;

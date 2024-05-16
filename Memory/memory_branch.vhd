@@ -25,6 +25,8 @@ BEGIN
                     Flush_MEM <= '1';
                     predicted_out <= NOT bit_predict;
                 END IF;
+            when "11"=>
+                    Flush_MEM <= '1';
             WHEN OTHERS =>
                 Flush_MEM <= '0';
         END CASE;

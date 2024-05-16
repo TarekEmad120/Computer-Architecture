@@ -480,7 +480,7 @@ BEGIN
   PC_MUX : PCmux
   PORT MAP(
     PCnext => PC_INSTRUCTION_INCREMNTED,
-    PC_BR_Ra => RA1_TO_ALU, PC_Ret => PC_Ret_value, -------------aloooo
+    PC_BR_Ra => RA1_TO_ALU, PC_Ret => MEM_DATA_OUT, -------------aloooo
     PC_value => pc_value_corrected,
     PC_DATA_MEM_BR_COND => PC_DATA_MEM_BR_CON,
     SIGNAL_COND => Signal_br_control_MEM,

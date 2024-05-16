@@ -32,7 +32,7 @@ BEGIN
             data <= (OTHERS => '0');
             INITIAL_FLAG <= '1';
         ELSIF (initial_flag = '1') THEN
-            file_open(memory_file, "D:\Arc_project\Computer-Architecture\Instructions.txt", read_mode);
+            file_open(memory_file, "F:\Computer Archectiture\project\Computer-Architecture\Computer-Architecture\Instructions.txt", read_mode);
             FOR i IN 0 TO 4095 LOOP
                 IF NOT endfile(memory_file) THEN
                     readline(memory_file, file_line);
