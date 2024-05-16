@@ -205,7 +205,7 @@ BEGIN
         END CASE;
       WHEN "110" =>
         CASE Func IS
-          WHEN "010" =>
+          WHEN "010" =>--jmp instruction
             Signal_br <= "01";
             RS1_RD_SEL <= '1';
             Mem_protect_enable <= '0';
@@ -222,21 +222,21 @@ BEGIN
             STACK_SIGNAL <= '0';
             out_enable <= '0';
             In_Enable <= '0';
-          WHEN "011" =>
+          WHEN "011" =>-- call 
             Signal_br <= "01";
             RS1_RD_SEL <= '1';
             Mem_protect_enable <= '0';
             Mem_free_enable <= '0';
             STALL_FETCH_IMM <= '0';
             Free_P_Enable <= '0';
-            MEM_READ <= '0';
-            MEM_WRITE <= '0';
+            MEM_READ <= '1';
+            MEM_WRITE <= '1';
             RS2_RD_SEL <= 'X';
             WRB_S <= "XX";
             RA2_SEL <= "XX";
             SIGNAL_MUX_ALU_TO_MEM <= '0';
-            push_signal <= '0';
-            STACK_SIGNAL <= '0';
+            push_signal <= '1';
+            STACK_SIGNAL <= '1';
             out_enable <= '0';
             In_Enable <= '0';
           WHEN "001" => ----- JZ ------
@@ -256,6 +256,41 @@ BEGIN
             STACK_SIGNAL <= '0';
             out_enable <= '0';
             In_Enable <= '0';
+            when "100" => --RET
+            Signal_br <= "10";
+            RS1_RD_SEL <= '1';
+            Mem_protect_enable <= '0';
+            Mem_free_enable <= '0';
+            STALL_FETCH_IMM <= '0';
+            Free_P_Enable <= '0';
+            MEM_READ <= '1';
+            MEM_WRITE <= '1';
+            RS2_RD_SEL <= 'X';
+            WRB_S <= "01";
+            RA2_SEL <= "XX";
+            SIGNAL_MUX_ALU_TO_MEM <= '0';
+            push_signal <= '0';
+            STACK_SIGNAL <= '1';
+            out_enable <= '0';
+            In_Enable <= '0';
+            when "101" => --RTI 
+            Signal_br <= "10";
+            RS1_RD_SEL <= '1';
+            Mem_protect_enable <= '0';
+            Mem_free_enable <= '0';
+            STALL_FETCH_IMM <= '0';
+            Free_P_Enable <= '0';
+            MEM_READ <= '1';
+            MEM_WRITE <= '1';
+            RS2_RD_SEL <= 'X';
+            WRB_S <= "01";
+            RA2_SEL <= "XX";
+            SIGNAL_MUX_ALU_TO_MEM <= '0';
+            push_signal <= '0';
+            STACK_SIGNAL <= '1';
+            out_enable <= '0';
+            In_Enable <= '0';
+
           WHEN OTHERS =>
         END CASE;
       WHEN "101" =>
