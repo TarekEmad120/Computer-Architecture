@@ -495,7 +495,7 @@ BEGIN
   PORT MAP(
     clk => clk, reset => flushF, enable => stallHazard, ---- THERE NO ENABLE 
     Interrupt => interrupt_signal_controller_out, IntermediateEnable => Intermediate_Enable_controller,
-    pc => PC_VALUE_CONCATENATED, instructionIn => Instruction_from_memory, ------------- CHECK PC VALUE 
+    pc => PC_MUX_OUT, instructionIn => Instruction_from_memory, ------------- CHECK PC VALUE 
     instructionOut => Instruction_from_Fetch_Decode,
     PC_data => PC_value_from_Fetch_Decode
   );

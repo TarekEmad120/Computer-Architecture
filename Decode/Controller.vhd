@@ -233,9 +233,9 @@ BEGIN
             MEM_WRITE <= '1';
             RS2_RD_SEL <= 'X';
             WRB_S <= "XX";
-            RA2_SEL <= "XX";
+            RA2_SEL <= "10";
             SIGNAL_MUX_ALU_TO_MEM <= '0';
-            push_signal <= '1';
+            push_signal <= '0';
             STACK_SIGNAL <= '1';
             out_enable <= '0';
             In_Enable <= '0';
