@@ -24,7 +24,8 @@ ENTITY Controller IS
     STACK_SIGNAL : OUT STD_LOGIC;
     SIGNAL_MUX_ALU_TO_MEM : OUT STD_LOGIC;
     out_enable : OUT STD_LOGIC;
-    In_Enable : OUT STD_LOGIC
+    In_Enable : OUT STD_LOGIC;
+    control_data_mem : OUT STD_LOGIC
   );
 
 END ENTITY;
@@ -52,6 +53,7 @@ BEGIN
         STACK_SIGNAL <= '0';
         out_enable <= '0';
         In_Enable <= '0';
+        control_data_mem <= '0';
         CASE one_two_attrib IS
           WHEN '0' =>
             RS1_RD_SEL <= '1';
@@ -83,6 +85,7 @@ BEGIN
             STACK_SIGNAL <= '0';
             out_enable <= '0';
             In_Enable <= '0';
+            control_data_mem <= '0';
           WHEN "100" => --- LDM operation
             aluControl <= "0101";
             WRB_S <= "01";
@@ -101,6 +104,7 @@ BEGIN
             SIGNAL_MUX_ALU_TO_MEM <= '0';
             out_enable <= '0';
             In_Enable <= '0';
+            control_data_mem <= '0';
           WHEN "001" => ---- PUSH operation
             aluControl <= (OTHERS => '0');
             MEM_READ <= '0';
@@ -120,6 +124,7 @@ BEGIN
             Free_P_Enable <= '0';
             out_enable <= '0';
             In_Enable <= '0';
+            control_data_mem <= '0';
           WHEN "010" => ---- POP operation
             aluControl <= (OTHERS => '0');
             MEM_READ <= '1';
@@ -139,6 +144,7 @@ BEGIN
             Free_P_Enable <= '0';
             out_enable <= '0';
             In_Enable <= '0';
+            control_data_mem <= '0';
           WHEN "101" => --- STD operation
             MEM_READ <= '0';
             MEM_WRITE <= '1';
@@ -158,6 +164,7 @@ BEGIN
             out_enable <= '0';
             SIGNAL_MUX_ALU_TO_MEM <= '0';
             In_Enable <= '0';
+            control_data_mem <= '0';
           WHEN OTHERS =>
         END CASE;
       WHEN "000" =>
@@ -178,6 +185,7 @@ BEGIN
         STACK_SIGNAL <= '0';
         out_enable <= '0';
         In_Enable <= '0';
+        control_data_mem <= '0';
       WHEN "010" => --- ADDI , SUBI
         Mem_protect_enable <= '0';
         Mem_free_enable <= '0';
@@ -196,6 +204,7 @@ BEGIN
         STACK_SIGNAL <= '0';
         out_enable <= '0';
         In_Enable <= '0';
+        control_data_mem <= '0';
         CASE Func IS
           WHEN "001" =>
             aluControl <= "0111";
@@ -205,7 +214,7 @@ BEGIN
         END CASE;
       WHEN "110" =>
         CASE Func IS
-          WHEN "010" =>--jmp instruction
+          WHEN "010" => --jmp instruction
             Signal_br <= "01";
             RS1_RD_SEL <= '1';
             Mem_protect_enable <= '0';
@@ -222,7 +231,8 @@ BEGIN
             STACK_SIGNAL <= '0';
             out_enable <= '0';
             In_Enable <= '0';
-          WHEN "011" =>-- call 
+            control_data_mem <= '0';
+          WHEN "011" => -- call 
             Signal_br <= "01";
             RS1_RD_SEL <= '1';
             Mem_protect_enable <= '0';
@@ -239,6 +249,7 @@ BEGIN
             STACK_SIGNAL <= '1';
             out_enable <= '0';
             In_Enable <= '0';
+            control_data_mem <= '1';
           WHEN "001" => ----- JZ ------
             Signal_br <= "10";
             RS1_RD_SEL <= '1';
@@ -256,7 +267,8 @@ BEGIN
             STACK_SIGNAL <= '0';
             out_enable <= '0';
             In_Enable <= '0';
-            when "100" => --RET
+            control_data_mem <= '0';
+          WHEN "100" => --RET
             Signal_br <= "10";
             RS1_RD_SEL <= '1';
             Mem_protect_enable <= '0';
@@ -273,7 +285,8 @@ BEGIN
             STACK_SIGNAL <= '1';
             out_enable <= '0';
             In_Enable <= '0';
-            when "101" => --RTI 
+            control_data_mem <= '0';
+          WHEN "101" => --RTI 
             Signal_br <= "10";
             RS1_RD_SEL <= '1';
             Mem_protect_enable <= '0';
@@ -290,7 +303,7 @@ BEGIN
             STACK_SIGNAL <= '1';
             out_enable <= '0';
             In_Enable <= '0';
-
+            control_data_mem <= '0';
           WHEN OTHERS =>
         END CASE;
       WHEN "101" =>
@@ -314,6 +327,7 @@ BEGIN
             Free_P_Enable <= '1';
             out_enable <= '0';
             In_Enable <= '0';
+            control_data_mem <= '0';
           WHEN OTHERS =>
         END CASE;
       WHEN "111" =>
@@ -337,6 +351,7 @@ BEGIN
             SIGNAL_MUX_ALU_TO_MEM <= '0';
             out_enable <= '0';
             In_Enable <= '0';
+            control_data_mem <= '0';
           WHEN OTHERS =>
         END CASE;
       WHEN "011" =>
@@ -360,6 +375,7 @@ BEGIN
             STALL_FETCH_IMM <= '0';
             SIGNAL_MUX_ALU_TO_MEM <= '0';
             In_Enable <= '0';
+            control_data_mem <= '0';
           WHEN "010" =>
             In_Enable <= '1';
             WRB_S <= "00";
@@ -379,6 +395,7 @@ BEGIN
             push_signal <= '0';
             STACK_SIGNAL <= '0';
             RA2_SEL <= "00";
+            control_data_mem <= '0';
           WHEN OTHERS =>
         END CASE;
 
