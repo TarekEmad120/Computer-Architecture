@@ -12,6 +12,7 @@ ENTITY Mem_WB_reg IS
         WBS_in : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
         WB_EN_in : IN STD_LOGIC;
         In_port_data_In : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        inportSignal_in : IN STD_LOGIC;
 
         Ra2_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
         Mem_data_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -19,7 +20,8 @@ ENTITY Mem_WB_reg IS
         Rd_address_out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
         WBS_out : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
         WB_EN_out : OUT STD_LOGIC;
-        In_port_data_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+        In_port_data_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+        inportSignal_out : OUT STD_LOGIC
     );
 END Mem_WB_reg;
 
@@ -36,6 +38,7 @@ BEGIN
             WBS_out <= (OTHERS => '0');
             WB_EN_out <= '0';
             In_port_data_OUT <= (OTHERS => '0');
+            inportSignal_out <= '0';
         ELSIF rising_edge(clk) THEN
             IF enable = '1' THEN
                 Ra2_out <= Ra2_in;
@@ -45,6 +48,7 @@ BEGIN
                 WBS_out <= WBS_in;
                 WB_EN_out <= WB_EN_in;
                 In_port_data_OUT <= In_port_data_In;
+                inportSignal_out <= inportSignal_in;
             END IF;
         END IF;
     END PROCESS;

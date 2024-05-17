@@ -328,6 +328,7 @@ ARCHITECTURE IMP OF processor IS
       WBS_in : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
       WB_EN_in : IN STD_LOGIC;
       In_port_data_In : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      inportSignal_in : IN STD_LOGIC;
 
       Ra2_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       Mem_data_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -335,7 +336,8 @@ ARCHITECTURE IMP OF processor IS
       Rd_address_out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
       WBS_out : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
       WB_EN_out : OUT STD_LOGIC;
-      In_port_data_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+      In_port_data_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      inportSignal_out : OUT STD_LOGIC
     );
   END COMPONENT;
 
@@ -475,14 +477,14 @@ ARCHITECTURE IMP OF processor IS
   SIGNAL Push_signal_EX_MEM_OUT, Protect_signal_EX_MEM_OUT, Free_signal_EX_MEM_OUT, signal_push_controller : STD_LOGIC;
   SIGNAL stack_value : unsigned(31 DOWNTO 0);
   SIGNAL EA_UNSIGNED, EA_UNSIGNED_RA : unsigned(11 DOWNTO 0);
-  SIGNAL SIGNAL_MUX_ALU_TO_MEM : STD_LOGIC;
+  SIGNAL SIGNAL_MUX_ALU_TO_MEM, inportEnable_mem_wb : STD_LOGIC;
   SIGNAL Address_In_EX_MEM : unsigned(11 DOWNTO 0);
   SIGNAL stallHazard, notStallHazard, enableFetch, out_enable, out_enable_dec_ex, In_enable_dec_ex, inportEnable_exec_mem : STD_LOGIC;
   SIGNAL In_Enable, controll_mem_data : STD_LOGIC;
   -- SIGNAL DATA_IN_PORT : STD_LOGIC_VECTOR(31 DOWNTO 0) := "00000000000000000000000000001110";
   SIGNAL flushF, flushMEM, flushD, flush_MEM : STD_LOGIC;
   SIGNAL predicted_out, controll_mem_data_DEC_EX, stall_pc_value, pcStall : STD_LOGIC;
-  SIGNAL PC_DATA_MEM_BR_CON, RA_out_mem_ex_mem, ra1_dataMUX_out_exec : STD_LOGIC_VECTOR(31 DOWNTO 0);
+  SIGNAL PC_DATA_MEM_BR_CON, RA_out_mem_ex_mem, ra1_dataMUX_out_exec, ra1_dataMUX_out_mem : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
 BEGIN
 
@@ -633,15 +635,22 @@ BEGIN
   );
   muxDataR1 : mux_data_r1 PORT MAP(
     data_port => input_data_port_ex_mem,
-    data_execute => RA1_Decode_Execute,
+    data_execute => AluOut_Out_Execute_Mem,
     data_out => ra1_dataMUX_out_exec,
     inPort => inportEnable_exec_mem
+  );
+
+  muxDatamemR : mux_data_r1 PORT MAP(
+    data_port => InPortData_MUX_WB,
+    data_execute => Data_write_back_out_muxWB,
+    data_out => ra1_dataMUX_out_mem,
+    inPort => inportEnable_mem_wb
   );
 
   muxsourcealu1 : mux_source_alu1 PORT MAP(
     RA => RA1_Decode_Execute,
     SRC_DATA_EXE => ra1_dataMUX_out_exec,
-    SRC_DATA_MEM => Data_write_back_out_muxWB, ---Alu_data_out_mem_wb
+    SRC_DATA_MEM => ra1_dataMUX_out_mem, ---Alu_data_out_mem_wb
     DATA_OUT_TO_ALU => RA1_TO_ALU,
     ForwardUnit_sel => SEL1_FU
   );
@@ -771,13 +780,15 @@ BEGIN
     WBS_in => WRB_S_Out_Execute_Mem,
     WB_EN_in => WRITE_BACK_out_Execute_Mem,
     In_port_data_In => input_data_port_ex_mem,
+    inportSignal_in => inportEnable_exec_mem,
     Ra2_out => Ra2_out_mem_wb,
     Mem_data_out => Mem_data_out_mem_wbt,
     Alu_data_out => Alu_data_out_mem_wb,
     Rd_address_out => Rd_address_out_mem_wb,
     WBS_out => WBS_out_mem_wb,
     WB_EN_out => WB_EN_out_mem_wb,
-    In_port_data_OUT => InPortData_MUX_WB
+    In_port_data_OUT => InPortData_MUX_WB,
+    inportSignal_out => inportEnable_mem_wb
   );
 
   ----------------------------- Controller

@@ -261,7 +261,7 @@ def immediate_operand_instructions(instruction):
     #     return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + "xxxxxx" + func[instruction[0]][3]
     elif instruction[0] == 'ldd' or instruction[0] == 'std':
         _, reg = add_EA_to_reg(instruction[2])
-        return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + register_bank[reg] + "000" + func[instruction[0]][3]
+        return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] +  "000000" + func[instruction[0]][3]
 
 
 
