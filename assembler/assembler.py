@@ -346,8 +346,11 @@ for instruction in instructions:
         mem_lines[ORG_LINE] = immediate_operand_instructions(instruction) + '\n'
         ORG_LINE += 1
         IS_ORG = False
-
-        if instruction[0] == 'ldd' or instruction[0] == 'std':
+        
+        if instruction[0] == 'addi' or instruction[0] == 'subi':
+            mem_lines[ORG_LINE] = hex_to_binary(instruction[3]) + '\n'
+            ORG_LINE += 1
+        elif instruction[0] == 'ldd' or instruction[0] == 'std':
             EA, _ = add_EA_to_reg(instruction[2])
             mem_lines[ORG_LINE] = hex_to_binary(EA) + '\n'
             ORG_LINE += 1
@@ -357,7 +360,6 @@ for instruction in instructions:
             ORG_LINE += 1
             IS_ORG = False
         # else:
-            # mem_lines[ORG_LINE] = hex_to_binary(instruction[3]) + '\n'
 
     # handle .org
     elif instruction[0] == '.org':

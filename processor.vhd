@@ -486,6 +486,8 @@ ARCHITECTURE IMP OF processor IS
   SIGNAL predicted_out, controll_mem_data_DEC_EX, stall_pc_value, pcStall : STD_LOGIC;
   SIGNAL PC_DATA_MEM_BR_CON, RA_out_mem_ex_mem, ra1_dataMUX_out_exec, ra1_dataMUX_out_mem : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
+  SIGNAL ra2_dataMUX_out_mem, ra2_dataMUX_out_exec : STD_LOGIC_VECTOR(31 DOWNTO 0);
+
 BEGIN
 
   Rs1 <= Instruction_from_Fetch_Decode(6 DOWNTO 4);
@@ -647,6 +649,20 @@ BEGIN
     inPort => inportEnable_mem_wb
   );
 
+  muxDataExr2 : mux_data_r1 PORT MAP(
+    data_port => input_data_port_ex_mem,
+    data_execute => AluOut_Out_Execute_Mem,
+    data_out => ra2_dataMUX_out_exec,
+    inPort => inportEnable_exec_mem
+  );
+
+  muxDataMemr2 : mux_data_r1 PORT MAP(
+    data_port => InPortData_MUX_WB,
+    data_execute => Data_write_back_out_muxWB,
+    data_out => ra2_dataMUX_out_mem,
+    inPort => inportEnable_mem_wb
+  );
+
   muxsourcealu1 : mux_source_alu1 PORT MAP(
     RA => RA1_Decode_Execute,
     SRC_DATA_EXE => ra1_dataMUX_out_exec,
@@ -657,11 +673,12 @@ BEGIN
 
   muxsource_alu2 : mux_source_alu1 PORT MAP(
     RA => RA2_Decode_Execute,
-    SRC_DATA_EXE => AluOut_Out_Execute_Mem,
-    SRC_DATA_MEM => Alu_data_out_mem_wb, ---Alu_data_out_mem_wb
+    SRC_DATA_EXE => ra2_dataMUX_out_exec,
+    SRC_DATA_MEM => ra2_dataMUX_out_mem, ---Alu_data_out_mem_wb
     DATA_OUT_TO_ALU => RA2_TO_ALU,
     ForwardUnit_sel => SEL2_FU
   );
+
   Forwardunit1 : ForwardUnit PORT MAP(
     RS1_address => RS1_out_Decode_Execute,
     RS2_address => RS2_out_Decode_Execute,

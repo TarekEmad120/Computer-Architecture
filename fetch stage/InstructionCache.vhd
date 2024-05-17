@@ -34,7 +34,7 @@ BEGIN
     BEGIN
         IF (reset = '1') THEN
             -- RAM <= (OTHERS => (OTHERS => '0'));
-            file_open(memory_file, "D:\Arc_project\Computer-Architecture\Instructions.txt", read_mode);
+            file_open(memory_file, "D:\ss\Computer-Architecture\Instructions.txt", read_mode);
             readline(memory_file, file_line);
             read(file_line, temp_data);
             ram(0) <= temp_data;
@@ -43,7 +43,7 @@ BEGIN
             INITIAL_FLAG <= '1';
             file_close(memory_file);
         ELSIF (interruptsignal = '1') THEN
-            file_open(memory_file, "D:\Arc_project\Computer-Architecture\Instructions.txt", read_mode);
+            file_open(memory_file, "D:\ss\Computer-Architecture\Instructions.txt", read_mode);
             FOR i IN 0 TO 4095 LOOP
                 IF NOT endfile(memory_file) THEN
                     readline(memory_file, file_line);
@@ -56,7 +56,7 @@ BEGIN
             END LOOP;
             interruptvalue <= ram(2);
         ELSIF (initial_flag = '1') THEN
-            file_open(memory_file, "D:\Arc_project\Computer-Architecture\Instructions.txt", read_mode);
+            file_open(memory_file, "D:\ss\Computer-Architecture\Instructions.txt", read_mode);
             FOR i IN 0 TO 4095 LOOP
                 IF NOT endfile(memory_file) THEN
                     readline(memory_file, file_line);
