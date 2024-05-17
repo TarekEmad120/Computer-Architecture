@@ -34,7 +34,7 @@ BEGIN
             ELSIF Interrupt = '1' THEN
                 --assging pc to pc_data using contactenation
                 PC_data <= pc;
-                instructionOut <= b"1110_0000_0000_0000";
+                instructionOut <= instructionIn;
             ELSE
                 PC_data <= pc;
                 instructionOut <= instructionIn;

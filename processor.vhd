@@ -90,6 +90,7 @@ ARCHITECTURE IMP OF processor IS
       oppCode : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
       Func : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
       one_two_attrib : IN STD_LOGIC;
+      interrupt_stall : IN STD_LOGIC;
       MEM_READ, MEM_WRITE, WRITE_BACK : OUT STD_LOGIC;
       RA2_SEL : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
       WRB_S : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
@@ -105,7 +106,8 @@ ARCHITECTURE IMP OF processor IS
       SIGNAL_MUX_ALU_TO_MEM : OUT STD_LOGIC;
       out_enable : OUT STD_LOGIC;
       In_Enable : OUT STD_LOGIC;
-      control_data_mem : OUT STD_LOGIC
+      control_data_mem : OUT STD_LOGIC;
+      stallpc : OUT STD_LOGIC
     );
   END COMPONENT;
 
@@ -363,6 +365,14 @@ ARCHITECTURE IMP OF processor IS
       predicted_out : OUT STD_LOGIC
     );
   END COMPONENT;
+
+  COMPONENT ICU IS
+    PORT (
+      clk : IN STD_LOGIC;
+      isInterrupt : IN STD_LOGIC;
+      interrupt_stall : OUT STD_LOGIC
+    );
+  END COMPONENT;
   --------------------------------------------- OUTPUT INPUTS PORT ---------------------------------------------
   COMPONENT Output IS
     PORT (
@@ -383,7 +393,8 @@ ARCHITECTURE IMP OF processor IS
   END COMPONENT;
 
   SIGNAL controller_pc_Enable : STD_LOGIC;
-  SIGNAL Reset_Pc_Value, Interrupt_PC_Value : STD_LOGIC_VECTOR(11 DOWNTO 0);
+  SIGNAL Reset_Pc_Value : STD_LOGIC_VECTOR(11 DOWNTO 0);
+  SIGNAL Interrupt_PC_Value : STD_LOGIC_VECTOR(11 DOWNTO 0) := "000000001111";
   SIGNAL Reset_Pc_Value_32 : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL Interrupt_PC_Value_32 : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL PC_value_selected, PC_VALUE_OUT : unsigned(11 DOWNTO 0);
@@ -439,7 +450,7 @@ ARCHITECTURE IMP OF processor IS
 
   -- Branch_prediction
   SIGNAL predicted, flush_f : STD_LOGIC;
-  SIGNAL resetD, resetF : STD_LOGIC;
+  SIGNAL resetD, resetF, interrupt_stall : STD_LOGIC;
   SIGNAL Signal_br_control_DE, Signal_br_control_MEM : STD_LOGIC_VECTOR(1 DOWNTO 0);
   SIGNAL MEM_DATA_OUT, PUSH_DATA, OUT_PORT, input_data_port_ex_mem, input_data_port : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL DATA_OUT_SP_MUX_TO_MEM : unsigned(11 DOWNTO 0);
@@ -454,7 +465,7 @@ ARCHITECTURE IMP OF processor IS
   SIGNAL In_Enable, controll_mem_data : STD_LOGIC;
   SIGNAL DATA_IN_PORT : STD_LOGIC_VECTOR(31 DOWNTO 0) := "00000000000000000000000000001110";
   SIGNAL flushF, flushMEM, flushD, flush_MEM : STD_LOGIC;
-  SIGNAL predicted_out, controll_mem_data_DEC_EX : STD_LOGIC;
+  SIGNAL predicted_out, controll_mem_data_DEC_EX, stall_pc_value, pcStall : STD_LOGIC;
   SIGNAL PC_DATA_MEM_BR_CON, RA_out_mem_ex_mem : STD_LOGIC_VECTOR(31 DOWNTO 0);
 BEGIN
 
@@ -464,14 +475,15 @@ BEGIN
   flushF <= flush_f AND reset AND flush_MEM;
   flushD <= flush_f AND reset AND flush_MEM;
   flushMEM <= reset AND flush_MEM;
+  pcStall <= NOT stall_pc_value;
   -- notStallHazard <= NOT stallHazard;
   -- Enable_Decode_Execute <= NOT stallHazard;
   -- enableFetch <= NOT stallHazard;
   -- controller_pc_Enable <= NOT stallHazard;
   PC1 : PCregister
   PORT MAP(
-    clk => clk, reset => reset, Interrupt => interrupt_signal_controller_out,
-    writeEnable => stallHazard,
+    clk => clk, reset => reset, Interrupt => interrupt_stall,
+    writeEnable => pcStall,
     ResetValue => unsigned(Reset_Pc_Value), InterruptValue => unsigned(Interrupt_PC_Value),
     PCValue => unsigned(PC_MUX_OUT(11 DOWNTO 0)),
     PCout => (PC_VALUE_OUT)
@@ -745,6 +757,7 @@ BEGIN
     enable => enableControll, oppCode => Instruction_from_Fetch_Decode(15 DOWNTO 13),
     Func => Instruction_from_Fetch_Decode(12 DOWNTO 10),
     one_two_attrib => Instruction_from_Fetch_Decode(0),
+    interrupt_stall => interrupt_stall,
     MEM_READ => MEM_READ_IN_Decode_Execute,
     MEM_WRITE => MEM_WRITE_IN_Decode_Execute,
     WRITE_BACK => WRITE_BACK_IN_Decode_Execute,
@@ -764,9 +777,15 @@ BEGIN
     SIGNAL_MUX_ALU_TO_MEM => SIGNAL_MUX_ALU_TO_MEM,
     out_enable => out_enable,
     IN_enable => In_Enable,
-    control_data_mem => controll_mem_data
+    control_data_mem => controll_mem_data,
+    stallpc => stall_pc_value
   );
 
+  InterruptUnit : ICU PORT MAP(
+    clk => clk,
+    isInterrupt => interrupt_signal_controller_out,
+    interrupt_stall => interrupt_stall
+  );
   ExeceptionBranch1 : ExeceptionBranch
   PORT MAP(
     clk => clk,
