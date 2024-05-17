@@ -16,6 +16,8 @@ ENTITY register_file IS
         read_address1 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         read_address2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
         write_address : IN STD_LOGIC_VECTOR(2 DOWNTO 0)
+        -- data_write2 : IN STD_LOGIC_VECTOR(bits - 1 DOWNTO 0);
+        -- write_address2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0)
     );
 
 END register_file;
@@ -31,15 +33,12 @@ BEGIN
                 registers(i) <= (OTHERS => '0');
             END LOOP;
         END IF;
-        IF rising_edge(clk) THEN
+        IF falling_edge(clk) THEN
             IF write_enable = '1' THEN
                 registers(to_integer(unsigned(write_address))) <= data_write;
             END IF;
         END IF;
-        IF falling_edge(clk) THEN
-            data_out1 <= registers(TO_INTEGER(UNSIGNED(read_address1)));
-            data_out2 <= registers(TO_INTEGER(UNSIGNED(read_address2)));
-        END IF;
     END PROCESS;
-
+    data_out1 <= registers(TO_INTEGER(UNSIGNED(read_address1)));
+    data_out2 <= registers(TO_INTEGER(UNSIGNED(read_address2)));
 END IMP;
