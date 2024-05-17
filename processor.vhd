@@ -50,10 +50,10 @@ ARCHITECTURE IMP OF processor IS
       interruptsignal : IN STD_LOGIC;
       address : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
       data : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-      resetvalue : out std_logic_vector(15 downto 0);
+      resetvalue : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
       interruptvalue : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
 
-      );
+    );
   END COMPONENT;
 
   COMPONENT FetchDecodeReg IS
@@ -238,7 +238,7 @@ ARCHITECTURE IMP OF processor IS
       In_port_data_In : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
       Signal_br_control_IN : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
       RA_1_IN : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-
+      inport_enable_IN : IN STD_LOGIC;
       MEM_READ_Out, MEM_WRITE_Out, WRITE_BACK_Out : OUT STD_LOGIC;
       WRB_S_Out : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
       Rd_address_Out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -252,7 +252,8 @@ ARCHITECTURE IMP OF processor IS
       Free_P_Enable_OUT : OUT STD_LOGIC;
       In_port_data_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       Signal_br_control_OUT : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
-      RA_1_OUT : OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
+      RA_1_OUT : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+      inport_enable_OUT : OUT STD_LOGIC
     );
   END COMPONENT;
   COMPONENT mux_data_address IS
@@ -378,6 +379,14 @@ ARCHITECTURE IMP OF processor IS
       interrupt_stall : OUT STD_LOGIC
     );
   END COMPONENT;
+  COMPONENT mux_data_r1 IS
+    PORT (
+      data_port, data_execute : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      data_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      inPort : IN STD_LOGIC
+    );
+
+  END COMPONENT;
   --------------------------------------------- OUTPUT INPUTS PORT ---------------------------------------------
   COMPONENT Output IS
     PORT (
@@ -399,9 +408,9 @@ ARCHITECTURE IMP OF processor IS
 
   SIGNAL controller_pc_Enable : STD_LOGIC;
   SIGNAL Reset_Pc_Value : STD_LOGIC_VECTOR(11 DOWNTO 0);
-  signal Reset_pc_value_16: STD_LOGIC_VECTOR(15 DOWNTO 0) ;
+  SIGNAL Reset_pc_value_16 : STD_LOGIC_VECTOR(15 DOWNTO 0);
   SIGNAL Interrupt_PC_Value : STD_LOGIC_VECTOR(11 DOWNTO 0) := "000000001111";
-  SIGNAL Interrupt_pc_value_16: STD_LOGIC_VECTOR(15 DOWNTO 0) := "0000000000000000";
+  SIGNAL Interrupt_pc_value_16 : STD_LOGIC_VECTOR(15 DOWNTO 0) := "0000000000000000";
   SIGNAL Reset_Pc_Value_32 : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL Interrupt_PC_Value_32 : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL PC_value_selected, PC_VALUE_OUT : unsigned(11 DOWNTO 0);
@@ -468,12 +477,13 @@ ARCHITECTURE IMP OF processor IS
   SIGNAL EA_UNSIGNED, EA_UNSIGNED_RA : unsigned(11 DOWNTO 0);
   SIGNAL SIGNAL_MUX_ALU_TO_MEM : STD_LOGIC;
   SIGNAL Address_In_EX_MEM : unsigned(11 DOWNTO 0);
-  SIGNAL stallHazard, notStallHazard, enableFetch, out_enable, out_enable_dec_ex, In_enable_dec_ex : STD_LOGIC;
+  SIGNAL stallHazard, notStallHazard, enableFetch, out_enable, out_enable_dec_ex, In_enable_dec_ex, inportEnable_exec_mem : STD_LOGIC;
   SIGNAL In_Enable, controll_mem_data : STD_LOGIC;
   -- SIGNAL DATA_IN_PORT : STD_LOGIC_VECTOR(31 DOWNTO 0) := "00000000000000000000000000001110";
   SIGNAL flushF, flushMEM, flushD, flush_MEM : STD_LOGIC;
   SIGNAL predicted_out, controll_mem_data_DEC_EX, stall_pc_value, pcStall : STD_LOGIC;
-  SIGNAL PC_DATA_MEM_BR_CON, RA_out_mem_ex_mem : STD_LOGIC_VECTOR(31 DOWNTO 0);
+  SIGNAL PC_DATA_MEM_BR_CON, RA_out_mem_ex_mem, ra1_dataMUX_out_exec : STD_LOGIC_VECTOR(31 DOWNTO 0);
+
 BEGIN
 
   Rs1 <= Instruction_from_Fetch_Decode(6 DOWNTO 4);
@@ -491,7 +501,7 @@ BEGIN
   PORT MAP(
     clk => clk, reset => reset, Interrupt => interrupt_stall,
     writeEnable => pcStall,
-    ResetValue => unsigned(Reset_pc_value_16(11 downto 0)), InterruptValue => unsigned(Interrupt_PC_Value),
+    ResetValue => unsigned(Reset_pc_value_16(11 DOWNTO 0)), InterruptValue => unsigned(Interrupt_PC_Value),
     PCValue => unsigned(PC_MUX_OUT(11 DOWNTO 0)),
     PCout => (PC_VALUE_OUT)
   );
@@ -518,10 +528,10 @@ BEGIN
   InstructionMemory1 : InstructionMemory
   PORT MAP(
     clk => clk, reset => reset,
-    interruptsignal=>signal_int,
+    interruptsignal => signal_int,
     address => PC_VALUE_OUT_STD_LOGIC, data => Instruction_from_memory,
     resetvalue => Reset_pc_value_16, interruptvalue => Interrupt_pc_value_16
-    );
+  );
 
   FetchDecodeReg1 : FetchDecodeReg
   PORT MAP(
@@ -621,9 +631,16 @@ BEGIN
     Negative_flag => Neg_flag,
     Overflow_flag => OF_flag
   );
+  muxDataR1 : mux_data_r1 PORT MAP(
+    data_port => input_data_port_ex_mem,
+    data_execute => RA1_Decode_Execute,
+    data_out => ra1_dataMUX_out_exec,
+    inPort => inportEnable_exec_mem
+  );
+
   muxsourcealu1 : mux_source_alu1 PORT MAP(
     RA => RA1_Decode_Execute,
-    SRC_DATA_EXE => AluOut_Out_Execute_Mem,
+    SRC_DATA_EXE => ra1_dataMUX_out_exec,
     SRC_DATA_MEM => Data_write_back_out_muxWB, ---Alu_data_out_mem_wb
     DATA_OUT_TO_ALU => RA1_TO_ALU,
     ForwardUnit_sel => SEL1_FU
@@ -687,6 +704,7 @@ BEGIN
     In_port_data_In => input_data_port,
     Signal_br_control_IN => Signal_br_control_DE,
     RA_1_IN => RA1_TO_ALU,
+    inport_enable_IN => In_enable_dec_ex,
     MEM_READ_Out => MEM_READ_out_Execute_Mem,
     MEM_WRITE_Out => MEM_WRITE_out_Execute_Mem,
     WRITE_BACK_Out => WRITE_BACK_out_Execute_Mem,
@@ -702,7 +720,8 @@ BEGIN
     Free_P_Enable_OUT => Free_P_Enable_EX_MEM,
     In_port_data_OUT => input_data_port_ex_mem,
     Signal_br_control_OUT => Signal_br_control_MEM,
-    RA_1_OUT => PC_DATA_MEM_BR_CON
+    RA_1_OUT => PC_DATA_MEM_BR_CON,
+    inport_enable_OUT => inportEnable_exec_mem
   );
 
   MUXDATA : mux_data_address PORT MAP(
@@ -829,8 +848,8 @@ BEGIN
   EA_UNSIGNED_RA <= unsigned(STD_LOGIC_VECTOR(RA2_DATA_WB_OUT_DATA(11 DOWNTO 0)));
   PC_VALUE_OUT_STD_LOGIC <= STD_LOGIC_VECTOR(PC_VALUE_OUT);
   PC_VALUE_CONCATENATED <= x"00000" & PC_VALUE_OUT_STD_LOGIC;-- TO BE 32 
-  Reset_Pc_Value <= Reset_pc_value_16(11 downto 0);
-  Interrupt_PC_Value <= Interrupt_pc_value_16(11 downto 0);
+  Reset_Pc_Value <= Reset_pc_value_16(11 DOWNTO 0);
+  Interrupt_PC_Value <= Interrupt_pc_value_16(11 DOWNTO 0);
   Reset_Pc_Value_32 <= x"00000" & Reset_Pc_Value;
 
   Interrupt_PC_Value_32 <= x"00000" & Interrupt_PC_Value;
