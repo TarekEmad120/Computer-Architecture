@@ -1,2 +1,4 @@
 # ignore folder work
 work/
+*.bak
+*.txt
