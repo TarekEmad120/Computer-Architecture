@@ -18,7 +18,8 @@ ENTITY Memory IS
     alu_src : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
     data_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
     PC_RST : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-    PC_Interrupt : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    PC_Interrupt : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    exceptionflagfrommemory : OUT STD_LOGIC
 
   );
 END Memory;
@@ -32,7 +33,7 @@ ARCHITECTURE Behavioral OF Memory IS
 BEGIN
   PROCESS (clk, reset)
     -- reading from cahce file 
-    FILE file_in : text OPEN read_mode IS "D:\ss\Computer-Architecture\cache.txt";
+    FILE file_in : text OPEN read_mode IS "D:\Arc_project\Computer-Architecture\cache.txt";
     VARIABLE line : line;
     VARIABLE data : STD_LOGIC_VECTOR(15 DOWNTO 0);
 
@@ -64,7 +65,7 @@ BEGIN
 
     IF falling_edge(clk) THEN
       IF Mem_Write = '1' AND protectedMem(to_integer(unsigned(address))) = '0' THEN
-
+        exceptionflagfrommemory <= '0';
         -- we will use big endian
         IF push_PC = '1' THEN
           mem(to_integer(unsigned(address))) <= alu_src(31 DOWNTO 16);
@@ -73,6 +74,8 @@ BEGIN
           mem(to_integer(unsigned(address))) <= data_in(31 DOWNTO 16);
           mem(to_integer(unsigned(address)) + 1) <= data_in(15 DOWNTO 0);
         END IF;
+      ELSIF protectedMem(to_integer(unsigned(address))) = '1' AND MEM_WRITE = '1' THEN
+        exceptionflagfrommemory <= '1';
       END IF;
       IF protect = '1' THEN
         ProtectedMem(to_integer(unsigned(address))) <= '1';
@@ -86,6 +89,7 @@ BEGIN
     IF (MEM_READ = '1') THEN
       data_out <= mem(to_integer(unsigned(address))) & mem(to_integer(unsigned(address)) + 1);
     END IF;
+
     PC_RST <= mem(0) & mem(1);
     PC_Interrupt <= mem(2) & mem(3);
   END PROCESS;

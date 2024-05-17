@@ -9,7 +9,8 @@ ENTITY processor IS
     clk, reset : IN STD_LOGIC;
     signal_int : IN STD_LOGIC;
     input_port : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-    output_port : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    output_port : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    exceptionSignal : OUT STD_LOGIC
   );
 
 END ENTITY;
@@ -293,7 +294,8 @@ ARCHITECTURE IMP OF processor IS
       alu_src : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
       data_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       PC_RST : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-      PC_Interrupt : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+      PC_Interrupt : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      exceptionflagfrommemory : OUT STD_LOGIC
     );
   END COMPONENT;
 
@@ -705,7 +707,7 @@ BEGIN
 
   muxRA2 : mux_ra2_data_mem PORT MAP(
     ra2_forwarderd => RA_out_Decode_Execute,
-    ra2_alu => RA2_Decode_Execute,
+    ra2_alu => RA2_TO_ALU,
     ra2_out => RA_out_mem_ex_mem,
     sel => controll_mem_data_DEC_EX
   );
@@ -769,7 +771,8 @@ BEGIN
     alu_src => PUSH_DATA,
     data_out => MEM_DATA_OUT,
     PC_RST => Reset_Pc_Value_32,
-    PC_Interrupt => Interrupt_PC_Value_32
+    PC_Interrupt => Interrupt_PC_Value_32,
+    exceptionflagfrommemory => exceptionSignal
   );
 
   SP_MUX : sp_addressmux PORT MAP(

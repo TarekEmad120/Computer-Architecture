@@ -133,7 +133,7 @@ BEGIN
             Free_P_Enable <= '0';
             out_enable <= '0';
             In_Enable <= '0';
-            control_data_mem <= '0';
+            control_data_mem <= '1';
             stallpc <= '0';
             Interrupt_Signal <= '0';
           WHEN "010" => ---- POP operation
