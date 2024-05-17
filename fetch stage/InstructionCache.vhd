@@ -11,8 +11,13 @@ ENTITY InstructionMemory IS
     PORT (
         clk : IN STD_LOGIC;
         reset : IN STD_LOGIC;
+        interruptsignal : IN STD_LOGIC;
         address : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
-        data : OUT STD_LOGIC_VECTOR(15 DOWNTO 0));
+        data : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+        resetvalue : out std_logic_vector(15 downto 0);
+        interruptvalue : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+
+        );
 END ENTITY;
 
 ARCHITECTURE Behavioral OF InstructionMemory IS
@@ -27,12 +32,31 @@ BEGIN
         VARIABLE file_line : line;
         VARIABLE temp_data : STD_LOGIC_VECTOR(15 DOWNTO 0);
     BEGIN
-        IF (RESET = '1') THEN
+        IF (reset = '1') THEN
             -- RAM <= (OTHERS => (OTHERS => '0'));
-            data <= (OTHERS => '0');
+            file_open(memory_file, "F:\Computer Archectiture\project\Computer-Architecture\Computer-Architecture\Instructions.txt", read_mode);
+            readline(memory_file, file_line);
+            read(file_line, temp_data);
+            ram(0) <= temp_data;
+            data <=ram(0);
+            resetvalue <= ram(0);
             INITIAL_FLAG <= '1';
+            file_close(memory_file);
+            elsif(interruptsignal = '1') then
+            file_open(memory_file, "F:\Computer Archectiture\project\Computer-Architecture\Computer-Architecture\Interrupt.txt", read_mode);
+            FOR i IN 0 TO 4095 LOOP
+                IF NOT endfile(memory_file) THEN
+                    readline(memory_file, file_line);
+                    read(file_line, temp_data);
+                    ram(i) <= temp_data;
+                    -- ELSE
+                    --     file_close(memory_file);
+
+                END IF;
+            END LOOP;
+            interruptvalue <= ram(2);
         ELSIF (initial_flag = '1') THEN
-            file_open(memory_file, "D:\Arc_project\Computer-Architecture\Instructions.txt", read_mode);
+            file_open(memory_file, "F:\Computer Archectiture\project\Computer-Architecture\Computer-Architecture\Instructions.txt", read_mode);
             FOR i IN 0 TO 4095 LOOP
                 IF NOT endfile(memory_file) THEN
                     readline(memory_file, file_line);

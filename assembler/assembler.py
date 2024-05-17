@@ -227,7 +227,7 @@ def one_operand_instructions(instruction):
     if instruction[0] == 'protect' or instruction[0] == 'free':
         return op_code[instruction[0]] + func[instruction[0]][0:3] + "000000" + register_bank[instruction[1]] + func[instruction[0]][3]
 
-    return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + "000000" + func[instruction[0]][3]
+    return op_code[instruction[0]] + func[instruction[0]][0:3] + register_bank[instruction[1]] + register_bank[instruction[1]]+"000" + func[instruction[0]][3]
 
 
 def two_operand_instructions(instruction):

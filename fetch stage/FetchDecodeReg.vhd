@@ -24,8 +24,8 @@ BEGIN
     PROCESS (clk, reset)
     BEGIN
         IF reset = '1' THEN
-            PC_data <= (OTHERS => '0');
-            instructionOut <= (OTHERS => '0');
+            PC_data <= pc;
+            -- instructionOut <= (OTHERS => '0=');
 
         ELSIF rising_edge(clk) AND enable = '1' THEN
             IF IntermediateEnable = '1' THEN
