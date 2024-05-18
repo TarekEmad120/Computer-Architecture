@@ -21,8 +21,6 @@ ENTITY Decode_Execute IS
         out_enable_IN : IN STD_LOGIC;
         In_enable_IN : IN STD_LOGIC;
         controll_mem_data_In : IN STD_LOGIC;
-        data_write2_in : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-        enable2_in : IN STD_LOGIC;
 
         RA_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
         alu_control_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0); --
@@ -39,9 +37,7 @@ ENTITY Decode_Execute IS
         Free_P_Enable_OUT : OUT STD_LOGIC;
         out_enable_OUT : OUT STD_LOGIC;
         In_enable_OUT : OUT STD_LOGIC;
-        controll_mem_data_OUT : OUT STD_LOGIC;
-        data_write2_out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-        enable2_out : OUT STD_LOGIC
+        controll_mem_data_OUT : OUT STD_LOGIC
     );
 
 END Decode_Execute;
@@ -71,8 +67,6 @@ BEGIN
             out_enable_OUT <= '0';
             In_enable_OUT <= '0';
             controll_mem_data_OUT <= '0';
-            data_write2_out <= (OTHERS => '0');
-            enable2_out <= '0';
         ELSIF clk'EVENT AND clk = '1' THEN
             IF enable = '1' THEN
                 RD_Out <= RD_In;
@@ -95,8 +89,6 @@ BEGIN
                 out_enable_OUT <= out_enable_IN;
                 In_enable_OUT <= In_enable_IN;
                 controll_mem_data_OUT <= controll_mem_data_In;
-                data_write2_out <= data_write2_in;
-                enable2_out <= enable2_in;
             END IF;
         END IF;
     END PROCESS;

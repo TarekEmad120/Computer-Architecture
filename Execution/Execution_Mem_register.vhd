@@ -21,9 +21,6 @@ ENTITY Execute_Mememory_Register IS
         RA_1_IN : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
         inport_enable_IN : IN STD_LOGIC;
         zf_flag_in : IN STD_LOGIC;
-        data_write2_in : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-        enable2_in : IN STD_LOGIC;
-
         MEM_READ_Out, MEM_WRITE_Out, WRITE_BACK_Out : OUT STD_LOGIC;
         WRB_S_Out : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
         Rd_address_Out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -39,9 +36,7 @@ ENTITY Execute_Mememory_Register IS
         Signal_br_control_OUT : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
         RA_1_OUT : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
         inport_enable_OUT : OUT STD_LOGIC;
-        zf_flag_out : OUT STD_LOGIC;
-        data_write2_out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-        enable2_out : OUT STD_LOGIC
+        zf_flag_out : OUT STD_LOGIC
 
     );
 END Execute_Mememory_Register;
@@ -69,8 +64,6 @@ BEGIN
             RA_1_OUT <= (OTHERS => '0');
             inport_enable_OUT <= '0';
             zf_flag_out <= '0';
-            data_write2_out <= (OTHERS => '0');
-            enable2_out <= '0';
         ELSIF clk'EVENT AND clk = '1' THEN
             IF enable = '1' THEN
                 Rd_address_Out <= Rd_address_In;
@@ -91,8 +84,6 @@ BEGIN
                 RA_1_OUT <= RA_1_IN;
                 inport_enable_OUT <= inport_enable_IN;
                 zf_flag_out <= zf_flag_in;
-                data_write2_out <= data_write2_in;
-                enable2_out <= enable2_in;
             END IF;
         END IF;
     END PROCESS;

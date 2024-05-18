@@ -76,7 +76,7 @@ BEGIN
         x"00000000";
 
     bx <=
-        NOT input1 WHEN sel = "0100" ELSE
+        NOT input2 WHEN sel = "0100" ELSE
         x"00000000" WHEN sel = "0110" ELSE
         NOT x"00000001" WHEN sel = "1000" ELSE
         input2 WHEN sel = "0101" ELSE
