@@ -13,24 +13,23 @@ END ExeceptionBranch;
 ARCHITECTURE IMP OF ExeceptionBranch IS
     -- SIGNAL signal_br_reg : std_logic_vector(1 downto 0); 
 BEGIN
-    PROCESS (signal_br, bit_predict)
+    PROCESS (clk)
     BEGIN
-        -- IF rising_edge(clk) THEN
-        -- signal_br_reg <= signal_br;
+        IF rising_edge(clk) THEN
+            -- signal_br_reg <= signal_br;
 
-        CASE signal_br IS
-            WHEN "01" =>
-                Flush_F <= '1';
-            WHEN "10" =>
-                IF (bit_predict = '1') THEN
+            CASE signal_br IS
+                WHEN "01" =>
                     Flush_F <= '1';
-                ELSE
+                WHEN "10" =>
+                    IF (bit_predict = '1') THEN
+                        Flush_F <= '1';
+                    ELSE
+                        Flush_F <= '0';
+                    END IF;
+                WHEN OTHERS =>
                     Flush_F <= '0';
-                END IF;
-            WHEN OTHERS =>
-
-                Flush_F <= '0';
-        END CASE;
-        -- END IF;
+            END CASE;
+        END IF;
     END PROCESS;
 END IMP;

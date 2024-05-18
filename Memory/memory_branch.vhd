@@ -15,20 +15,22 @@ END MemoryBranch;
 ARCHITECTURE IMP OF MemoryBranch IS
     -- SIGNAL signal_br_reg : std_logic_vector(1 downto 0); 
 BEGIN
-    PROCESS (signal_br, bit_predict, ZF)
+    PROCESS (clk)
     BEGIN
         -- signal_br_reg <= signal_br;
+        IF rising_edge(clk) THEN
 
-        CASE signal_br IS
-            WHEN "10" =>
-                IF (ZF = NOT bit_predict) THEN
+            CASE signal_br IS
+                WHEN "10" =>
+                    IF (ZF = NOT bit_predict) THEN
+                        Flush_MEM <= '1';
+                        predicted_out <= NOT bit_predict;
+                    END IF;
+                WHEN "11" =>
                     Flush_MEM <= '1';
-                    predicted_out <= NOT bit_predict;
-                END IF;
-            when "11"=>
-                    Flush_MEM <= '1';
-            WHEN OTHERS =>
-                Flush_MEM <= '0';
-        END CASE;
+                WHEN OTHERS =>
+                    Flush_MEM <= '0';
+            END CASE;
+        END IF;
     END PROCESS;
 END IMP;

@@ -244,6 +244,7 @@ BEGIN
             MEM_WRITE <= '0';
             RS2_RD_SEL <= 'X';
             WRB_S <= "XX";
+            WRITE_BACK <= '0'; --------------------------------- ADDED ---------------------------------
             RA2_SEL <= "XX";
             SIGNAL_MUX_ALU_TO_MEM <= '0';
             push_signal <= '0';
@@ -269,6 +270,7 @@ BEGIN
             push_signal <= '0';
             STACK_SIGNAL <= '1';
             out_enable <= '0';
+            WRITE_BACK <= '0'; --------------------------------- ADDED ---------------------------------
             In_Enable <= '0';
             control_data_mem <= '1';
             stallpc <= '0';
@@ -287,6 +289,7 @@ BEGIN
             RA2_SEL <= "XX";
             SIGNAL_MUX_ALU_TO_MEM <= '0';
             push_signal <= '0';
+            WRITE_BACK <= '0'; --------------------------------- ADDED ---------------------------------
             STACK_SIGNAL <= '0';
             out_enable <= '0';
             In_Enable <= '0';
@@ -305,6 +308,7 @@ BEGIN
             RS2_RD_SEL <= 'X';
             WRB_S <= "01";
             RA2_SEL <= "10";
+            WRITE_BACK <= '0'; --------------------------------- ADDED ---------------------------------
             SIGNAL_MUX_ALU_TO_MEM <= '0';
             push_signal <= '1';
             STACK_SIGNAL <= '1';
@@ -323,6 +327,7 @@ BEGIN
             MEM_READ <= '1';
             MEM_WRITE <= '1';
             RS2_RD_SEL <= 'X';
+            WRITE_BACK <= '0'; --------------------------------- ADDED ---------------------------------
             WRB_S <= "01";
             RA2_SEL <= "10";
             SIGNAL_MUX_ALU_TO_MEM <= '0';
