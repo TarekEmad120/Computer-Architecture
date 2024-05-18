@@ -14,6 +14,8 @@ ENTITY Mem_WB_reg IS
         In_port_data_In : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
         inportSignal_in : IN STD_LOGIC;
         signal_mem_in : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
+        data_write2_in : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        enable2_in : IN STD_LOGIC;
 
         Ra2_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
         Mem_data_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -23,7 +25,9 @@ ENTITY Mem_WB_reg IS
         WB_EN_out : OUT STD_LOGIC;
         In_port_data_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
         inportSignal_out : OUT STD_LOGIC;
-        signal_mem_out : OUT STD_LOGIC_VECTOR (1 DOWNTO 0)
+        signal_mem_out : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
+        data_write2_out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+        enable2_out : OUT STD_LOGIC
     );
 END Mem_WB_reg;
 
@@ -42,6 +46,8 @@ BEGIN
             In_port_data_OUT <= (OTHERS => '0');
             inportSignal_out <= '0';
             signal_mem_out <= "00";
+            data_write2_out <= (OTHERS => '0');
+            enable2_out <= '0';
         ELSIF rising_edge(clk) THEN
             IF enable = '1' THEN
                 Ra2_out <= Ra2_in;
@@ -53,6 +59,8 @@ BEGIN
                 In_port_data_OUT <= In_port_data_In;
                 inportSignal_out <= inportSignal_in;
                 signal_mem_out <= signal_mem_in;
+                data_write2_out <= data_write2_in;
+                enable2_out <= enable2_in;
             END IF;
         END IF;
     END PROCESS;

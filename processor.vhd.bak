@@ -113,7 +113,8 @@ ARCHITECTURE IMP OF processor IS
       out_enable : OUT STD_LOGIC;
       In_Enable : OUT STD_LOGIC;
       control_data_mem : OUT STD_LOGIC;
-      stallpc : OUT STD_LOGIC
+      stallpc : OUT STD_LOGIC;
+      enable2 : OUT STD_LOGIC
     );
   END COMPONENT;
 
@@ -131,7 +132,10 @@ ARCHITECTURE IMP OF processor IS
       write_enable : IN STD_LOGIC;
       read_address1 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
       read_address2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-      write_address : IN STD_LOGIC_VECTOR(2 DOWNTO 0)
+      write_address : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+      data_write2 : IN STD_LOGIC_VECTOR(bits - 1 DOWNTO 0);
+      enable2 : IN STD_LOGIC;
+      write_address2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0)
     );
   END COMPONENT;
 
@@ -178,6 +182,8 @@ ARCHITECTURE IMP OF processor IS
       out_enable_IN : IN STD_LOGIC;
       In_enable_IN : IN STD_LOGIC;
       controll_mem_data_In : IN STD_LOGIC;
+      data_write2_in : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      enable2_in : IN STD_LOGIC;
 
       RA_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       alu_control_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0); --
@@ -194,7 +200,9 @@ ARCHITECTURE IMP OF processor IS
       Free_P_Enable_OUT : OUT STD_LOGIC;
       out_enable_OUT : OUT STD_LOGIC;
       In_enable_OUT : OUT STD_LOGIC;
-      controll_mem_data_OUT : OUT STD_LOGIC
+      controll_mem_data_OUT : OUT STD_LOGIC;
+      data_write2_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      enable2_out : OUT STD_LOGIC
     );
   END COMPONENT;
   -------------------------------------------- EXECUTE STAGE 
@@ -241,6 +249,9 @@ ARCHITECTURE IMP OF processor IS
       RA_1_IN : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
       inport_enable_IN : IN STD_LOGIC;
       zf_flag_in : IN STD_LOGIC;
+      data_write2_in : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+      enable2_in : IN STD_LOGIC;
+
       MEM_READ_Out, MEM_WRITE_Out, WRITE_BACK_Out : OUT STD_LOGIC;
       WRB_S_Out : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
       Rd_address_Out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -256,7 +267,9 @@ ARCHITECTURE IMP OF processor IS
       Signal_br_control_OUT : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
       RA_1_OUT : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
       inport_enable_OUT : OUT STD_LOGIC;
-      zf_flag_out : OUT STD_LOGIC
+      zf_flag_out : OUT STD_LOGIC;
+      data_write2_out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+      enable2_out : OUT STD_LOGIC
     );
   END COMPONENT;
   COMPONENT mux_data_address IS
@@ -334,6 +347,8 @@ ARCHITECTURE IMP OF processor IS
       In_port_data_In : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
       inportSignal_in : IN STD_LOGIC;
       signal_mem_in : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
+      data_write2_in : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+      enable2_in : IN STD_LOGIC;
 
       Ra2_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       Mem_data_out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -343,7 +358,9 @@ ARCHITECTURE IMP OF processor IS
       WB_EN_out : OUT STD_LOGIC;
       In_port_data_OUT : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       inportSignal_out : OUT STD_LOGIC;
-      signal_mem_out : OUT STD_LOGIC_VECTOR (1 DOWNTO 0)
+      signal_mem_out : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
+      data_write2_out : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+      enable2_out : OUT STD_LOGIC
     );
   END COMPONENT;
 
@@ -489,8 +506,8 @@ ARCHITECTURE IMP OF processor IS
   SIGNAL DATA_OUT_MUX_IMM_RA_PC, pc_value_corrected : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
   -- Branch_prediction
-  SIGNAL predicted, flush_f : STD_LOGIC;
-  SIGNAL resetD, resetF, interrupt_stall : STD_LOGIC;
+  SIGNAL predicted, flush_f, enable2_con : STD_LOGIC;
+  SIGNAL resetD, resetF, interrupt_stall, enable2_dec : STD_LOGIC;
   SIGNAL Signal_br_control_DE, Signal_br_control_MEM : STD_LOGIC_VECTOR(1 DOWNTO 0);
   SIGNAL MEM_DATA_OUT, PUSH_DATA, OUT_PORT, input_data_port_ex_mem, input_data_port : STD_LOGIC_VECTOR(31 DOWNTO 0);
   SIGNAL DATA_OUT_SP_MUX_TO_MEM : unsigned(11 DOWNTO 0);
@@ -509,8 +526,9 @@ ARCHITECTURE IMP OF processor IS
   SIGNAL PC_DATA_MEM_BR_CON, RA_out_mem_ex_mem, ra1_dataMUX_out_exec, ra1_dataMUX_out_mem : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
   SIGNAL ra2_dataMUX_out_mem, ra2_dataMUX_out_exec : STD_LOGIC_VECTOR(31 DOWNTO 0);
-  SIGNAL Z_flag_ex_mem, Z_flag_out : STD_LOGIC; -----------added
+  SIGNAL Z_flag_ex_mem, Z_flag_out, enable2_dec_ex, enabbble2 : STD_LOGIC; -----------added
   SIGNAL Signal_br_control_MEM_wb : STD_LOGIC_VECTOR (1 DOWNTO 0);
+  SIGNAL write_data2_dec_ex, write_data2_ex_mem, write_data2_mem_wb : STD_LOGIC_VECTOR(2 DOWNTO 0);
 
 BEGIN
 
@@ -543,7 +561,7 @@ BEGIN
     SIGNAL_COND => Signal_br_control_MEM_wb,
     flushEX => flush_f,
     flushMem => flush_MEM,
-    predicted => predicted, --------   to be edited
+    predicted => '1', --------   to be edited
     ZF => Z_flag_ex_mem,
     PC => PC_MUX_OUT
   );
@@ -591,9 +609,11 @@ BEGIN
     write_enable => WB_EN_out_mem_wb,
     write_address => Rd_address_out_mem_wb,
     data_out1 => Ra1_value_RegisterFile,
-    data_out2 => Ra2_value_enter_Decode_Execute
+    data_out2 => Ra2_value_enter_Decode_Execute,
+    data_write2 => Ra2_out_mem_wb,
+    enable2 => enabbble2,
+    write_address2 => write_data2_mem_wb
   );
-
   HazardUnit : hazarddectionunit PORT MAP(
     oldRD => Rd_out_Execute_Mem,
     currentRS1 => Rs1_output_Mux,
@@ -625,7 +645,9 @@ BEGIN
     Free_P_Enable_IN => Free_P_Enable_con,
     out_enable_IN => out_enable,
     In_enable_IN => IN_enable,
+    enable2_in => enable2_con,
     controll_mem_data_In => controll_mem_data,
+    data_write2_in => Rs1_output_Mux,
     RA_OUT => RA_out_Decode_Execute,
     alu_control_out => alu_control_out_Decode_Execute,
     dataOut1 => RA1_Decode_Execute,
@@ -645,7 +667,9 @@ BEGIN
     Free_P_Enable_OUT => Free_P_Enable_DEC_EX,
     out_enable_out => out_enable_dec_ex,
     In_enable_out => In_enable_dec_ex,
-    controll_mem_data_OUT => controll_mem_data_DEC_EX
+    controll_mem_data_OUT => controll_mem_data_DEC_EX,
+    data_write2_out => write_data2_dec_ex,
+    enable2_out => enable2_dec
   );
 
   alucomp1 : ALU
@@ -763,6 +787,8 @@ BEGIN
     RA_1_IN => RA1_TO_ALU,
     inport_enable_IN => In_enable_dec_ex,
     zf_flag_in => Z_flag_out,
+    data_write2_in => write_data2_dec_ex,
+    enable2_in => enable2_dec,
     MEM_READ_Out => MEM_READ_out_Execute_Mem,
     MEM_WRITE_Out => MEM_WRITE_out_Execute_Mem,
     WRITE_BACK_Out => WRITE_BACK_out_Execute_Mem,
@@ -780,7 +806,9 @@ BEGIN
     Signal_br_control_OUT => Signal_br_control_MEM,
     RA_1_OUT => PC_DATA_MEM_BR_CON,
     inport_enable_OUT => inportEnable_exec_mem,
-    zf_flag_out => Z_flag_ex_mem
+    zf_flag_out => Z_flag_ex_mem,
+    data_write2_out => write_data2_ex_mem,
+    enable2_out => enable2_dec_ex
   );
 
   MUXDATA : mux_data_address PORT MAP(
@@ -833,6 +861,8 @@ BEGIN
     In_port_data_In => input_data_port_ex_mem,
     inportSignal_in => inportEnable_exec_mem,
     signal_mem_in => Signal_br_control_MEM,
+    data_write2_in => write_data2_ex_mem,
+    enable2_in => enable2_dec_ex,
     Ra2_out => Ra2_out_mem_wb,
     Mem_data_out => Mem_data_out_mem_wbt,
     Alu_data_out => Alu_data_out_mem_wb,
@@ -841,7 +871,9 @@ BEGIN
     WB_EN_out => WB_EN_out_mem_wb,
     In_port_data_OUT => InPortData_MUX_WB,
     inportSignal_out => inportEnable_mem_wb,
-    signal_mem_out => Signal_br_control_MEM_wb
+    signal_mem_out => Signal_br_control_MEM_wb,
+    data_write2_in => write_data2_mem_wb,
+    enable2_out => enabbble2
   );
 
   ----------------------------- Controller
@@ -871,7 +903,8 @@ BEGIN
     out_enable => out_enable,
     IN_enable => In_Enable,
     control_data_mem => controll_mem_data,
-    stallpc => stall_pc_value
+    stallpc => stall_pc_value,
+    enable2 => enable2_con
   );
 
   InterruptUnit : ICU PORT MAP(
@@ -883,14 +916,14 @@ BEGIN
   PORT MAP(
     clk => clk,
     signal_br => Signal_br_control_DE,
-    bit_predict => predicted,
+    bit_predict => '1',
     Flush_F => flush_f
   );
 
   MemBranch : MemoryBranch PORT MAP(
     clk => clk,
     signal_br => Signal_br_control_MEM,
-    bit_predict => predicted,
+    bit_predict => '1',
     ZF => Z_flag_ex_mem,
     Flush_MEM => flush_MEM,
     predicted_out => predicted_out
@@ -898,9 +931,9 @@ BEGIN
   pr : predictedBit PORT MAP(
     clk => clk,
     reset => reset,
-    predicted_in => predicted_out,
+    predicted_in => '1',
     predicted_out => predicted
-  )
+  );
 
   ------------------------------ MUX WRITE BACK ----------------------------------------
   muxWB : mux_WB
