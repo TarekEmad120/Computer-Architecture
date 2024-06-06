@@ -41,8 +41,8 @@ The vhdl implementation of 5-stage pipelined Processor
 - DATA Operations
   1. **IN** Rdst
   2. **OUT** Rdst
-  3. \***\*\*\*\*\***PUSH\***\*\*\*\*\*** Rdst
-  4. **\*\*\*\***POP**\*\*\*\*** Rdst
+  3. **PUSH** Rdst
+  4. **POP** Rdst
   5. **LDD** Rdst, EA
   6. **STD** Rdst, EA
 - Memory Security (FREE/PROTECT)
