@@ -56,64 +56,64 @@ The vhdl implementation of 5-stage pipelined Processor 🦾
 
 # ALU Operations
 
-| Operation              | Opp Code (3 bits) | b(15-13) | Func (3 bits) | b(12-10) | Rdst (3 bits) | b(9-7) | RS1 (3 bits) | b(6-4) | RS2 (3 bits) | b(3-1) | One/Two Attributes (1 bit) | b(0) |
-| ---------------------- | ----------------- | -------- | ------------- | -------- | ------------- | ------ | ------------ | ------ | ------------ | ------ | -------------------------- | ---- |
-| NOT Rdst               | 001               | 001      | Rdst          | xxx      | xxx           | 0      |
-| NEG Rdst               | 001               | 010      | Rdst          | xxx      | xxx           | 0      |
-| INC Rdst               | 001               | 011      | Rdst          | xxx      | xxx           | 0      |
-| DEC Rdst               | 001               | 100      | Rdst          | xxx      | xxx           | 0      |
-| MOV Rdst, Rsrc         | 001               | 000      | Rdst          | Rsrc     | xxx           | 1      |
-| SWAP Rdst, Rsrc1       | 001               | 001      | Rdst          | Rsrc     | xxx           | 1      |
-| ADD Rdst, Rsrc1, Rsrc2 | 001               | 010      | Rdst          | Rsrc     | Rsrc2         | 1      |
-| SUB Rdst, Rsrc1, Rsrc2 | 001               | 011      | Rdst          | Rsrc     | Rsrc2         | 1      |
-| AND Rdst, Rsrc1, Rsrc2 | 001               | 100      | Rdst          | Rsrc     | Rsrc2         | 1      |
-| OR Rdst, Rsrc1, Rsrc2  | 001               | 101      | Rdst          | Rsrc     | Rsrc2         | 1      |
-| XOR Rdst, Rsrc1, Rsrc2 | 001               | 111      | Rdst          | Rsrc     | Rsrc2         | 1      |
-| CMP Rsrc1, Rsrc2       | 001               | 110      | xxx           | Rsrc     | Rsrc2         | 1      |
+| Operation              | Opp Code (3 bits) | Func (3 bits) | Rdst (3 bits) | Rsc1 b(6-4) | b(3-1) | One/Two attributes |
+| ---------------------- | ----------------- | ------------- | ------------- | ----------- | ------ | ------------------ |
+| NOT Rdst               | 001               | 001           | Rdst          | xxx         | xxx    | 0                  |
+| NEG Rdst               | 001               | 010           | Rdst          | xxx         | xxx    | 0                  |
+| INC Rdst               | 001               | 011           | Rdst          | xxx         | xxx    | 0                  |
+| DEC Rdst               | 001               | 100           | Rdst          | xxx         | xxx    | 0                  |
+| MOV Rdst, Rsrc         | 001               | 000           | Rdst          | Rsrc        | xxx    | 1                  |
+| SWAP Rdst, Rsrc1       | 001               | 001           | Rdst          | Rsrc        | xxx    | 1                  |
+| ADD Rdst, Rsrc1, Rsrc2 | 001               | 010           | Rdst          | Rsrc        | Rsrc2  | 1                  |
+| SUB Rdst, Rsrc1, Rsrc2 | 001               | 011           | Rdst          | Rsrc        | Rsrc2  | 1                  |
+| AND Rdst, Rsrc1, Rsrc2 | 001               | 100           | Rdst          | Rsrc        | Rsrc2  | 1                  |
+| OR Rdst, Rsrc1, Rsrc2  | 001               | 101           | Rdst          | Rsrc        | Rsrc2  | 1                  |
+| XOR Rdst, Rsrc1, Rsrc2 | 001               | 111           | Rdst          | Rsrc        | Rsrc2  | 1                  |
+| CMP Rsrc1, Rsrc2       | 001               | 110           | xxx           | Rsrc        | Rsrc2  | 1                  |
 
 # Immediate Value Operations
 
-| Operation             | Opp Code (3 bits) | b(15-13) | Func (3 bits) | b(12-10) | Rdst (3 bits) | b(9-7) | RS1 (3 bits) | b(6-4) | b(3-1) | b(0) |
-| --------------------- | ----------------- | -------- | ------------- | -------- | ------------- | ------ | ------------ | ------ | ------ | ---- |
-| SUBI Rdst, Rsrc1, Imm | 010               | 001      | Rdst          | Rsrc     | xxx           | x      |
-| ADDI Rdst, Rsrc1, Imm | 010               | 010      | Rdst          | Rsrc     | xxx           | x      |
+| Operation             | Opp Code (3 bits) | Func (3 bits) | Rdst (3 bits) | Rsc1 b(6-4) | b(3-1) | b(0) |
+| --------------------- | ----------------- | ------------- | ------------- | ----------- | ------ | ---- |
+| SUBI Rdst, Rsrc1, Imm | 010               | 001           | Rdst          | Rsrc        | xxx    | x    |
+| ADDI Rdst, Rsrc1, Imm | 010               | 010           | Rdst          | Rsrc        | xxx    | x    |
 
 # Input/Output Operations
 
-| Operation | Opp Code (3 bits) | b(15-13) | Func (3 bits) | b(12-10) | Rdst (3 bits) | b(9-7) | b(6-4) | b(3-1) | b(0) |
-| --------- | ----------------- | -------- | ------------- | -------- | ------------- | ------ | ------ | ------ | ---- |
-| OUT Rdst  | 011               | 001      | Rdst          | xxx      | xxx           | x      |
-| IN Rdst   | 011               | 010      | Rdst          | xxx      | xxx           | x      |
+| Operation | Opp Code (3 bits) | Func (3 bits) | Rdst (3 bits) | b(6-4) | b(3-1) | b(0) |
+| --------- | ----------------- | ------------- | ------------- | ------ | ------ | ---- |
+| OUT Rdst  | 011               | 001           | Rdst          | xxx    | xxx    | x    |
+| IN Rdst   | 011               | 010           | Rdst          | xxx    | xxx    | x    |
 
 # Memory Operations
 
-| Operation           | Opp Code (3 bits) | b(15-13) | Func (3 bits) | b(12-10) | Rdst (3 bits) | b(9-7) | Rsrc1 | b(6-4) | b(3-1) | b(0) |
-| ------------------- | ----------------- | -------- | ------------- | -------- | ------------- | ------ | ----- | ------ | ------ | ---- |
-| PUSH Rdst           | 100               | 001      | Rdst          | xxx      | xxx           | x      |
-| POP Rdst            | 100               | 010      | Rdst          | xxx      | xxx           | x      |
-| LDM Rdst, Imm       | 100               | 011      | Rdst          | xxx      | xxx           | x      |
-| LDD Rdst, EA(Rsrc1) | 100               | 100      | Rdst          | Rsrc1    | xxx           | x      |
-| STD Rdst, EA(Rsrc1) | 100               | 101      | Rdst          | Rsrc1    | xxx           | x      |
+| Operation           | Opp Code (3 bits) | Func (3 bits) | Rdst (3 bits) | Rsc1 b(6-4) | b(3-1) | b(0) |
+| ------------------- | ----------------- | ------------- | ------------- | ----------- | ------ | ---- |
+| PUSH Rdst           | 100               | 001           | Rdst          | xxx         | xxx    | x    |
+| POP Rdst            | 100               | 010           | Rdst          | xxx         | xxx    | x    |
+| LDM Rdst, Imm       | 100               | 011           | Rdst          | xxx         | xxx    | x    |
+| LDD Rdst, EA(Rsrc1) | 100               | 100           | Rdst          | Rsrc1       | xxx    | x    |
+| STD Rdst, EA(Rsrc1) | 100               | 101           | Rdst          | Rsrc1       | xxx    | x    |
 
 # Protect / Free Operations
 
-| Operation    | Opp Code (3 bits) | b(15-13) | Func (3 bits) | b(12-10) | Rdst (3 bits) | b(9-7) | Rsrc1 | b(6-4) | Rsrc2 | b(3-1) | b(0) |
-| ------------ | ----------------- | -------- | ------------- | -------- | ------------- | ------ | ----- | ------ | ----- | ------ | ---- |
-| PROTECT Rsrc | 101               | 001      | xxx           |          | Rsrc          | x      |
-| FREE Rsrc    | 101               | 010      | xxx           |          | Rsrc          | x      |
+| Operation    | Opp Code (3 bits) | Func (3 bits) | Rdst (3 bits) | b(6-4) | Rsrc b(3-1) | b(0) |
+| ------------ | ----------------- | ------------- | ------------- | ------ | ----------- | ---- |
+| PROTECT Rsrc | 101               | 001           | xxx           | xxx    | Rsrc        | x    |
+| FREE Rsrc    | 101               | 010           | xxx           | xxx    | Rsrc        | x    |
 
 # Branching
 
-| Operation | Opp Code (3 bits) | b(15-13) | Func (3 bits) | b(12-10) | Rdst (3 bits) | b(9-7) | b(6-4) | b(3-1) | b(0) |
-| --------- | ----------------- | -------- | ------------- | -------- | ------------- | ------ | ------ | ------ | ---- |
-| JZ Rdst   | 110               | 001      | Rdst          | xxx      | xxx           | x      |
-| JMP Rdst  | 110               | 010      | Rdst          | xxx      | xxx           | x      |
-| CALL Rdst | 110               | 011      | Rdst          | xxx      | xxx           | x      |
-| RET       | 110               | 100      | xxx           | xxx      | xxx           | x      |
-| RTI       | 110               | 101      | xxx           | xxx      | xxx           | x      |
+| Operation | Opp Code (3 bits) | Func (3 bits) | Rdst (3 bits) | b(6-4) | b(3-1) | b(0) |
+| --------- | ----------------- | ------------- | ------------- | ------ | ------ | ---- |
+| JZ Rdst   | 110               | 001           | Rdst          | xxx    | xxx    | x    |
+| JMP Rdst  | 110               | 010           | Rdst          | xxx    | xxx    | x    |
+| CALL Rdst | 110               | 011           | Rdst          | xxx    | xxx    | x    |
+| RET       | 110               | 100           | xxx           | xxx    | xxx    | x    |
+| RTI       | 110               | 101           | xxx           | xxx    | xxx    | x    |
 
 # Nop
 
-| Operation | Opp Code (3 bits) | b(15-13) | Func (3 bits) | b(12-10) | Rdst (3 bits) | b(9-7) | b(6-4) | b(3-1) | b(0) |
-| --------- | ----------------- | -------- | ------------- | -------- | ------------- | ------ | ------ | ------ | ---- |
-| NOP       | 000               | xxx      | xxx           | xxx      | xxx           | x      |
+| Operation | Opp Code (3 bits) | Func (3 bits) | Rdst (3 bits) | b(6-4) | b(3-1) | b(0) |
+| --------- | ----------------- | ------------- | ------------- | ------ | ------ | ---- |
+| NOP       | 000               | xxx           | xxx           | xxx    | xxx    | x    |
