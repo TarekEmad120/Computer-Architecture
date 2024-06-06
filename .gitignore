@@ -2,3 +2,6 @@
 work/
 *.bak
 *.txt
+*.mpf
+*.mti
+.vscode/

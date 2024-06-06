@@ -34,7 +34,7 @@ BEGIN
     BEGIN
         IF (reset = '1') THEN
             -- RAM <= (OTHERS => (OTHERS => '0'));
-            file_open(memory_file, "D:\Arc_project\Computer-Architecture\Instructions.txt", read_mode);
+            file_open(memory_file, "../Instructions.txt", read_mode);
             readline(memory_file, file_line);
             read(file_line, temp_data);
             ram(0) <= temp_data;
