@@ -117,3 +117,10 @@ The vhdl implementation of 5-stage pipelined Processor 🦾
 | Operation | Opp Code (3 bits) | Func (3 bits) | Rdst (3 bits) | b(6-4) | b(3-1) | b(0) |
 | --------- | ----------------- | ------------- | ------------- | ------ | ------ | ---- |
 | NOP       | 000               | xxx           | xxx           | xxx    | xxx    | x    |
+
+# Contributors
+
+- [Ahmed Waleed](https://github.com/ahmedwaleed01)
+- [Tarek Emad](https://github.com/TarekEmad120)
+- [Ahmed Gaber](https://github.com/agaberr)
+- [Mohamed sayed](https://github.com/mohamedelsayed148)
