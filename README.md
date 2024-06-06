@@ -2,4 +2,4 @@
 
 ### Processor Design
 
-![Image](Design\5-stage-processor Design.png)
+![Image](Design/5-stage-processor-design.png)
