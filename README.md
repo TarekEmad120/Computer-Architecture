@@ -120,7 +120,39 @@ The vhdl implementation of 5-stage pipelined Processor 🦾
 
 # Contributors
 
-- [Ahmed Waleed](https://github.com/ahmedwaleed01)
-- [Tarek Emad](https://github.com/TarekEmad120)
-- [Ahmed Gaber](https://github.com/agaberr)
-- [Mohamed sayed](https://github.com/mohamedelsayed148)
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/ahmedwaleed01">
+        <img src="https://github.com/ahmedwaleed01.png" width="100px;" alt="Ahmed Waleed"/>
+        <br />
+        <sub><b>Ahmed Waleed</b></sub>
+      </a>
+      <br />
+    </td>
+    <td align="center">
+      <a href="https://github.com/TarekEmad120">
+        <img src="https://github.com/TarekEmad120.png" width="100px;" alt="Tarek Emad"/>
+        <br />
+        <sub><b>Tarek Emad</b></sub>
+      </a>
+      <br />
+    </td>
+    <td align="center">
+      <a href="https://github.com/agaberr">
+        <img src="https://github.com/agaberr.png" width="100px;" alt="Ahmed Gaber"/>
+        <br />
+        <sub><b>Ahmed Gaber</b></sub>
+      </a>
+      <br />
+    </td>
+    <td align="center">
+      <a href="https://github.com/mohamedelsayed148">
+        <img src="https://github.com/mohamedelsayed148.png" width="100px;" alt="Mohamed Sayed"/>
+        <br />
+        <sub><b>Mohamed Sayed</b></sub>
+      </a>
+      <br />
+    </td>
+  </tr>
+</table>
